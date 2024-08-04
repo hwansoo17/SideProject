@@ -33,7 +33,9 @@ const HomeMain: React.FC = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollWidth = screenWidth * 0.6 - screenWidth * 0.2;
+
   const logout = useAuthStore((state) => state.logout);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
@@ -135,7 +137,7 @@ const HomeMain: React.FC = () => {
           }}
         />
       </ScrollView>
-      <Button title="로그아웃" onPress={() => {logout}} />
+      <Button title="로그아웃" onPress={() => {logout(); console.log(isLoggedIn)}} />
       <View style={{ height: 73 }} />
     </SafeAreaView>
   );

@@ -23,7 +23,7 @@ const MyCardTab: React.FC<{ route: any }> = ({ route }) => {
   }, [route, showTabBar, hideTabBar]);
 
   return (
-    <Stack.Navigator initialRouteName="storageMain">
+    <Stack.Navigator initialRouteName="MyCardMain">
       <Stack.Screen name="MyCardMain" component={MyCardMain} />
       <Stack.Screen name="MyCardDetail" component={MyCardDetail} />
     </Stack.Navigator>

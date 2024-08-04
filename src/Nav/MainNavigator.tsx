@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MyCardTab from '../bottomTabs/MyCardTab';
 import StorageTab from '../bottomTabs/StorageTab';
 import HomeTab from '../bottomTabs/HomeTab';
-import useAuthStore from '../store/useAuthStore';
 import CustomTabBar from '../components/CustomTabBar';
 
 const MyCardIcon = require('../assets/tabBarIcon/MyCardIcon.svg').default;
@@ -12,9 +11,10 @@ const StorageIcon = require('../assets/tabBarIcon/StorageIcon.svg').default;
 const Tab = createBottomTabNavigator();
 
 const MainNavigator = () => {
-  const {logout} = useAuthStore();
+
   return (
     <Tab.Navigator 
+      initialRouteName='Home'
       tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
