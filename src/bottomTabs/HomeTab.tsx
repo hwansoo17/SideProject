@@ -23,6 +23,8 @@ const HomeTab: React.FC<{ route: any }> = ({ route }) => {
       <Stack.Screen
         name="홈"
         component={HomeMain}
+        options={{ headerShown: false }}
+        
       />
     </Stack.Navigator>
   );

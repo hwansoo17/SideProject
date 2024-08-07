@@ -8,7 +8,6 @@ const MyCardMain: React.FC<{ navigation: any }> = ({navigation}) => {
         <Text>my card Main</Text>
         <Button title="Go to My card Detail" onPress={() => {navigation.navigate('MyCardDetail')}} />
       </View>
-      <View style={{ height: 73 }} />
     </View>
   );
 }
