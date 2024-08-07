@@ -1,56 +1,70 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
   Dimensions,
-  Animated,
-  Button,
+  TouchableOpacity,
+  Button
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  runOnJS,
+} from 'react-native-reanimated';
 import useAuthStore from '../../store/useAuthStore';
 import Carousel from '../../components/Carousel';
+import ShareButton from '../../components/ShareButton';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+const ShareIcon = require('../../assets/buttonIcon/ShareIcon.svg').default;
+
+interface CarouselItem {
+  id: number;
+  title: string;
+  color: string;
+  backColor: string;
+}
+
+const data: CarouselItem[] = [
+  { id: 0, title: 'Item 1', color: '#42FFC6', backColor: '#eee' },
+  { id: 1, title: 'Item 2', color: '#FFB2B2', backColor: '#eee' },
+  { id: 2, title: 'Item 3', color: '#fff', backColor: '#eee' },
+  { id: 3, title: 'Item 4', color: '#0053F5', backColor: '#eee' },
+  { id: 4, title: 'Item 5', color: '#FF9D2A', backColor: '#eee' },
+];
 
 const HomeMain: React.FC = () => {
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const [isFlipped, setIsFlipped] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const handleFlip = () => {
+    setIsFlipped(!isFlipped);
+  };
 
   const logout = useAuthStore((state) => state.logout);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
+
+  useEffect(() => {
+    setIsFlipped(false);
+  }, [currentIndex]);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header} />
-      <Carousel
-        scrollX={scrollX}
-        currentIndex={currentIndex}
-        setCurrentIndex={setCurrentIndex}
-      />
-      <Button
-        title="로그아웃"
-        onPress={() => {
-          logout();
-          console.log(isLoggedIn);
-        }}
-      />
-      <View style={styles.footer} />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Carousel currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} data={data} isFlipped={isFlipped} />
+      <View style={{position:'absolute', bottom: (screenHeight-screenWidth-73)/2-24, alignSelf:'center'}}>
+        <ShareButton handleFlip={handleFlip} />
+      </View>
+      {/* <Button title="로그아웃" onPress={() => { logout(); console.log(isLoggedIn); }} /> */}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#282828',
-  },
-  header: {
-    height: screenHeight * 0.17,
-  },
-  footer: {
-    height: 73,
   },
 });
 

@@ -1,46 +1,43 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
-  ScrollView,
-  Animated,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
+  Button
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  runOnJS,
+} from 'react-native-reanimated';
 import CarouselItem from './CarouselItem';
 
-const { width: screenWidth } = Dimensions.get('window');
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
-interface CarouselProps {
-  scrollX: Animated.Value;
+type CarouselProps = {
   currentIndex: number;
-  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
-}
+  setCurrentIndex: (index: number) => void;
+  data: any[];
+  isFlipped: boolean;
+};
 
-const data = [
-  { id: 0, title: 'Item 1', color: '#FFB2B2' },
-  { id: 1, title: 'Item 2', color: '#0053F5' },
-  { id: 2, title: 'Item 3', color: '#42FFC6' },
-  { id: 3, title: 'Item 4', color: 'rgb(4, 0, 187)' },
-  { id: 4, title: 'Item 5', color: 'rgb(255, 122, 0)' },
-];
+const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data, isFlipped}) => {
 
-const Carousel: React.FC<CarouselProps> = ({
-  scrollX,
-  currentIndex,
-  setCurrentIndex,
-}) => {
-  const scrollWidth = screenWidth * 0.6 - screenWidth * 0.2;
+  const scrollX = useSharedValue(0);
+  const scrollWidth = screenWidth * 0.7 - screenWidth * 0.1;
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(contentOffsetX / scrollWidth);
-    setCurrentIndex(index);
-  };
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollX.value = event.contentOffset.x;
+    const index = Math.round(
+      scrollX.value / scrollWidth // 중앙 카드 인덱스 계산
+    );
+    runOnJS(setCurrentIndex)(index);
+  });
 
   return (
-    <ScrollView
+    <Animated.ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       snapToInterval={scrollWidth}
@@ -48,29 +45,31 @@ const Carousel: React.FC<CarouselProps> = ({
       decelerationRate="fast"
       scrollEventThrottle={16}
       bounces={false}
-      onScroll={Animated.event(
-        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-        { useNativeDriver: false, listener: handleScroll }
-      )}
+      onScroll={scrollHandler}
     >
-      <View style={styles.spacer} />
-      {data.map((item) => (
+      <View
+        style={{
+          width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
+        }}
+      />
+      {data.map((item, index) => (
         <CarouselItem
+          scrollWidth={scrollWidth}
           key={item.id}
           item={item}
           scrollX={scrollX}
           currentIndex={currentIndex}
+          index={index}
+          isFlipped={isFlipped && currentIndex === index}
         />
       ))}
-      <View style={styles.spacer} />
-    </ScrollView>
+      <View
+        style={{
+          width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
+        }}
+      />
+    </Animated.ScrollView>
   );
-};
-
-const styles = StyleSheet.create({
-  spacer: {
-    width: (screenWidth - screenWidth * 0.6) / 2 + screenWidth * 0.1,
-  },
-});
+}
 
 export default Carousel;
