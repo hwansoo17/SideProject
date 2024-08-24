@@ -2,6 +2,8 @@ import React, {useLayoutEffect} from 'react';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeMain from '../screens/home/HomeMain';
+import MakeCard from '../screens/home/MakeCard';
+import CardDetail from '../screens/home/CardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; 
 
 const Stack = createStackNavigator();
@@ -21,10 +23,17 @@ const HomeTab: React.FC<{ route: any }> = ({ route }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="홈"
+        name="HomeMain"
         component={HomeMain}
         options={{ headerShown: false }}
-        
+      />
+      <Stack.Screen
+        name="MakeCard"
+        component={MakeCard}
+      />
+      <Stack.Screen
+        name="CardDetail"
+        component={CardDetail}
       />
     </Stack.Navigator>
   );

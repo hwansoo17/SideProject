@@ -3,19 +3,19 @@
 import React, { useLayoutEffect } from 'react';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import MyCardMain from '../screens/myCard/MyCardMain';
-import MyCardDetail from '../screens/myCard/MyCardDetail';
+import SettingMain from '../screens/setting/SettingMain';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; // Import the zustand store
+import { NavigationProp } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
-const MyCardTab: React.FC<{ route: any }> = ({ route }) => {
+const SettingTab: React.FC<{ route: any }> = ({ route }) => {
   // Access the zustand store
   const { showTabBar, hideTabBar } = useTabBarVisibilityStore();
 
   useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === 'MyCardMain' || routeName === undefined) {
+    if (routeName === 'SettingMain' || routeName === undefined) {
       showTabBar();
     } else {
       hideTabBar();
@@ -23,11 +23,10 @@ const MyCardTab: React.FC<{ route: any }> = ({ route }) => {
   }, [route, showTabBar, hideTabBar]);
 
   return (
-    <Stack.Navigator initialRouteName="MyCardMain">
-      <Stack.Screen name="MyCardMain" component={MyCardMain} options={{ headerShown: false }}/>
-      <Stack.Screen name="MyCardDetail" component={MyCardDetail}/>
+    <Stack.Navigator initialRouteName="storageMain">
+      <Stack.Screen name="SettingMain" component={SettingMain} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };
 
-export default MyCardTab;
+export default SettingTab;

@@ -5,6 +5,7 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import StorageMain from '../screens/storage/StorageMain';
 import StorageDetail from '../screens/storage/StorageDetail';
+import AddCard from '../screens/storage/AddCard';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; // Import the zustand store
 import { NavigationProp } from '@react-navigation/native';
 
@@ -16,7 +17,7 @@ const StorageTab: React.FC<{ route: any }> = ({ route }) => {
 
   useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === 'storageMain' || routeName === undefined) {
+    if (routeName === 'StorageMain' || routeName === undefined) {
       showTabBar();
     } else {
       hideTabBar();
@@ -25,8 +26,9 @@ const StorageTab: React.FC<{ route: any }> = ({ route }) => {
 
   return (
     <Stack.Navigator initialRouteName="storageMain">
-      <Stack.Screen name="storageMain" component={StorageMain} options={{ headerShown: false }}/>
-      <Stack.Screen name="storageDetail" component={StorageDetail} options={{ headerShown: false }}/>
+      <Stack.Screen name="StorageMain" component={StorageMain} options={{ headerShown: false }}/>
+      <Stack.Screen name="StorageDetail" component={StorageDetail}/>
+      <Stack.Screen name="AddCard" component={AddCard}/>
     </Stack.Navigator>
   );
 };

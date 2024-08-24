@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { Pressable, TouchableOpacity } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -10,6 +11,8 @@ import Animated, {
   withTiming,
   ReduceMotion
 } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -27,6 +30,10 @@ interface CarouselItemProps {
   scrollWidth: number;
 }
 
+interface Props {
+  navigation: NavigationProp<any>;
+  navigate: any;
+}
 const CarouselItem: React.FC<CarouselItemProps> = ({
   item,
   scrollX,
@@ -35,6 +42,9 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
   isFlipped,
   scrollWidth,
 }) => {
+
+  const navigation = useNavigation<Props>();
+
   const rotateY = useSharedValue(0);
 
   if (isFlipped) {
@@ -128,14 +138,17 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       ]}
     >
       <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.color }]}>
-        <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+        <Pressable 
+          style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
+          onPress={() => navigation.navigate('CardDetail', { item })}
+        >
           <View style={{flex:7}}>
             <Text style={styles.text}>{item.title} - 앞면</Text>
           </View>
           <View style={{flex:3, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
 
           </View>
-        </View>
+        </Pressable>
       </Animated.View>
       <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: item.backColor }]}>
         <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
