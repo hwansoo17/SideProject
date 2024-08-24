@@ -12,6 +12,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import CarouselItem from './CarouselItem';
+import AddNewCardItem from './AddNewCardItem';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -35,6 +36,8 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
     );
     runOnJS(setCurrentIndex)(index);
   });
+
+  
 
   return (
     <Animated.ScrollView
@@ -63,6 +66,13 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
           isFlipped={isFlipped && currentIndex === index}
         />
       ))}
+      <AddNewCardItem
+        scrollWidth={scrollWidth}
+        data={data}
+        scrollX={scrollX}
+        currentIndex={currentIndex}
+        isFlipped={isFlipped}
+      />
       <View
         style={{
           width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,

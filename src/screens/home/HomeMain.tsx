@@ -1,23 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
   Dimensions,
-  TouchableOpacity,
-  Button
+  Text,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedScrollHandler,
-  runOnJS,
-} from 'react-native-reanimated';
+
 import useAuthStore from '../../store/useAuthStore';
 import Carousel from '../../components/Carousel';
 import ShareButton from '../../components/ShareButton';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-const ShareIcon = require('../../assets/buttonIcon/ShareIcon.svg').default;
 
 interface CarouselItem {
   id: number;
@@ -35,14 +29,14 @@ const data: CarouselItem[] = [
 ];
 
 const HomeMain: React.FC = () => {
+  
   const [isFlipped, setIsFlipped] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
-
-  const logout = useAuthStore((state) => state.logout);
+  const userdata = useAuthStore((state) => state.data);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
 
@@ -53,9 +47,10 @@ const HomeMain: React.FC = () => {
   return (
     <View style={styles.container}>
       <Carousel currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} data={data} isFlipped={isFlipped} />
+      {currentIndex !== data.length &&
       <View style={{position:'absolute', bottom: (screenHeight-screenWidth-73)/2-24, alignSelf:'center'}}>
         <ShareButton handleFlip={handleFlip} />
-      </View>
+      </View>}
       {/* <Button title="로그아웃" onPress={() => { logout(); console.log(isLoggedIn); }} /> */}
     </View>
   );

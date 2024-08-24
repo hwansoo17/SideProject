@@ -1,10 +1,10 @@
-import axios from 'axios';
+import { api } from './api';
+import config from '../../config';
 
 export interface LoginResponse {
   token: string;
   user: {
     id: number;
-    name: string;
     email: string;
   };
 }
@@ -15,6 +15,6 @@ export interface LoginData {
 }
 
 export const loginUser = async (loginData: LoginData): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>('https://api.example.com/login', loginData);
+  const response = await api.post<LoginResponse>(`/api/auth/login`, loginData);
   return response.data;
 };
