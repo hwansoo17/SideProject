@@ -64,6 +64,7 @@ yarn-error.log
 
 # testing
 /coverage
+config.js
 
 # Yarn
 .yarn/*
@@ -72,5 +73,7 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+
 
 /src/screens/home/HomeMainTest.tsx
