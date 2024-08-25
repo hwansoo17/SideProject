@@ -1,5 +1,4 @@
 import { api } from './api';
-import config from '../../config';
 
 export interface LoginResponse {
   token: string;
