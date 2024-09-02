@@ -9,29 +9,47 @@ import {
 import useAuthStore from '../../store/useAuthStore';
 import Carousel from '../../components/Carousel';
 import ShareButton from '../../components/ShareButton';
-
+// import { useQuery } from '@tanstack/react-query';
+// import { fetchMyCardList } from '../../api/myCard';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
+
+
 interface CarouselItem {
   id: number;
+  name: string;
+  corporation: string;
   title: string;
-  color: string;
-  backColor: string;
-}
+  tel: string;
+  email: string;
+  link1: string;
+  link2: string;
+  link3: string;
+  logoImg: string;
+  bgImg: string;
+  brColor: string;
+  gradient: string;
+  realCardImg: string;
+  background: string;
+  }
 
 const data: CarouselItem[] = [
-  { id: 0, title: 'Item 1', color: '#42FFC6', backColor: '#eee' },
-  { id: 1, title: 'Item 2', color: '#FFB2B2', backColor: '#eee' },
-  { id: 2, title: 'Item 3', color: '#fff', backColor: '#eee' },
-  { id: 3, title: 'Item 4', color: '#0053F5', backColor: '#eee' },
-  { id: 4, title: 'Item 5', color: '#FF9D2A', backColor: '#eee' },
+  { id: 0, name:'김수환', corporation:'회사', title:'직책', tel:'010-1234-5678', email:'playground99@ajou.ac.kr', link1:'https://www.naver.com', link2:'https://www.naver.com', link3:'https://www.naver.com', logoImg:'https://www.google.com/logos/doodles/2024/paris-games-archery-day-2-6753651837110537-s.png', bgImg:'https://www.naver.com', brColor:'red', gradient:'#eee', realCardImg:'https://www.naver.com', background:'#eee' },
+  { id: 1, name:'김수환', corporation:'회사', title:'직책', tel:'010-1234-5678', email:'playground99@ajou.ac.kr', link1:'https://www.naver.com', link2:'https://www.naver.com', link3:'https://www.naver.com', logoImg:'https://www.naver.com', bgImg:'https://www.naver.com', brColor:'green', gradient:'#eee', realCardImg:'https://www.naver.com', background:'#eee' },
+  { id: 2, name:'김수환', corporation:'회사', title:'직책', tel:'010-1234-5678', email:'playground99@ajou.ac.kr', link1:'https://www.naver.com', link2:'https://www.naver.com', link3:'https://www.naver.com', logoImg:'https://www.naver.com', bgImg:'https://www.naver.com', brColor:'#eee', gradient:'#eee', realCardImg:'https://www.naver.com', background:'#eee' },
+  { id: 3, name:'김수환', corporation:'회사', title:'직책', tel:'010-1234-5678', email:'playground99@ajou.ac.kr', link1:'https://www.naver.com', link2:'https://www.naver.com', link3:'https://www.naver.com', logoImg:'https://www.naver.com', bgImg:'https://www.naver.com', brColor:'#eee', gradient:'#eee', realCardImg:'https://www.naver.com', background:'#eee' },
+  { id: 4, name:'김수환', corporation:'회사', title:'직책', tel:'010-1234-5678', email:'playground99@ajou.ac.kr', link1:'https://www.naver.com', link2:'https://www.naver.com', link3:'https://www.naver.com', logoImg:'https://www.naver.com', bgImg:'https://www.naver.com', brColor:'#eee', gradient:'#eee', realCardImg:'https://www.naver.com', background:'#eee' },
 ];
 
 const HomeMain: React.FC = () => {
   
   const [isFlipped, setIsFlipped] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+
+  // const {isLoading, isError, data, error} = useQuery({queryKey:['cards'], queryFn: fetchMyCardList});
+
   
   const handleFlip = () => {
     setIsFlipped(!isFlipped);

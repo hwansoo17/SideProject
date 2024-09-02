@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Image } from 'react-native';
 import { Pressable, TouchableOpacity } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -15,19 +15,31 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
-
+const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
+const PhoneIcon = require('../assets/cardIcon/phone.svg').default;
 interface CarouselItemProps {
   item: {
     id: number;
+    name: string;
+    corporation: string;
     title: string;
-    color: string;
-    backColor: string; // Added backColor for the back of the card
+    tel: string;
+    email: string;
+    link1: string;
+    link2: string;
+    link3: string;
+    logoImg: string;
+    bgImg: string;
+    brColor: string;
+    gradient: string;
+    realCardImg: string;
+    background: string;
   };
-  scrollX: SharedValue<number>;
-  currentIndex: number;
-  index: number;
-  isFlipped: boolean;
-  scrollWidth: number;
+    scrollX: SharedValue<number>;
+    currentIndex: number;
+    index: number;
+    isFlipped: boolean;
+    scrollWidth: number;
 }
 
 interface Props {
@@ -128,7 +140,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
     };
   });
 
-
+  const data = [1, 2, 3, 4];
 
   return (
     <Animated.View
@@ -137,20 +149,59 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         animatedStyle,
       ]}
     >
-      <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.color }]}>
+      <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.brColor }]}>
         <Pressable 
-          style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
+          style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
           onPress={() => navigation.navigate('CardDetail', { item })}
         >
-          <View style={{flex:7}}>
-            <Text style={styles.text}>{item.title} - 앞면</Text>
+          <View style={{width:'100%', height:'70%', padding:24, flexDirection:'row'}}>
+            <View>
+              <View style={{width:53, height:53}}> 
+                <Image src={item.logoImg} style={{flex:1, resizeMode:'contain'}}/>
+              </View>
+              <View style={{flex:1}}/>
+              <View>
+                <Text style={{fontFamily: 'Pretendard-Bold', fontSize:18, color: '#fff'}}>
+                  {item.corporation}
+                </Text>
+                <View style={{height:8}}/>
+                <Text style={{fontFamily: 'Pretendard-Regular', fontSize:16, color: '#f2f2f2'}}>
+                  {item.title}
+                </Text>
+              </View>
+            </View>
+            <View style={{flex:1}}/>
+            <View style={{justifyContent:'flex-end'}}>
+              {data.map((item, index) => (
+                <TouchableOpacity key={index} style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.1)', borderRadius:18, marginTop:12}}>    
+                </TouchableOpacity>
+              ))}
+            </View>  
           </View>
-          <View style={{flex:3, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
-
+          <View style={{width:'100%', height:'30%', padding:20, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
+            <Text style={{fontFamily: 'Pretendard-Medium', fontSize:18, color: '#fff'}}>
+              {item.name}
+            </Text>
+            <View style={{flex:1}}/>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+              <PhoneIcon/>
+              <View style={{width:4}}/>
+              <Text style={{fontFamily: 'Pretendard-Light', fontSize:14, color: '#fff'}}>
+                {item.tel}
+              </Text>
+            </View>
+            <View style={{height:4}}/>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+              <MailIcon/>
+              <View style={{width:4}}/>
+              <Text style={{fontFamily: 'Pretendard-Light', fontSize:14, color: '#fff'}}>
+                {item.email}
+              </Text>
+            </View>
           </View>
         </Pressable>
       </Animated.View>
-      <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: item.backColor }]}>
+      <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: '#fff' }]}>
         <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
           <Text style={styles.text}>{item.title} - 뒷면</Text>
         </View>

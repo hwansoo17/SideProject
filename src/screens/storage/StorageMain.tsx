@@ -55,7 +55,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
         renderItem={({item}) => {
           return (
             <TouchableOpacity 
-              style={{height:77, backgroundColor:item.color, margin:8, borderRadius:8}}
+              style={{height:77, backgroundColor:item.color, margin:8, borderRadius:4}}
               onPress={() => {navigation.navigate("StorageDetail", {id: item.id})}}
             >              
               <View style={{flex:1, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
