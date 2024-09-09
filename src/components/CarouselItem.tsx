@@ -25,9 +25,7 @@ interface CarouselItemProps {
     title: string;
     tel: string;
     email: string;
-    link1: string;
-    link2: string;
-    link3: string;
+    links: string[];
     logoImg: string;
     bgImg: string;
     brColor: string;
@@ -67,9 +65,9 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
 
   // Calculate input range for scaling and positioning
   const inputRange = [
-    (item.id - 1) * scrollWidth,
-    item.id * scrollWidth,
-    (item.id + 1) * scrollWidth,
+    ((item.id-1) - 1) * scrollWidth,
+    (item.id-1) * scrollWidth,
+    ((item.id-1) + 1) * scrollWidth,
   ];
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -83,34 +81,34 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
     const marginRight = interpolate(
       scrollX.value,
       [
-        item.id * scrollWidth,
-        (item.id + 0.5) * scrollWidth,
-        (item.id + 1) * scrollWidth,
+        (item.id-1) * scrollWidth,
+        ((item.id-1) + 0.5) * scrollWidth,
+        ((item.id-1) + 1) * scrollWidth,
       ],
-      [-screenWidth * 0.05, 50, -screenWidth * 0.05],
+      [-screenWidth * 0.1, 50, -screenWidth * 0.1],
       Extrapolation.CLAMP
     );
 
     const marginLeft = interpolate(
       scrollX.value,
       [
-        (item.id - 1) * scrollWidth,
-        (item.id - 0.5) * scrollWidth,
-        item.id * scrollWidth,
+        ((item.id-1) - 1) * scrollWidth,
+        ((item.id-1) - 0.5) * scrollWidth,
+        (item.id-1) * scrollWidth,
       ],
-      [-screenWidth * 0.05, 50, -screenWidth * 0.05],
+      [-screenWidth * 0.1, 50, -screenWidth * 0.1],
       Extrapolation.CLAMP
     );
 
-    const zIndex = currentIndex === item.id ? 2 : 0;
+    const zIndex = currentIndex === (item.id-1) ? 2 : 0;
 
     return {
       transform: [
         { scale },
         // { perspective: 1000 },
       ],
-      marginRight: item.id === currentIndex ? marginRight : undefined,
-      marginLeft: item.id === currentIndex ? marginLeft : undefined,
+      marginRight: (item.id-1) === currentIndex ? marginRight : undefined,
+      marginLeft: (item.id-1) === currentIndex ? marginLeft : undefined,
       zIndex,
     };
   });
@@ -150,9 +148,9 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       ]}
     >
       <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.brColor }]}>
-        <Pressable 
-          style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
-          onPress={() => navigation.navigate('CardDetail', { item })}
+        <View 
+          style={{flex:1, width: screenWidth * 0.76, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
+          // onPress={() => navigation.navigate('CardDetail', { item })}
         >
           <View style={{width:'100%', height:'70%', padding:24, flexDirection:'row'}}>
             <View>
@@ -173,7 +171,11 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
             <View style={{flex:1}}/>
             <View style={{justifyContent:'flex-end'}}>
               {data.map((item, index) => (
-                <TouchableOpacity key={index} style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.1)', borderRadius:18, marginTop:12}}>    
+                <TouchableOpacity 
+                  key={index} 
+                  style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.1)', borderRadius:18, marginTop:12}}
+                  onPress={() => console.log('링크 터치')}
+                >    
                 </TouchableOpacity>
               ))}
             </View>  
@@ -199,10 +201,10 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
               </Text>
             </View>
           </View>
-        </Pressable>
+        </View>
       </Animated.View>
       <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: '#fff' }]}>
-        <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+        <View style={{width: screenWidth * 0.76, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
           <Text style={styles.text}>{item.title} - 뒷면</Text>
         </View>
       </Animated.View>
@@ -212,8 +214,8 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: screenWidth * 0.7,
-    marginHorizontal: -screenWidth * 0.05,
+    width: screenWidth * 0.76,
+    marginHorizontal: -screenWidth * 0.1,
     justifyContent: 'center',
     alignItems: 'center',
   },
