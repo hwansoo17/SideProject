@@ -1,19 +1,15 @@
 import React, { useState, useLayoutEffect, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';;
+import { View, Text, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { colors, textStyles } from '../../styles/styles';
 import CustomButton from '../../components/CustomButton';
-import { useRegister } from '../../hooks/useAuthMutation';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import RegisterPage from '../../components/RegisterPage';
-import { AxiosError } from 'axios';
-
+import { useSendCode, useVerifyCode, useResetPassword } from '../../hooks/useAuthMutation';
+import CodeInput from '../../components/CodeInput';
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
-
-
-const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ navigation }) => {
-  const [name, setName] = useState('');
+const PasswordReset: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -21,8 +17,15 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [isPasswordSame, setIsPasswordSame] = useState(true);
-  const { mutate, error, isPending, status } = useRegister();
+  const [code, setCode] = useState('');
 
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode);
+  };
+
+  const { mutate: sendCodeMutate, isPending: isSendCodePending } = useSendCode();
+  const { mutate: verifyCodeMutate, isPending: isVerifyCodePending } = useVerifyCode();
+  const { mutate: resetPasswordMutate, isPending: isResetPasswordPending } = useResetPassword();
   const isEmailValid = (email: string) => {
     if (email.length > 0) {
     const emailRegEx =
@@ -31,10 +34,9 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
     }
     return true;
   };
+
   const isPasswordValid = (password: string) => {
     if (password.length > 0) {
-      // 최소 8자 이상, 최대 100자 이하
-      // 최소 하나의 문자, 하나의 숫자, 하나의 기호를 포함
       const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,100}$/;
       return passwordRegEx.test(password);
     }
@@ -55,30 +57,68 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
     setIsValidEmail(isEmailValid(email));
     setIsValidPassword(isPasswordValid(password));
     setIsPasswordSame(isSamePassword(password, passwordCheck));
-  }, [email, password, passwordCheck]);
+    console.log(code)
+  }, [email, password, passwordCheck, code]);
 
 
 
   const handleBackPress = () => {
     if (step === 0) {
       navigation.goBack(); // 기본 동작: 이전 화면으로 돌아가기
-    } else {
+    } 
+    if (step === 1) {
       setStep(step - 1); // 이전 단계로 돌아가기
+    }
+    if (step === 2) {
+      navigation.goBack();
     }
     return true; // 기본 뒤로가기 동작을 막음
   };
 
-  const handleRegister = () => {
-    mutate({ name: name , email: email, password: password }, {
+  const handleSendCode = () => {
+    sendCodeMutate(email, {
       onSuccess: () => {
-        setStep(3);
+        setStep(1);
+        Alert.alert('인증번호가 전송되었습니다');
       },
       onError: (error) => {
-        Alert.alert(error.response.data.message)
-      }
+        console.error(error.response?.data.message)
+      },
     });
+  }
 
+  const handleVerifyCode = () => {
+    verifyCodeMutate({ email: email, otpInput: code }, {
+      onSuccess: (data) => {
+        if (data.isVerified) {
+          setStep(2)
+          Alert.alert('인증되었습니다');
+        } else {
+          Alert.alert('인증번호가 올바르지 않습니다');
+
+        }
+      },
+      onError: (error) => {
+        console.error(error.response?.data.message)
+      },
+    });
   };
+
+  const handleResetPassword = () => {
+    resetPasswordMutate({ email: email, newPassword: password, otp:code }, {
+      onSuccess: (data) => {
+        if (data.result == 'success') {
+          Alert.alert('비밀번호가 변경되었습니다'); 
+          navigation.navigate('Login');
+        } else {
+          Alert.alert('비밀번호 변경에 실패했습니다');
+        }
+      },
+      onError: (error) => {
+        console.error(error.response?.data.message)
+      },
+    });
+  }
 
   useLayoutEffect(() => {
     // 뒤로가기 버튼을 눌렀을 때 동작할 함수
@@ -95,6 +135,8 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
     });
   }, [navigation, step]);
 
+
+
   return (
     <View 
       style={{
@@ -104,26 +146,28 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
       }}>
       {step == 0 &&
       <RegisterPage
-        title="이름을 입력해 주세요"
-        inputData={[{category: "이름", value: name, placeHolder: "예) 홍길동", onChangeText: setName, isValid: true, errorMessage: ''}]}
+        title="가입하신 이메일을 입력해 주세요"
+        inputData={[{category: "이메일 주소", value: email, placeHolder: "예) aaa@aaa.co.kr", onChangeText: setEmail, isValid: isValidEmail, errorMessage: '이메일 형식이 올바르지 않습니다'}]}
         buttonTitle="다음"
-        onPress={() => {setStep(1)}}
-        disabled={name.length == 0}
+        onPress={() => {handleSendCode();}}
+        disabled={!(isValidEmail && email.length > 1) || isSendCodePending}
       />
       }
       {step == 1 &&
-      <RegisterPage
-        title="이메일을 입력해 주세요"
-        inputData={[{category: "이메일 주소", value: email, placeHolder: "예) aaa@aaa.co.kr", onChangeText: setEmail, isValid: isValidEmail, errorMessage: '이메일 형식이 올바르지 않습니다'}]}
-        buttonTitle="다음"
-        onPress={() => {setStep(2)}}
-        disabled={!(isValidEmail && email.length > 1)}
-      />
+      <View>
+        <Text style={[textStyles.B2, {color:colors.White}]}>
+          인증번호를 입력해 주세요
+        </Text>
+        <View style={{height: 24}} />
+        <CodeInput length={6} onCodeChange={handleCodeChange} />
+        <View style={{height: 24}} />
+        <CustomButton title="다음" onPress={() => {handleVerifyCode()}} disabled={code.length != 6 || isVerifyCodePending} />
+      </View>
       }
       {step == 2 &&
       <View>
         <RegisterPage
-          title="비밀번호를 설정해 주세요"
+          title="새로운 비밀번호를 설정해 주세요"
           inputData={
             [
               {
@@ -146,9 +190,9 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
               }
             ]
           }
-          buttonTitle="회원가입"
-          onPress={() => {handleRegister();}}
-          disabled={!(isValidEmail && isValidPassword && isPasswordSame && email.length > 0 && password.length > 1 && passwordCheck.length > 1) || isPending}
+          buttonTitle="완료"
+          onPress={() => {handleResetPassword()}}
+          disabled={!(isValidEmail && isValidPassword && isPasswordSame && email.length > 0 && password.length > 1 && passwordCheck.length > 1) || isResetPasswordPending}
         />
       </View>
       }
@@ -162,4 +206,4 @@ const Register: React.FC<{ navigation: NavigationProp<ParamListBase> }> = ({ nav
   );
 };
 
-export default Register;
+export default PasswordReset;

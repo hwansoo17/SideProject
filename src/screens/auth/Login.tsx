@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useLogin } from '../../hooks/useLogin';
+import { useLogin } from '../../hooks/useAuthMutation';
 import useAuthStore from '../../store/useAuthStore';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { textStyles } from '../../styles/styles';
 import PolicyModal from '../../components/PolicyModal';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
 const LoginScreen: React.FC = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,6 +64,23 @@ const LoginScreen: React.FC = () => {
             },
           ]}>
           이메일로 회원가입하기
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('PasswordReset');
+        }}>
+        <Text
+          style={[
+            textStyles.R1,
+
+            {
+              color: 'black',
+              borderBottomWidth: 1,
+              borderColor: 'black',
+            },
+          ]}>
+          비밀번호 재설정
         </Text>
       </TouchableOpacity>
     </View>

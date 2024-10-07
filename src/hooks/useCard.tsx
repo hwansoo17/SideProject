@@ -2,14 +2,14 @@
 
 import { useQuery } from '@tanstack/react-query';
 import useCardStore from '../store/useCardStore';
-import { fetchCardList, Card } from '../api/myCard';
+import { fetchMyCardList, Card } from '../api/myCard';
 
 export const useCards = () => {
   const setCards = useCardStore((state) => state.setCards);
 
   return useQuery<Card[], Error>(
     ['cards'], 
-    fetchCardList, 
+    fetchMyCardList, 
     {
     onSuccess: (data: Card[]) => {
       setCards(data);  // zustand 상태 업데이트
