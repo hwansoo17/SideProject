@@ -1,5 +1,3 @@
-// src/store/useAuthStore.ts
-
 import { create } from 'zustand';
 
 interface User {
