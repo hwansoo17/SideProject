@@ -2,7 +2,9 @@ import React, {useLayoutEffect} from 'react';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeMain from '../screens/home/HomeMain';
-import MakeCard from '../screens/home/MakeCard';
+// import MakeCard from '../screens/home/MakeCard';
+import MakeCard from '../screens/register/MakeCard';
+import RegisterCard from '../screens/register/RegisterCard';
 import CardDetail from '../screens/home/CardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; 
 
@@ -27,13 +29,21 @@ const HomeTab: React.FC<{ route: any }> = ({ route }) => {
         component={HomeMain}
         options={{ headerShown: false }}
       />
+      {/* <Stack.Screen
+        name="MakeCard"
+        component={MakeCard}
+      /> */}
+      <Stack.Screen
+        name="CardDetail"
+        component={CardDetail}
+      />
       <Stack.Screen
         name="MakeCard"
         component={MakeCard}
       />
       <Stack.Screen
-        name="CardDetail"
-        component={CardDetail}
+        name="RegisterCard"
+        component={RegisterCard}
       />
     </Stack.Navigator>
   );
