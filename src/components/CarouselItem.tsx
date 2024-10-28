@@ -65,9 +65,9 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
 
   // Calculate input range for scaling and positioning
   const inputRange = [
-    ((item.id-1) - 1) * scrollWidth,
-    (item.id-1) * scrollWidth,
-    ((item.id-1) + 1) * scrollWidth,
+    ((index) - 1) * scrollWidth,
+    (index) * scrollWidth,
+    ((index) + 1) * scrollWidth,
   ];
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -81,9 +81,9 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
     const marginRight = interpolate(
       scrollX.value,
       [
-        (item.id-1) * scrollWidth,
-        ((item.id-1) + 0.5) * scrollWidth,
-        ((item.id-1) + 1) * scrollWidth,
+        (index) * scrollWidth,
+        ((index) + 0.5) * scrollWidth,
+        ((index) + 1) * scrollWidth,
       ],
       [-screenWidth * 0.1, 50, -screenWidth * 0.1],
       Extrapolation.CLAMP
@@ -92,23 +92,23 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
     const marginLeft = interpolate(
       scrollX.value,
       [
-        ((item.id-1) - 1) * scrollWidth,
-        ((item.id-1) - 0.5) * scrollWidth,
-        (item.id-1) * scrollWidth,
+        ((index) - 1) * scrollWidth,
+        ((index) - 0.5) * scrollWidth,
+        (index) * scrollWidth,
       ],
       [-screenWidth * 0.1, 50, -screenWidth * 0.1],
       Extrapolation.CLAMP
     );
 
-    const zIndex = currentIndex === (item.id-1) ? 2 : 0;
+    const zIndex = currentIndex === (index) ? 2 : 0;
 
     return {
       transform: [
         { scale },
         // { perspective: 1000 },
       ],
-      marginRight: (item.id-1) === currentIndex ? marginRight : undefined,
-      marginLeft: (item.id-1) === currentIndex ? marginLeft : undefined,
+      marginRight: (index) === currentIndex ? marginRight : undefined,
+      marginLeft: (index) === currentIndex ? marginLeft : undefined,
       zIndex,
     };
   });
