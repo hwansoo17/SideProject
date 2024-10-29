@@ -6,9 +6,6 @@ import MakeCard from '../screens/home/MakeCard';
 import RegisterCard from '../screens/home/RegisterCard';
 import CardDetail from '../screens/home/CardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore';
-import {TouchableOpacity} from 'react-native';
-
-const BackIcon = require('../assets/icons/BackIcon.svg').default;
 
 const Stack = createStackNavigator();
 
@@ -30,18 +27,11 @@ const HomeTab: React.FC<{route: any}> = ({route}) => {
         component={HomeMain}
         options={{headerShown: false}}
       />
-<<<<<<< Updated upstream
-      <Stack.Screen
-        name="CardDetail"
-        component={CardDetail}
-      />
-=======
       {/* <Stack.Screen
         name="MakeCard"
         component={MakeCard}
       /> */}
       <Stack.Screen name="CardDetail" component={CardDetail} />
->>>>>>> Stashed changes
       <Stack.Screen
         name="MakeCard"
         component={MakeCard}
