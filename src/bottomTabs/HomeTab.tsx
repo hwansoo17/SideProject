@@ -27,10 +27,6 @@ const HomeTab: React.FC<{route: any}> = ({route}) => {
         component={HomeMain}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen
-        name="MakeCard"
-        component={MakeCard}
-      /> */}
       <Stack.Screen name="CardDetail" component={CardDetail} />
       <Stack.Screen
         name="MakeCard"
