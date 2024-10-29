@@ -25,18 +25,21 @@ const RegisterCard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#282828',
+    backgroundColor: '#0d0d0d',
   },
   header: {
     flex: 0.1,
     textAlign: 'center',
-    backgroundColor: '#fff',
+    // backgroundColor: '#0d0d0d',
     justifyContent: 'space-between',
   },
   leftIcon: {
     paddingLeft: 16,
     flex: 1,
     justifyContent: 'center',
+    color: '#fff',
+  },
+  Text: {
     color: '#fff',
   },
 });

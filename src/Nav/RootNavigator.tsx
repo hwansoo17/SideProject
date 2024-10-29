@@ -4,15 +4,17 @@ import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import useAuthStore from '../store/useAuthStore';
 import BottomSheet from '../components/BottomSheet';
+import {StatusBar} from 'react-native';
 
 const RootNavigator = () => {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   return (
-      <NavigationContainer>
-        {isLoggedIn ?  <MainNavigator /> : <AuthNavigator />}
-        <BottomSheet />
-      </NavigationContainer>
+    <NavigationContainer>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
+      {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
+      <BottomSheet />
+    </NavigationContainer>
   );
 };
 
