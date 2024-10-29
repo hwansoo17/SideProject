@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text, Image } from 'react-native';
-import { Pressable, TouchableOpacity } from 'react-native-gesture-handler';
+import { Pressable, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -32,6 +32,7 @@ interface CarouselItemProps {
     gradient: string;
     realCardImg: string;
     background: string;
+    qrCodeSrc: string;
   };
     scrollX: SharedValue<number>;
     currentIndex: number;
@@ -85,7 +86,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         ((index) + 0.5) * scrollWidth,
         ((index) + 1) * scrollWidth,
       ],
-      [-screenWidth * 0.1, 50, -screenWidth * 0.1],
+      [-screenWidth * 0.05, 50, -screenWidth * 0.05],
       Extrapolation.CLAMP
     );
 
@@ -96,11 +97,11 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         ((index) - 0.5) * scrollWidth,
         (index) * scrollWidth,
       ],
-      [-screenWidth * 0.1, 50, -screenWidth * 0.1],
+      [-screenWidth * 0.05, 50, -screenWidth * 0.05],
       Extrapolation.CLAMP
     );
 
-    const zIndex = currentIndex === (index) ? 2 : 0;
+    const zIndex = currentIndex === (index) ? 8 : 0;
 
     return {
       transform: [
@@ -148,9 +149,9 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       ]}
     >
       <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.brColor }]}>
-        <View 
-          style={{flex:1, width: screenWidth * 0.76, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
-          // onPress={() => navigation.navigate('CardDetail', { item })}
+        <TouchableWithoutFeedback 
+          style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
+          onPress={() => navigation.navigate('CardDetail', { item })}
         >
           <View style={{width:'100%', height:'70%', padding:24, flexDirection:'row'}}>
             <View>
@@ -173,7 +174,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
               {data.map((item, index) => (
                 <TouchableOpacity 
                   key={index} 
-                  style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.1)', borderRadius:18, marginTop:12}}
+                  style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.05)', borderRadius:18, marginTop:12}}
                   onPress={() => console.log('링크 터치')}
                 >    
                 </TouchableOpacity>
@@ -201,11 +202,16 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Animated.View>
       <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: '#fff' }]}>
-        <View style={{width: screenWidth * 0.76, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-          <Text style={styles.text}>{item.title} - 뒷면</Text>
+        <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+          <View style={{alignItems:'center', justifyContent:'center', flex:1}}>
+            <View style={{width: '53%', aspectRatio:1, justifyContent:'center', alignItems:'center', borderRadius:4, backgroundColor:'white'}}>
+            <Image src={item.qrCodeSrc} style={{width: '86%', aspectRatio:1}}/>
+            </View>
+          </View>
+
         </View>
       </Animated.View>
     </Animated.View>
@@ -214,8 +220,8 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: screenWidth * 0.76,
-    marginHorizontal: -screenWidth * 0.1,
+    width: screenWidth * 0.7,
+    marginHorizontal: -screenWidth * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
   },

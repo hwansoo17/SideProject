@@ -15,7 +15,6 @@ import CarouselItem from './CarouselItem';
 import AddNewCardItem from './AddNewCardItem';
 
 const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
 
 type CarouselProps = {
   currentIndex: number;
@@ -27,7 +26,7 @@ type CarouselProps = {
 const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data, isFlipped}) => {
 
   const scrollX = useSharedValue(0);
-  const scrollWidth = screenWidth * 0.76 - screenWidth * 0.2;
+  const scrollWidth = screenWidth * 0.7 - screenWidth * 0.1;
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollX.value = event.contentOffset.x;
@@ -52,7 +51,7 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
     >
       <View
         style={{
-          width: (screenWidth - screenWidth * 0.76) / 2 + screenWidth * 0.1,
+          width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
         }}
       />
       {data.map((item, index) => (
@@ -75,7 +74,7 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
       />
       <View
         style={{
-          width: (screenWidth - screenWidth * 0.76) / 2 + screenWidth * 0.1,
+          width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
         }}
       />
     </Animated.ScrollView>
