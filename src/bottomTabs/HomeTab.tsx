@@ -2,9 +2,8 @@ import React, {useLayoutEffect} from 'react';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeMain from '../screens/home/HomeMain';
-// import MakeCard from '../screens/home/MakeCard';
-import MakeCard from '../screens/register/MakeCard';
-import RegisterCard from '../screens/register/RegisterCard';
+import MakeCard from '../screens/home/MakeCard';
+import RegisterCard from '../screens/home/RegisterCard';
 import CardDetail from '../screens/home/CardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; 
 
