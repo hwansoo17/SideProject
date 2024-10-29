@@ -1,17 +1,19 @@
 import React, {useLayoutEffect} from 'react';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeMain from '../screens/home/HomeMain';
 import MakeCard from '../screens/home/MakeCard';
 import RegisterCard from '../screens/home/RegisterCard';
 import CardDetail from '../screens/home/CardDetail';
-import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; 
+import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore';
+import {TouchableOpacity} from 'react-native';
+
+const BackIcon = require('../assets/icons/BackIcon.svg').default;
 
 const Stack = createStackNavigator();
 
-const HomeTab: React.FC<{ route: any }> = ({ route }) => {
-
-  const { showTabBar, hideTabBar } = useTabBarVisibilityStore();
+const HomeTab: React.FC<{route: any}> = ({route}) => {
+  const {showTabBar, hideTabBar} = useTabBarVisibilityStore();
 
   useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
@@ -26,19 +28,29 @@ const HomeTab: React.FC<{ route: any }> = ({ route }) => {
       <Stack.Screen
         name="HomeMain"
         component={HomeMain}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
+<<<<<<< Updated upstream
       <Stack.Screen
         name="CardDetail"
         component={CardDetail}
       />
+=======
+      {/* <Stack.Screen
+        name="MakeCard"
+        component={MakeCard}
+      /> */}
+      <Stack.Screen name="CardDetail" component={CardDetail} />
+>>>>>>> Stashed changes
       <Stack.Screen
         name="MakeCard"
         component={MakeCard}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="RegisterCard"
         component={RegisterCard}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
