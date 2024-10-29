@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, ImageBackground, TouchableOpacity, FlatList } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { NavigationProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import useBottomSheetStore from '../store/useBottomSheetStore';
 
 const AddIcon = require('../assets/buttonIcon/AddIcon.svg').default;
 const { width: screenWidth } = Dimensions.get('window');
@@ -38,6 +39,23 @@ const AddNewCardItem: React.FC<CarouselItemProps> = ({
 }) => {
 
   const navigation = useNavigation<Props>();
+
+  const openBottomSheet = useBottomSheetStore(state => state.openBottomSheet);
+  const handleOpenBottomSheet = () => {
+    const nodes = [
+      {
+        icon: "",
+        title: "새로 제작하기",
+        link: "MakeCard"
+      },
+      {
+        icon: "",
+        title: "기존 명함 추가",
+        link: "RegisterCard"
+      },
+    ];
+    return openBottomSheet(nodes);
+  };
 
   const inputRange = [
     (data.length -1) * scrollWidth,
@@ -107,7 +125,8 @@ const AddNewCardItem: React.FC<CarouselItemProps> = ({
       <View style={{flex:1}}/>
       <TouchableOpacity 
           style={{alignItems:'center'}}  
-          onPress={() => navigation.navigate('MakeCard')}
+          // onPress={() => navigation.navigate('MakeCard')}
+          onPress={() => handleOpenBottomSheet()}
       >
         <View 
           style={{
@@ -124,7 +143,8 @@ const AddNewCardItem: React.FC<CarouselItemProps> = ({
         <View style={{height:20}}/>
         <TouchableOpacity
           style={{alignItems:'center', justifyContent:'center'}}
-          onPress={() => {navigation.navigate('MakeCard'); console.log('pressed')}}
+          // onPress={() => {navigation.navigate('MakeCard'); console.log('pressed')}}
+          onPress={() => handleOpenBottomSheet()}
         >
           <View style={{paddingVertical:10, paddingHorizontal:44, backgroundColor:'#5539FF', borderRadius:100}}>
             <Text style={{color:'#fff', fontSize:14, fontFamily:'Pretendard-Medium'}}>명함 추가하기</Text>
