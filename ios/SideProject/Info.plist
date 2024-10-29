@@ -26,8 +26,6 @@
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>mycard</string>
-					<string>mypp</string>
-					<string>myCard</string>
 				</array>
 			</dict>
 		</array>
