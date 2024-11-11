@@ -7,8 +7,8 @@ import {
   Button,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import TakePhoto from '../../components/TakePhoto';
-import RegisterCardItem from '../../components/RegisterCardItem';
+import TakePhoto from '../../components/MakeCard/TakePhoto';
+import RegisterCardItem from '../../components/MakeCard/RegisterCardItem';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;

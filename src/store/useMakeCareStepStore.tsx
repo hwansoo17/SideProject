@@ -16,6 +16,7 @@ interface ICardFormData {
   phone: string;
   email: string;
   address: string;
+  links: string[];
 }
 
 const initialFormData: ICardFormData = {
@@ -25,6 +26,7 @@ const initialFormData: ICardFormData = {
   address: '',
   phone: '',
   email: '',
+  links: [],
 };
 
 const useMakeCardStore = create<IMakeCardStepState>(set => ({
