@@ -101,7 +101,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       Extrapolation.CLAMP
     );
 
-    const zIndex = currentIndex === (index) ? 8 : 0;
+    const zIndex = currentIndex === (index) ? 2 : 0;
 
     return {
       transform: [

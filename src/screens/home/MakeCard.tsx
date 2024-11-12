@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {RNCamera} from 'react-native-camera';
-import RNFS from 'react-native-fs';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
@@ -38,7 +36,7 @@ const MakeCard: React.FC = () => {
           <BackIcon />
         </TouchableOpacity>
       </View>
-      {!capturedImage ? (
+      {/* {!capturedImage ? (
         <RNCamera
           ref={cameraRef}
           style={styles.camera}
@@ -50,7 +48,7 @@ const MakeCard: React.FC = () => {
           source={{uri: `file://${capturedImage}`}}
           style={styles.preview}
         />
-      )}
+      )} */}
 
       <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
         <Text style={styles.captureText}>

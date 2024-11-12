@@ -5,15 +5,16 @@ import MainNavigator from './MainNavigator';
 import useAuthStore from '../store/useAuthStore';
 import BottomSheet from '../components/BottomSheet';
 import {StatusBar} from 'react-native';
+import { linking } from '../../deepLinkConfig';
 
 const RootNavigator = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="light-content" backgroundColor="#000" />
+    <NavigationContainer linking={linking}>
+      {/* <StatusBar barStyle="light-content" backgroundColor="#000" /> */}
       {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
-      <BottomSheet />
+      {/* <BottomSheet /> */}
     </NavigationContainer>
   );
 };

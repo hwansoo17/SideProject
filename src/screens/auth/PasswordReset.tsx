@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from 'react';
 import { View, Text, Alert } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { colors, textStyles } from '../../styles/styles';
 import CustomButton from '../../components/CustomButton';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
@@ -18,6 +18,7 @@ const PasswordReset: React.FC<{ navigation: NavigationProp<ParamListBase> }> = (
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [isPasswordSame, setIsPasswordSame] = useState(true);
   const [code, setCode] = useState('');
+  const [test, setTest] = useState('');
 
   const handleCodeChange = (newCode: string) => {
     setCode(newCode);
@@ -57,7 +58,7 @@ const PasswordReset: React.FC<{ navigation: NavigationProp<ParamListBase> }> = (
     setIsValidEmail(isEmailValid(email));
     setIsValidPassword(isPasswordValid(password));
     setIsPasswordSame(isSamePassword(password, passwordCheck));
-    console.log(code)
+    console.log(code, email)
   }, [email, password, passwordCheck, code]);
 
 
@@ -144,6 +145,13 @@ const PasswordReset: React.FC<{ navigation: NavigationProp<ParamListBase> }> = (
         flex: 1,
         backgroundColor: colors.Black
       }}>
+        <TextInput
+          value={test}
+          onChangeText={setTest}
+          placeholder="test"
+          placeholderTextColor={colors.White}
+          style={{color: colors.White}}
+        />
       {step == 0 &&
       <RegisterPage
         title="가입하신 이메일을 입력해 주세요"

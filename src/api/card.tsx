@@ -17,8 +17,8 @@ interface CarouselItem {
   }
 
 // 카드 리스트 가져오기 함수
-export const fetchMyCardList = async (): Promise<CarouselItem[]> => {
-  const response = await authApi.get<CarouselItem[]>('/api/my_cards');
+export const fetchCardList = async (): Promise<CarouselItem[]> => {
+  const response = await authApi.get<CarouselItem[]>('/api/cards');
   console.log(response.data);
   return response.data;
 };
