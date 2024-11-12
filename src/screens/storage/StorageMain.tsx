@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Button, Linking, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 import { NavigationProp } from "@react-navigation/native";
@@ -17,6 +17,9 @@ const MailIcon = require('../../assets/buttonIcon/MailIcon.svg').default;
 const GridIcon = require('../../assets/buttonIcon/GridIcon.svg').default;
 const ListIcon = require('../../assets/buttonIcon/ListIcon.svg').default;
 const LogoIcon = require('../../assets/icons/LogoIcon.svg').default;
+const Check = require('../../assets/icons/Check.svg').default;
+const TotalSelectIcon = require('../../assets/buttonIcon/TotalSelectIcon.svg').default;
+const TrashCanIcon = require('../../assets/buttonIcon/TrashCanIcon.svg').default;
 interface Props {
   navigation: NavigationProp<any>;
 }
@@ -39,12 +42,113 @@ const Chip: React.FC<{text: string, isSelected: boolean, onPress: () => void }> 
   );
 }
 
+const CardListItem = ({item, settingVisible, setSelectedIds, selectedIds}) => {
+  const isSelected = selectedIds.includes(item.id);
+
+  useEffect(() => {
+    if (!settingVisible) {
+      setSelectedIds([]); // 설정 모드 해제 시 선택 초기화
+    }
+  }, [settingVisible]);
+
+  const toggleSelection = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+    );
+  };
+
+  return(
+    <TouchableOpacity
+      style={{
+        height: 77,
+        backgroundColor: item.brColor,
+        borderRadius: 4,
+        marginHorizontal: 20,
+      }}
+      onPress={() => {
+        if (settingVisible) {
+          toggleSelection(item.id);
+        } else {
+          Linking.openURL(`sideproject://storage/Detail/${item.id}`);
+        }
+      }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          padding: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        {settingVisible &&
+        <View 
+        style={{borderRadius:100, height:17, width:17, borderWidth:1, borderColor:isSelected ? colors.Primary : colors.G10, marginRight:16, backgroundColor: isSelected ? colors.Primary: undefined, alignItems:'center', justifyContent:'center'}}
+        >
+          {isSelected && <Check/>}
+        </View>}
+        <View>
+          <Text style={[textStyles.R3, { color: colors.G11 }]}>{item.corporation}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={[textStyles.M3, { color: colors.White }]}>{item.name}</Text>
+            <View
+              style={{
+                width: 1,
+                height: 8,
+                backgroundColor: colors.White,
+                marginHorizontal: 8,
+              }}
+            />
+            <Text style={[textStyles.M3, { color: colors.White }]}>{item.tel}</Text>
+          </View>
+        </View>
+        <View style={{ flex: 1 }} />
+        <View style={{ flexDirection: 'row', gap: 4 }}>
+          <TouchableOpacity
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 18,
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            disabled={settingVisible}
+          >
+            <PhoneIcon />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 18,
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            disabled={settingVisible}
+          >
+            <MailIcon />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 const StorageMain: React.FC<Props> = ({navigation}) => {
   // const {isLoading, isError, data: data, error} = useQuery({queryKey:['cards'], queryFn: fetchCardList});
   const {showTabBar, hideTabBar, isTabBarVisible} = useTabBarVisibilityStore();
   const [settingVisible, setSettingVisible] = React.useState(false);
   const [isName, setIsName] = React.useState(false);
   const [isGrid, setIsGrid] = React.useState(false);
+  const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
+  
+  useEffect(() => {
+    console.log(selectedIds);
+  }
+  , [selectedIds]);
   const {isLoading, isError, data: data = [], error} = useQuery<any[]>({
     queryKey:['myCards'],
     select: (data) => {
@@ -60,10 +164,10 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   const pressSetting = () => {
     if (isTabBarVisible) {
       hideTabBar();
-      setSettingVisible(!settingVisible);
+      setSettingVisible(true);
     } else {
       showTabBar();
-      setSettingVisible(!settingVisible);
+      setSettingVisible(false);
     }
   }
 
@@ -73,71 +177,13 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       data={data}
       ListHeaderComponent={<View style={{height:12}}/>}
       ListFooterComponent={<View style={{height:10}}/>}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={{
-            height: 77,
-            backgroundColor: item.brColor,
-            borderRadius: 4,
-            marginHorizontal: 20,
-          }}
-          onPress={() => {
-            Linking.openURL(`sideproject://storage/Detail/${item.id}`);
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              padding: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <View>
-              <Text style={[textStyles.R3, { color: colors.G11 }]}>{item.corporation}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={[textStyles.M3, { color: colors.White }]}>{item.name}</Text>
-                <View
-                  style={{
-                    width: 1,
-                    height: 8,
-                    backgroundColor: colors.White,
-                    marginHorizontal: 8,
-                  }}
-                />
-                <Text style={[textStyles.M3, { color: colors.White }]}>{item.tel}</Text>
-              </View>
-            </View>
-            <View style={{ flex: 1 }} />
-            <View style={{ flexDirection: 'row', gap: 4 }}>
-              <TouchableOpacity
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 18,
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <PhoneIcon />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 18,
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <MailIcon />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableOpacity>
+      renderItem={({item}) => (
+        <CardListItem
+          item={item}
+          settingVisible={settingVisible}
+          setSelectedIds={setSelectedIds}
+          selectedIds={selectedIds}
+        />
       )}
       
       ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
@@ -284,7 +330,6 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
     </View>
     {settingVisible &&
     <View style={{
-      paddingHorizontal:20,
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12,
       backgroundColor: 'rgba(44,44,44,0.8)',
@@ -297,16 +342,27 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       shadowRadius: 3.84,
       elevation: 5}}
     >
-      <TouchableOpacity>
-        <Text style={[textStyles.R1, {color:colors.White}]}>
-          전체 선택
-        </Text>
+      <TouchableOpacity 
+        style={{padding:20}}
+        onPress={() => {
+          if (selectedIds.length === data.length) {
+            // 이미 모두 선택된 경우 선택 해제
+            setSelectedIds([]);
+          } else {
+            // 모든 아이템 선택
+            setSelectedIds(data.map((item) => item.id));
+          }
+        }}
+      >
+        <TotalSelectIcon/>
       </TouchableOpacity>
-      <View style={{flex:1}}/>
-      <TouchableOpacity>
-        <Text style={[textStyles.R1, {color:colors.Red}]}>
-          삭제
+      <View style={{flex:1}}>
+        <Text style={[textStyles.R1, {color:colors.White, textAlign:'center'}]}>
+          {selectedIds.length}개 항목 선택됨
         </Text>
+      </View>
+      <TouchableOpacity style={{padding:20}}>
+        <TrashCanIcon/>
       </TouchableOpacity>
       
     </View>
