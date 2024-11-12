@@ -12,9 +12,9 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer linking={linking}>
-      {/* <StatusBar barStyle="light-content" backgroundColor="#000" /> */}
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
       {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
-      {/* <BottomSheet /> */}
+      <BottomSheet />
     </NavigationContainer>
   );
 };
