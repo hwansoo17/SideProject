@@ -1,6 +1,6 @@
 import { authApi } from './api';
 
-interface CarouselItem {
+interface Card {
   id: number;
   name: string;
   corporation: string;
@@ -17,8 +17,8 @@ interface CarouselItem {
   }
 
 // 카드 리스트 가져오기 함수
-export const fetchCardList = async (): Promise<CarouselItem[]> => {
-  const response = await authApi.get<CarouselItem[]>('/api/cards');
+export const fetchCardList = async (): Promise<Card[]> => {
+  const response = await authApi.get<Card[]>('/api/cards');
   console.log(response.data);
   return response.data;
 };

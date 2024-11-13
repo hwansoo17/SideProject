@@ -1,7 +1,8 @@
+import { LinkingOptions } from '@react-navigation/native';
 import { Linking } from 'react-native';
 
 
-export const linking = {
+export const linking: LinkingOptions<{}> = {
   prefixes: ['sideproject://'],
   config: {
     screens: {

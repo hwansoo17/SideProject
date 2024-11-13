@@ -5,10 +5,13 @@ import { NavigationProp } from "@react-navigation/native";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCardList } from "../../api/card";
 import { colors, textStyles } from "../../styles/styles";
 import useTabBarVisibilityStore from "../../store/useTabBarVisibilityStore";
 import { Image } from "react-native-svg";
+import useCardList from "../../hooks/queries/useCardList";
+import CustomChip from "../../components/CustomChip";
+import CardListItem from "../../components/CardListItem";
+import CardGridItem from "../../components/CardGridItem";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
 const SettingIcon = require('../../assets/buttonIcon/SettingIcon.svg').default;
@@ -17,124 +20,10 @@ const MailIcon = require('../../assets/buttonIcon/MailIcon.svg').default;
 const GridIcon = require('../../assets/buttonIcon/GridIcon.svg').default;
 const ListIcon = require('../../assets/buttonIcon/ListIcon.svg').default;
 const LogoIcon = require('../../assets/icons/LogoIcon.svg').default;
-const Check = require('../../assets/icons/Check.svg').default;
 const TotalSelectIcon = require('../../assets/buttonIcon/TotalSelectIcon.svg').default;
 const TrashCanIcon = require('../../assets/buttonIcon/TrashCanIcon.svg').default;
 interface Props {
   navigation: NavigationProp<any>;
-}
-
-const Chip: React.FC<{text: string, isSelected: boolean, onPress: () => void }> = ({text, isSelected, onPress}) => {
-  return (
-    <TouchableOpacity 
-      style={{
-        backgroundColor: isSelected? colors.Primary : undefined , 
-        borderRadius: 100, 
-        paddingHorizontal:20, 
-        paddingVertical:10, 
-        borderColor: isSelected ? colors.Primary : 'rgba(142, 142, 151, 0.4)', 
-        borderWidth: 1
-      }}
-      onPress={onPress}
-    >
-      <Text style={[textStyles.R3, {color: colors.White}]}>{text}</Text>
-    </TouchableOpacity>
-  );
-}
-
-const CardListItem = ({item, settingVisible, setSelectedIds, selectedIds}) => {
-  const isSelected = selectedIds.includes(item.id);
-
-  useEffect(() => {
-    if (!settingVisible) {
-      setSelectedIds([]); // 설정 모드 해제 시 선택 초기화
-    }
-  }, [settingVisible]);
-
-  const toggleSelection = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
-    );
-  };
-
-  return(
-    <TouchableOpacity
-      style={{
-        height: 77,
-        backgroundColor: item.brColor,
-        borderRadius: 4,
-        marginHorizontal: 20,
-      }}
-      onPress={() => {
-        if (settingVisible) {
-          toggleSelection(item.id);
-        } else {
-          Linking.openURL(`sideproject://storage/Detail/${item.id}`);
-        }
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          padding: 20,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        {settingVisible &&
-        <View 
-        style={{borderRadius:100, height:17, width:17, borderWidth:1, borderColor:isSelected ? colors.Primary : colors.G10, marginRight:16, backgroundColor: isSelected ? colors.Primary: undefined, alignItems:'center', justifyContent:'center'}}
-        >
-          {isSelected && <Check/>}
-        </View>}
-        <View>
-          <Text style={[textStyles.R3, { color: colors.G11 }]}>{item.corporation}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={[textStyles.M3, { color: colors.White }]}>{item.name}</Text>
-            <View
-              style={{
-                width: 1,
-                height: 8,
-                backgroundColor: colors.White,
-                marginHorizontal: 8,
-              }}
-            />
-            <Text style={[textStyles.M3, { color: colors.White }]}>{item.tel}</Text>
-          </View>
-        </View>
-        <View style={{ flex: 1 }} />
-        <View style={{ flexDirection: 'row', gap: 4 }}>
-          <TouchableOpacity
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 18,
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            disabled={settingVisible}
-          >
-            <PhoneIcon />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 18,
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            disabled={settingVisible}
-          >
-            <MailIcon />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
 }
 
 const StorageMain: React.FC<Props> = ({navigation}) => {
@@ -149,6 +38,9 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
     console.log(selectedIds);
   }
   , [selectedIds]);
+
+  // const {isLoading, isError, data: data = [], error} = useCardList(isName);
+    
   const {isLoading, isError, data: data = [], error} = useQuery<any[]>({
     queryKey:['myCards'],
     select: (data) => {
@@ -203,78 +95,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
         ListHeaderComponent={<View style={{height:12}}/>}
         ListFooterComponent={<View/>}
         columnWrapperStyle={{ justifyContent: 'space-between', gap:10 }} // 가로 간격 설정
-        renderItem={({ item }) => {
-          if (item.id === 'placeholder') {
-            // 빈 아이템은 렌더링하지 않음
-            return <View style={{ flex: 1, height: 200 }} />;
-          }
-  
-          return (
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                height: 200,
-                backgroundColor: item.brColor,
-                borderRadius: 4,
-              }}
-              onPress={() => {
-                Linking.openURL(`sideproject://storage/Detail/${item.id}`);
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  padding: 10,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                }}
-              >
-                {item.logoImg ? (
-                  <Image src={item.logoImg} style={{ width: 33, height: 33 }} />
-                ) : (
-                  <LogoIcon />
-                )}
-                <View style={{ gap: 4 }}>
-                  <Text style={[textStyles.R3, { color: colors.G11, textAlign: 'center' }]}>
-                    {item.corporation}
-                  </Text>
-                  <Text style={[textStyles.SB1, { color: colors.White, textAlign: 'center' }]}>
-                    {item.name}
-                  </Text>
-                </View>
-                <Text style={[textStyles.R2, { color: colors.G12 }]}>{item.tel}</Text>
-                <View style={{ flexDirection: 'row', gap: 4 }}>
-                  <TouchableOpacity
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 18,
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <PhoneIcon />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 18,
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <MailIcon />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={({ item }) => (<CardGridItem item={item}/>)}
         
         keyExtractor={(item) => item.id.toString()}
       />
@@ -311,9 +132,9 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
           </View>
         </View>
         <View style={{flexDirection:'row', alignItems:'center'}}>
-          <Chip text="이름" isSelected={isName} onPress={() => setIsName(true)}/>
+          <CustomChip text="이름" isSelected={isName} onPress={() => setIsName(true)}/>
           <View style={{width:8}}/>
-          <Chip text="회사명" isSelected={!isName} onPress={() => setIsName(false)}/>
+          <CustomChip text="회사명" isSelected={!isName} onPress={() => setIsName(false)}/>
           <View style={{flex:1}}/>
           <TouchableOpacity 
             style={{padding:5}}
