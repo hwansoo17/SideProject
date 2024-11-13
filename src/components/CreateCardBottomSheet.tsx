@@ -8,18 +8,23 @@ import {
   PanResponder,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Image,
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import useBottomSheetStore from '../store/useBottomSheetStore';
+import { useCreatedCardBottomSheetStore } from '../store/useBottomSheetStore';
+import { colors } from '../styles/styles';
 
 interface INav extends NavigationProp<any> {}
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const BottomSheet = () => {
-  const isOpen = useBottomSheetStore(state => state.isOpen);
-  const menuItems = useBottomSheetStore(state => state.menuItems);
-  const closeBottomSheet = useBottomSheetStore(state => state.closeBottomSheet);
+const CameraIcon = require('../assets/icons/bottomSheet/bs_camera_icon.svg').default;
+const PlusIcon = require('../assets/icons/bottomSheet/bs_plus_icon.svg').default;
+const RightArrowIcon = require('../assets/icons/chevron_right.svg').default;
+
+const CreateCardBottomSheet = () => {
+  const isOpen = useCreatedCardBottomSheetStore(state => state.isOpen);
+  const closeBottomSheet = useCreatedCardBottomSheetStore(state => state.closeBottomSheet);
 
   const navigation = useNavigation<INav>();
 
@@ -82,25 +87,38 @@ const BottomSheet = () => {
         style={[styles.bottomSheetContainer, { transform: [{ translateY }] }]}
         {...panResponder.panHandlers} // 드래그 제스처 핸들러
       >
+        <View style={styles.drawerContainer}>
+          <Image style={styles.drawerImage} />
+        </View>
         <View style={styles.contentContainer}>
-          {menuItems.map((
-            item: {
-              icon: string,
-              title: string,
-              link: string
-            }, 
-            index: Key) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.menuItem}
-              onPress={() => {
-                navigation.navigate(item.link);
-                closeBottomSheetWithAnimation();
-              }}
-            >
-              <Text style={styles.menuText}>{item.title}</Text>
-            </TouchableOpacity>
-          ))}
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              navigation.navigate('MakeCard');
+              closeBottomSheetWithAnimation();
+            }}>
+            <View style={styles.linkContainer}>
+              <View style={styles.linkHeader}>
+                <PlusIcon />
+                <Text style={styles.menuText}>새로 제작하기</Text>
+              </View>
+              <RightArrowIcon />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              navigation.navigate('RegisterCard');
+              closeBottomSheetWithAnimation();
+            }}>
+            <View style={styles.linkContainer}>
+              <View style={styles.linkHeader}>
+                <CameraIcon />
+                <Text style={styles.menuText}>기존 명함 추가</Text>
+              </View>
+              <RightArrowIcon />
+            </View>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </View>
@@ -119,6 +137,19 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: 'rgba(1, 1, 1, 0.5)', // 투명한 배경
+  },
+  drawerContainer: {
+    position: 'relative',
+    top: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  drawerImage: {
+    width: 60,
+    height: 5,
+    borderRadius: 10,
+    backgroundColor: colors.White,
+    elevation: 10,
   },
   bottomSheetContainer: {
     position: 'absolute',
@@ -149,6 +180,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 16,
+    paddingTop: 32,
   },
   menuItem: {
     paddingVertical: 12,
@@ -158,6 +190,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#fff',
   },
+  linkContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  linkHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
 });
 
-export default BottomSheet;
+export default CreateCardBottomSheet;

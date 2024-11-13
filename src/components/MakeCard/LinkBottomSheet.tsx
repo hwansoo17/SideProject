@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, Key, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,9 @@ import {
   Linking,
   Image,
 } from 'react-native';
-import AddLinkModal from './AddLinkModal';
 import EditLinkModal from './EditLinkModal';
-import { colors } from '../../styles/styles';
+import {colors} from '../../styles/styles';
+import {useLinkBottomSheetStore} from '../../store/useBottomSheetStore';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -22,22 +22,9 @@ const EditIcon = require('../../assets/icons/edit_icon.svg').default;
 const LinkExternalIcon = require('../../assets/icons/link_external_icon.svg').default;
 const RightArrowIcon = require('../../assets/icons/chevron_right.svg').default;
 
-interface ILinkBottomSheet {
-  isOpen: boolean;
-  closeBottomSheet: () => void;
-  deleteLink: (url: string) => void;
-  editLink: (before: string, after: string) => void;
-  link: string;
-}
-
-const LinkBottomSheet: React.FC<ILinkBottomSheet> = ({
-  isOpen,
-  closeBottomSheet,
-  deleteLink,
-  editLink,
-  link,
-}) => {
+const LinkBottomSheet = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {isOpen, closeBottomSheet, deleteLink, editLink, selectedUrl} = useLinkBottomSheetStore();
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
   const panResponder = useRef(
@@ -104,12 +91,12 @@ const LinkBottomSheet: React.FC<ILinkBottomSheet> = ({
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              deleteLink(link);
+              deleteLink();
               closeBottomSheetWithAnimation();
             }}>
             <View style={styles.linkContainer}>
               <View style={styles.linkHeader}>
-                <DelIcon />
+                <DelIcon width={22} height={22} />
                 <Text style={styles.menuText}>링크 삭제하기</Text>
               </View>
               <RightArrowIcon />
@@ -131,7 +118,7 @@ const LinkBottomSheet: React.FC<ILinkBottomSheet> = ({
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              Linking.openURL(link);
+              Linking.openURL(selectedUrl);
               closeBottomSheetWithAnimation();
             }}>
             <View style={styles.linkContainer}>
@@ -148,10 +135,10 @@ const LinkBottomSheet: React.FC<ILinkBottomSheet> = ({
         visible={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={(url: string) => {
-          editLink(link, url);
+          editLink(url);
           closeBottomSheetWithAnimation();
         }}
-        link={link}
+        link={selectedUrl}
       />
     </View>
   ) : null;
@@ -229,7 +216,7 @@ const styles = StyleSheet.create({
   linkHeader: {
     flexDirection: 'row',
     gap: 10,
-  }
+  },
 });
 
 export default LinkBottomSheet;

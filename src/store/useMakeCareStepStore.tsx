@@ -5,7 +5,7 @@ interface IMakeCardStepState {
   formData: ICardFormData;
   setStep: (step: number) => void;
   resetStep: () => void;
-  updateFormData: (key: keyof ICardFormData, value: string) => void;
+  updateFormData: (key: keyof ICardFormData, value: string | string[]) => void;
   resetFormData: () => void;
 }
 

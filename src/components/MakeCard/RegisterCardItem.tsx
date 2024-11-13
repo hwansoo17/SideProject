@@ -3,19 +3,17 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   View,
   Text,
-  Image,
   Dimensions,
   Alert,
   TextInput,
   ScrollView,
   StyleSheet,
-  TouchableOpacityComponent,
 } from 'react-native';
 import useMakeCardStepStore from '../../store/useMakeCareStepStore';
 import {useNavigation} from '@react-navigation/native';
 import {colors, textStyles} from '../../styles/styles';
 import AddLinkModal from './AddLinkModal';
-import LinkBottomSheet from './LinkBottomSheet';
+import {useCardSubmitBottomSheetStore, useLinkBottomSheetStore} from '../../store/useBottomSheetStore';
 
 const XIcon = require('../../assets/icons/links/x_icon.svg').default;
 const KakaoIcon = require('../../assets/icons/links/kakao_icon.svg').default;
@@ -24,49 +22,37 @@ const InstagramIcon = require('../../assets/icons/links/instagram_icon.svg').def
 const LinkIcon = require('../../assets/icons/links/default_link_icon.svg').default;
 const AddIcon = require('../../assets/icons/links/+_icon.svg').default;
 
-const linkIcons = {
-  x: <XIcon />,
-  kakao: <KakaoIcon />,
-  facebook: <FacebookIcon />,
-  instagram: <InstagramIcon />,
-  link: <LinkIcon />,
-  add: <AddIcon />,
-};
-
 const RegisterCardItem: React.FC = () => {
-  const navigation = useNavigation();
   const {formData, updateFormData, resetFormData, step, setStep} =
     useMakeCardStepStore();
-
+  const {openBottomSheet, links, setLinks, setSelectedUrl} = useLinkBottomSheetStore();
+  const {
+    openBottomSheet: openCardSubmitBottomSheet,
+    setOnSubmit,
+    setOnCreateMobileCard,
+  } = useCardSubmitBottomSheetStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [links, setLinks] = useState<{url: string; type: string}[]>([]);
-  const [selectedLink, setSelectedLink] = useState<string>('');
 
-  const deleteLink = (link: string) => {
-    console.log(link);
-    setLinks(links.filter(l => l.url !== link));
-  };
+  useEffect(() => {
+    setOnSubmit(handleSubmit);
+    setOnCreateMobileCard(handleCreateMobileCard);
+  }, []);
 
-  const editLink = (before: string, after: string) => {
-    setLinks(links.map(l => (l.url === before ? {url: after, type: detectLinkType(after)} : l)));
-  };
+  useEffect(() => {
+    if (links.length > 0) {
+      updateFormData(
+        'links',
+        links.map(l => l.url),
+      );
+    }
+  }, [links]);
 
   const OpenLinkSheet = (link: {url: string; type: string}) => {
-    setSelectedLink(link.url);
-    setIsBottomSheetOpen(true);
+    setSelectedUrl(link.url);
+    openBottomSheet();
   };
 
-  const detectLinkType = (url: string) => {
-    if (url.includes('twitter.com') || url.includes('x.com')) return 'x';
-    if (url.includes('kakao.com')) return 'kakao';
-    if (url.includes('facebook.com')) return 'facebook';
-    if (url.includes('instagram.com')) return 'instagram';
-    return 'link';
-  };
-
-  const handleSubmit = () => {
-    // 필수 입력값 검증
+  const OpenCardSubmitSheet = () => {
     if (
       !formData.name ||
       !formData.company ||
@@ -76,10 +62,19 @@ const RegisterCardItem: React.FC = () => {
       Alert.alert('입력 오류', '필수 항목을 모두 입력해주세요.');
       return;
     }
-
     console.log('제출된 데이터:', formData);
-    // API 호출 로직 추가
-    navigation.navigate('RegisterCard');
+    openCardSubmitBottomSheet();
+  };
+
+  const handleSubmit = () => {
+    // Create Card
+    console.log('Create Card');
+    // navigation.navigate('CompleteCard');
+  };
+  const handleCreateMobileCard = () => {
+    // Create Mobile Temp
+    console.log('Create Mobile Temp');
+    // navigation.navigate('RegisterCard');
   };
 
   return (
@@ -194,7 +189,7 @@ const RegisterCardItem: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.nextButton}
-            onPress={handleSubmit}>
+            onPress={OpenCardSubmitSheet}>
             <Text>다음</Text>
           </TouchableOpacity>
         </View>
@@ -203,15 +198,8 @@ const RegisterCardItem: React.FC = () => {
         visible={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={(url: string) => {
-          setLinks([...links, {url, type: detectLinkType(url)}]);
+          setLinks(url);
         }}
-      />
-      <LinkBottomSheet
-        isOpen={isBottomSheetOpen}
-        closeBottomSheet={() => setIsBottomSheetOpen(false)}
-        deleteLink={deleteLink}
-        editLink={editLink}
-        link={selectedLink}
       />
     </View>
   );

@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, Key, useState} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,10 @@ import {
   PanResponder,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Linking,
+  Image,
 } from 'react-native';
+import {useCardSubmitBottomSheetStore} from '../../store/useBottomSheetStore';
+import {colors} from '../../styles/styles';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -17,19 +19,8 @@ const SaveIcon = require('../../assets/icons/save_icon.svg').default;
 const EditIcon = require('../../assets/icons/edit_icon.svg').default;
 const RightArrowIcon = require('../../assets/icons/chevron_right.svg').default;
 
-interface ICardSubmitBottomSheet {
-  isOpen: boolean;
-  closeBottomSheet: () => void;
-  onSubmit: () => void;
-  onCreateMobileCard: () => void;
-}
-
-const CardSubmitBottomSheet: React.FC<ICardSubmitBottomSheet> = ({
-  isOpen,
-  closeBottomSheet,
-  onSubmit,
-  onCreateMobileCard,
-}) => {
+const CardSubmitBottomSheet = () => {
+  const {isOpen, closeBottomSheet, onSubmit, onCreateMobileCard} = useCardSubmitBottomSheetStore();
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
   const panResponder = useRef(
@@ -89,6 +80,9 @@ const CardSubmitBottomSheet: React.FC<ICardSubmitBottomSheet> = ({
         style={[styles.bottomSheetContainer, { transform: [{ translateY }] }]}
         {...panResponder.panHandlers} // 드래그 제스처 핸들러
       >
+        <View style={styles.drawerContainer}>
+          <Image style={styles.drawerImage} />
+        </View>
         <View style={styles.contentContainer}>
           <TouchableOpacity
             style={styles.menuItem}
@@ -118,32 +112,8 @@ const CardSubmitBottomSheet: React.FC<ICardSubmitBottomSheet> = ({
               <RightArrowIcon />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => {
-              console.log('open');
-              Linking.openURL(link);
-              closeBottomSheetWithAnimation();
-            }}>
-            <View style={styles.linkContainer}>
-              <View style={styles.linkHeader}>
-                <LinkExternalIcon />
-                <Text style={styles.menuText}>링크 방문하기</Text>
-              </View>
-              <RightArrowIcon />
-            </View>
-          </TouchableOpacity>
         </View>
       </Animated.View>
-      <EditLinkModal
-        visible={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={(url: string) => {
-          editLink(link, url);
-          closeBottomSheetWithAnimation();
-        }}
-        link={link}
-      />
     </View>
   ) : null;
 };
@@ -156,6 +126,19 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     justifyContent: 'flex-end',
+  },
+  drawerContainer: {
+    position: 'relative',
+    top: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  drawerImage: {
+    width: 60,
+    height: 5,
+    borderRadius: 10,
+    backgroundColor: colors.White,
+    elevation: 10,
   },
   background: {
     flex: 1,
@@ -190,6 +173,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 16,
+    paddingTop: 32,
   },
   menuItem: {
     paddingVertical: 12,
@@ -206,7 +190,7 @@ const styles = StyleSheet.create({
   linkHeader: {
     flexDirection: 'row',
     gap: 10,
-  }
+  },
 });
 
 export default CardSubmitBottomSheet;

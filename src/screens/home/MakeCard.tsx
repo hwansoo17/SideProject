@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -16,6 +16,10 @@ const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 const MakeCard: React.FC = () => {
   const {step, resetStep} = useMakeCardStore();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    return () => resetStep();
+  }, []);
 
   const handleBack = () => {
     resetStep();
