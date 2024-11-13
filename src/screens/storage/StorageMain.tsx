@@ -4,7 +4,7 @@ import { Button, Linking, Pressable, Text, TouchableOpacity, View } from "react-
 import { NavigationProp } from "@react-navigation/native";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { colors, textStyles } from "../../styles/styles";
 import useTabBarVisibilityStore from "../../store/useTabBarVisibilityStore";
 import { Image } from "react-native-svg";
@@ -12,6 +12,7 @@ import useCardList from "../../hooks/queries/useCardList";
 import CustomChip from "../../components/CustomChip";
 import CardListItem from "../../components/CardListItem";
 import CardGridItem from "../../components/CardGridItem";
+import useDeleteCard from "../../hooks/mutations/useDeleteCard";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
 const SettingIcon = require('../../assets/buttonIcon/SettingIcon.svg').default;
@@ -34,24 +35,37 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   const [isGrid, setIsGrid] = React.useState(false);
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
   
+
   useEffect(() => {
     console.log(selectedIds);
   }
   , [selectedIds]);
 
-  // const {isLoading, isError, data: data = [], error} = useCardList(isName);
-    
-  const {isLoading, isError, data: data = [], error} = useQuery<any[]>({
-    queryKey:['myCards'],
-    select: (data) => {
-      // 정렬 로직 적용
-      return [...data].sort((a, b) =>
-        isName
-          ? a.name.localeCompare(b.name) // 이름 순 정렬
-          : a.corporation.localeCompare(b.corporation) // 회사명 순 정렬
-      );
+  const {isLoading, isError, data: data = [], error} = useCardList(isName);
+
+  const deleteCardMutation  = useDeleteCard();
+
+  const queryClient = useQueryClient();
+
+  const deleteSelectedCards = async () => {
+    if (selectedIds.length > 0) {
+      try {
+        // 모든 삭제 요청을 병렬로 실행
+        await Promise.all(
+          selectedIds.map((id) =>
+            deleteCardMutation.mutateAsync(id) // `mutateAsync` 사용
+          )
+        );
+  
+        console.log('All selected cards deleted successfully.');
+        setSelectedIds([]); // 선택 초기화
+        queryClient.invalidateQueries({ queryKey: ['cardList'] }); // 한 번만 호출
+        pressSetting();
+      } catch (error) {
+        console.error('Error deleting selected cards:', error);
+      }
     }
-  });
+  };
 
   const pressSetting = () => {
     if (isTabBarVisible) {
@@ -84,7 +98,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   );
 
   const renderGrid = () => {
-    const adjustedData = data.length % 2 !== 0 ? [...data, { id: 'placeholder' }] : data; // 홀수일 때 빈 아이템 추가
+    const adjustedData = data.length % 2 !== 0 ? [...data, { id: 'placeholder', brColor: '', corporation: '', name: '', tel: '' }] : data; // 홀수일 때 빈 아이템 추가
     
     return (
       <FlatList
@@ -113,13 +127,13 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       <View style={{flexDirection:'row', alignItems:'center', paddingHorizontal:24, paddingVertical:16}}>
         <Text style={{fontFamily:'Pretendard-SemiBold', fontSize:28, color:'#fff'}}>보관함</Text>
         <View style={{flex:1}}/>
-        <Pressable onPress={() => {navigation.navigate("AddCard")}}>
+        <TouchableOpacity onPress={() => {navigation.navigate("AddCard")}}>
           <EditIcon/>
-        </Pressable>
+        </TouchableOpacity>
         <View style={{width:16}}/>
-        <Pressable onPress={() => {pressSetting()}}>
+        <TouchableOpacity onPress={() => {pressSetting()}}>
           <SettingIcon/>
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <View style={{paddingHorizontal: 20, gap:16}}>
         <View>
@@ -182,7 +196,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
           {selectedIds.length}개 항목 선택됨
         </Text>
       </View>
-      <TouchableOpacity style={{padding:20}}>
+      <TouchableOpacity style={{padding:20}} onPress={deleteSelectedCards}>
         <TrashCanIcon/>
       </TouchableOpacity>
       
