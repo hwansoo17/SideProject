@@ -8,6 +8,8 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import useMakeCardStepStore from '../../store/useMakeCareStepStore';
 import {useNavigation} from '@react-navigation/native';
@@ -69,7 +71,7 @@ const RegisterCardItem: React.FC = () => {
   const handleSubmit = () => {
     // Create Card
     console.log('Create Card');
-    // navigation.navigate('CompleteCard');
+    setStep(step + 1);
   };
   const handleCreateMobileCard = () => {
     // Create Mobile Temp
@@ -78,7 +80,10 @@ const RegisterCardItem: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={50}
+      style={styles.container}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}>
@@ -201,7 +206,7 @@ const RegisterCardItem: React.FC = () => {
           setLinks(url);
         }}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

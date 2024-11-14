@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import TakePhoto from '../../components/MakeCard/TakePhoto';
 import RegisterCardItem from '../../components/MakeCard/RegisterCardItem';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
+import RegisterComplete from '../../components/MakeCard/RegisterComplete';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
@@ -33,7 +34,14 @@ const MakeCard: React.FC = () => {
           <BackIcon />
         </TouchableOpacity>
       </View>
-      {step == 1 ? <TakePhoto /> : <RegisterCardItem />}
+      {
+        step == 1 ? (
+          <TakePhoto />
+        ) : step == 2 ? (
+          <RegisterCardItem />
+        ) : (
+          <RegisterComplete />
+        )}
     </SafeAreaView>
   );
 };
