@@ -7,12 +7,13 @@ import {StatusBar} from 'react-native';
 import CreateCardBottomSheet from '../components/CreateCardBottomSheet';
 import LinkBottomSheet from '../components/MakeCard/LinkBottomSheet';
 import CardSubmitBottomSheet from '../components/MakeCard/CardSubmitBottomSheet';
+import { linking } from '../../deepLinkConfig';
 
 const RootNavigator = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <StatusBar barStyle="light-content" backgroundColor="#000" />
       {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
       <CreateCardBottomSheet />
