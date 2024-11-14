@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, Key} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,19 @@ import {
   PanResponder,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Image,
 } from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import useBottomSheetStore from '../store/useBottomSheetStore';
-
-interface INav extends NavigationProp<any> {}
+import {useCardSubmitBottomSheetStore} from '../../store/useBottomSheetStore';
+import {colors} from '../../styles/styles';
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const BottomSheet = () => {
-  const isOpen = useBottomSheetStore(state => state.isOpen);
-  const menuItems = useBottomSheetStore(state => state.menuItems);
-  const closeBottomSheet = useBottomSheetStore(state => state.closeBottomSheet);
+const SaveIcon = require('../../assets/icons/save_icon.svg').default;
+const EditIcon = require('../../assets/icons/edit_icon.svg').default;
+const RightArrowIcon = require('../../assets/icons/chevron_right.svg').default;
 
-  const navigation = useNavigation<INav>();
-
+const CardSubmitBottomSheet = () => {
+  const {isOpen, closeBottomSheet, onSubmit, onCreateMobileCard} = useCardSubmitBottomSheetStore();
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
   const panResponder = useRef(
@@ -82,25 +80,38 @@ const BottomSheet = () => {
         style={[styles.bottomSheetContainer, { transform: [{ translateY }] }]}
         {...panResponder.panHandlers} // 드래그 제스처 핸들러
       >
+        <View style={styles.drawerContainer}>
+          <Image style={styles.drawerImage} />
+        </View>
         <View style={styles.contentContainer}>
-          {menuItems.map((
-            item: {
-              icon: string,
-              title: string,
-              link: string
-            }, 
-            index: Key) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.menuItem}
-              onPress={() => {
-                navigation.navigate(item.link);
-                closeBottomSheetWithAnimation();
-              }}
-            >
-              <Text style={styles.menuText}>{item.title}</Text>
-            </TouchableOpacity>
-          ))}
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              onSubmit();
+              closeBottomSheetWithAnimation();
+            }}>
+            <View style={styles.linkContainer}>
+              <View style={styles.linkHeader}>
+                <SaveIcon />
+                <Text style={styles.menuText}>이대로 명함 제작</Text>
+              </View>
+              <RightArrowIcon />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              onCreateMobileCard();
+              closeBottomSheetWithAnimation();
+            }}>
+            <View style={styles.linkContainer}>
+              <View style={styles.linkHeader}>
+                <EditIcon />
+                <Text style={styles.menuText}>모바일 명함 제작</Text>
+              </View>
+              <RightArrowIcon />
+            </View>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </View>
@@ -115,6 +126,19 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     justifyContent: 'flex-end',
+  },
+  drawerContainer: {
+    position: 'relative',
+    top: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  drawerImage: {
+    width: 60,
+    height: 5,
+    borderRadius: 10,
+    backgroundColor: colors.White,
+    elevation: 10,
   },
   background: {
     flex: 1,
@@ -149,6 +173,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 16,
+    paddingTop: 32,
   },
   menuItem: {
     paddingVertical: 12,
@@ -158,6 +183,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#fff',
   },
+  linkContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  linkHeader: {
+    flexDirection: 'row',
+    gap: 10,
+  },
 });
 
-export default BottomSheet;
+export default CardSubmitBottomSheet;

@@ -5,7 +5,7 @@ interface IMakeCardStepState {
   formData: ICardFormData;
   setStep: (step: number) => void;
   resetStep: () => void;
-  updateFormData: (key: keyof ICardFormData, value: string) => void;
+  updateFormData: (key: keyof ICardFormData, value: string | string[]) => void;
   resetFormData: () => void;
 }
 
@@ -16,6 +16,7 @@ interface ICardFormData {
   phone: string;
   email: string;
   address: string;
+  links: string[];
 }
 
 const initialFormData: ICardFormData = {
@@ -25,6 +26,7 @@ const initialFormData: ICardFormData = {
   address: '',
   phone: '',
   email: '',
+  links: [],
 };
 
 const useMakeCardStore = create<IMakeCardStepState>(set => ({

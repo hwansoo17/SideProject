@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,15 +7,20 @@ import {
   Button,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import TakePhoto from '../../components/TakePhoto';
-import RegisterCardItem from '../../components/RegisterCardItem';
+import TakePhoto from '../../components/MakeCard/TakePhoto';
+import RegisterCardItem from '../../components/MakeCard/RegisterCardItem';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
+import RegisterComplete from '../../components/MakeCard/RegisterComplete';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
 const MakeCard: React.FC = () => {
   const {step, resetStep} = useMakeCardStore();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    return () => resetStep();
+  }, []);
 
   const handleBack = () => {
     resetStep();
@@ -29,7 +34,14 @@ const MakeCard: React.FC = () => {
           <BackIcon />
         </TouchableOpacity>
       </View>
-      {step == 1 ? <TakePhoto /> : <RegisterCardItem />}
+      {
+        step == 1 ? (
+          <TakePhoto />
+        ) : step == 2 ? (
+          <RegisterCardItem />
+        ) : (
+          <RegisterComplete />
+        )}
     </SafeAreaView>
   );
 };

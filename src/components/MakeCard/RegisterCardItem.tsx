@@ -1,17 +1,60 @@
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {View, Text, Image, Alert, TextInput, ScrollView} from 'react-native';
-import useMakeCardStepStore from '../store/useMakeCareStepStore';
-import {StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  Alert,
+  TextInput,
+  ScrollView,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import useMakeCardStepStore from '../../store/useMakeCareStepStore';
 import {useNavigation} from '@react-navigation/native';
-import {colors, textStyles} from '../styles/styles';
+import {colors, textStyles} from '../../styles/styles';
+import AddLinkModal from './AddLinkModal';
+import {useCardSubmitBottomSheetStore, useLinkBottomSheetStore} from '../../store/useBottomSheetStore';
+
+const XIcon = require('../../assets/icons/links/x_icon.svg').default;
+const KakaoIcon = require('../../assets/icons/links/kakao_icon.svg').default;
+const FacebookIcon = require('../../assets/icons/links/facebook_icon.svg').default;
+const InstagramIcon = require('../../assets/icons/links/instagram_icon.svg').default;
+const LinkIcon = require('../../assets/icons/links/default_link_icon.svg').default;
+const AddIcon = require('../../assets/icons/links/+_icon.svg').default;
 
 const RegisterCardItem: React.FC = () => {
-  const navigation = useNavigation();
   const {formData, updateFormData, resetFormData, step, setStep} =
     useMakeCardStepStore();
+  const {openBottomSheet, links, setLinks, setSelectedUrl} = useLinkBottomSheetStore();
+  const {
+    openBottomSheet: openCardSubmitBottomSheet,
+    setOnSubmit,
+    setOnCreateMobileCard,
+  } = useCardSubmitBottomSheetStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSubmit = () => {
-    // 필수 입력값 검증
+  useEffect(() => {
+    setOnSubmit(handleSubmit);
+    setOnCreateMobileCard(handleCreateMobileCard);
+  }, []);
+
+  useEffect(() => {
+    if (links.length > 0) {
+      updateFormData(
+        'links',
+        links.map(l => l.url),
+      );
+    }
+  }, [links]);
+
+  const OpenLinkSheet = (link: {url: string; type: string}) => {
+    setSelectedUrl(link.url);
+    openBottomSheet();
+  };
+
+  const OpenCardSubmitSheet = () => {
     if (
       !formData.name ||
       !formData.company ||
@@ -21,14 +64,26 @@ const RegisterCardItem: React.FC = () => {
       Alert.alert('입력 오류', '필수 항목을 모두 입력해주세요.');
       return;
     }
-
     console.log('제출된 데이터:', formData);
-    // API 호출 로직 추가
-    navigation.navigate('RegisterCard');
+    openCardSubmitBottomSheet();
+  };
+
+  const handleSubmit = () => {
+    // Create Card
+    console.log('Create Card');
+    setStep(step + 1);
+  };
+  const handleCreateMobileCard = () => {
+    // Create Mobile Temp
+    console.log('Create Mobile Temp');
+    // navigation.navigate('RegisterCard');
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={50}
+      style={styles.container}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}>
@@ -100,20 +155,58 @@ const RegisterCardItem: React.FC = () => {
             onChangeText={value => updateFormData('email', value)}
           />
         </View>
+        <View style={styles.inputContainer}>
+          <Text style={[textStyles.M4, styles.label]}>링크 추가</Text>
+          <View style={styles.linkContainer}>
+            {links.map((link: {url: string; type: string}, index: number) =>
+              link.type === 'x' ? (
+                <TouchableOpacity key={index} onPress={() => OpenLinkSheet(link)}>
+                  <XIcon />
+                </TouchableOpacity>
+              ) : link.type === 'kakao' ? (
+                <TouchableOpacity key={index} onPress={() => OpenLinkSheet(link)}>
+                  <KakaoIcon />
+                </TouchableOpacity>
+              ) : link.type === 'facebook' ? (
+                <TouchableOpacity key={index} onPress={() => OpenLinkSheet(link)}>
+                  <FacebookIcon />
+                </TouchableOpacity>
+              ) : link.type === 'instagram' ? (
+                <TouchableOpacity key={index} onPress={() => OpenLinkSheet(link)}>
+                  <InstagramIcon />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity key={index} onPress={() => OpenLinkSheet(link)}>
+                  <LinkIcon />
+                </TouchableOpacity>
+              ),
+            )}
+            <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+              <AddIcon />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => setStep(step - 1)}>
+            <Text>취소</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.nextButton}
+            onPress={OpenCardSubmitSheet}>
+            <Text>다음</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => setStep(step - 1)}>
-          <Text>취소</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.nextButton}
-          onPress={() => setStep(step + 1)}>
-          <Text>다음</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      <AddLinkModal
+        visible={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={(url: string) => {
+          setLinks(url);
+        }}
+      />
+    </KeyboardAvoidingView>
   );
 };
 
@@ -132,8 +225,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   cardImage: {
-    width: 343,
-    height: 184,
+    width: '100%',
+    height: Dimensions.get('window').width * (184 / 343),
     marginVertical: 20,
     backgroundColor: '#bebebe',
     borderRadius: 10,
@@ -154,6 +247,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
   },
+  linkContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  linkIcon: {
+    width: 20,
+    height: 20,
+  },
   submitButton: {
     backgroundColor: colors.Primary,
     padding: 16,
@@ -173,7 +276,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   cancelButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.G02,
     width: 100,
     height: 40,
     borderRadius: 10,
@@ -181,7 +284,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.Primary,
     width: 100,
     height: 40,
     borderRadius: 10,

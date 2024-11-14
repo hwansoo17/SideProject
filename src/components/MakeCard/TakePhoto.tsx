@@ -10,16 +10,17 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  Dimensions,
 } from 'react-native';
 import {
   launchCamera,
   launchImageLibrary,
   Asset,
 } from 'react-native-image-picker';
-import {postPresignedUrl, putS3upload} from '../api/upload';
-import {getSrcFromStorage} from '../utils/common';
+import {postPresignedUrl, putS3upload} from '../../api/upload';
+import {getSrcFromStorage} from '../../utils/common';
 import {useNavigation} from '@react-navigation/native';
-import useMakeCardStore from '../store/useMakeCareStepStore';
+import useMakeCardStore from '../../store/useMakeCareStepStore';
 
 const TakePhoto: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -140,18 +141,21 @@ const TakePhoto: React.FC = () => {
     }
 
     let result;
-    if (Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS) {
-      Alert.alert('Simulator', 'Camera is not available on the iOS Simulator.');
-      result = await launchImageLibrary({
-        mediaType: 'photo',
-        quality: 1,
-        selectionLimit: 1,
-      });
-    } else {
-      result = await launchCamera({
-        mediaType: 'photo',
-      });
-    }
+    // if (Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS) {
+    //   Alert.alert('Simulator', 'Camera is not available on the iOS Simulator.');
+    //   result = await launchImageLibrary({
+    //     mediaType: 'photo',
+    //     quality: 1,
+    //     selectionLimit: 1,
+    //   });
+    // } else {
+    //   result = await launchCamera({
+    //     mediaType: 'photo',
+    //   });
+    // }
+    result = await launchCamera({
+      mediaType: 'photo',
+    });
 
     if (result.assets && result.assets[0]) {
       const img: Asset = result.assets[0];
@@ -163,19 +167,16 @@ const TakePhoto: React.FC = () => {
             name: img.fileName || 'photo.jpg',
             fileType: img.type || 'image/jpeg',
           };
+          console.log('payload', payload);
           const {uploadUrl, uploadPath} = await postPresignedUrl(payload);
-
-          // 이미지를 Blob 형태로 변환하여 업로드
-          const response = await fetch(img.uri);
-          const blob = await response.blob();
-
+          console.log({uploadUrl, uploadPath});
           const input = {
             url: uploadUrl,
-            file: blob,
+            file: img.uri,
           };
 
           const res = await putS3upload(input);
-
+          console.log(input);
           if (res.status === 200) {
             setImage(getSrcFromStorage(uploadPath));
           }
@@ -225,12 +226,12 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 184,
+    height: Dimensions.get('window').width * (184 / 343),
     marginVertical: 20,
   },
   ImageBox: {
     width: '100%',
-    height: 184,
+    height: Dimensions.get('window').width * (184 / 343),
     marginVertical: 20,
     backgroundColor: '#bebebe',
     borderRadius: 10,

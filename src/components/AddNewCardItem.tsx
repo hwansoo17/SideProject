@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { NavigationProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import useBottomSheetStore from '../store/useBottomSheetStore';
+import { useCreatedCardBottomSheetStore } from '../store/useBottomSheetStore';
 
 const AddIcon = require('../assets/buttonIcon/AddIcon.svg').default;
 const { width: screenWidth } = Dimensions.get('window');
@@ -40,21 +40,9 @@ const AddNewCardItem: React.FC<CarouselItemProps> = ({
 
   const navigation = useNavigation<Props>();
 
-  const openBottomSheet = useBottomSheetStore(state => state.openBottomSheet);
+  const openBottomSheet = useCreatedCardBottomSheetStore(state => state.openBottomSheet);
   const handleOpenBottomSheet = () => {
-    const nodes = [
-      {
-        icon: "",
-        title: "새로 제작하기",
-        link: "MakeCard"
-      },
-      {
-        icon: "",
-        title: "기존 명함 추가",
-        link: "RegisterCard"
-      },
-    ];
-    return openBottomSheet(nodes);
+    return openBottomSheet();
   };
 
   const inputRange = [

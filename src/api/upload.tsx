@@ -19,7 +19,7 @@ interface IPresignedOutput {
 export const postPresignedUrl = async (
   payload: IPresignedUrl,
 ): Promise<IPresignedOutput> => {
-  const res = await api.post(`/s3-presigned-url`, payload);
+  const res = await api.post('/s3-presigned-url', payload);
   return res.data;
 };
 
@@ -28,6 +28,6 @@ export const postPresignedUrl = async (
  * @param payload
  * @returns
  */
-export const putS3upload = async (payload: {url: string; file: Blob}) => {
+export const putS3upload = async (payload: {url: string; file: string}) => {
   return await api.put(payload.url, payload.file);
 };
