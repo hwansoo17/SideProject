@@ -16,6 +16,26 @@ interface Card {
   background: string;
 }
 
+export interface ICreateCardInput {
+  name?: string;
+  corporation?: string;
+  title?: string;
+  tel?: string;
+  email?: string;
+  address?: string;
+  links?: string[];
+  logoImg?: string;
+  bgImg?: string;
+  brColor?: string;
+  gradient?: string;
+  realCardImg?: string;
+  background?: string;
+}
+
+export interface ICreateCardOutput extends ICreateCardInput {
+  id: number;
+}
+
 // 카드 리스트 가져오기 함수
 export const fetchCardList = async (): Promise<Card[]> => {
   const response = await authApi.get<{ results: Card[] }>('/api/cards');
@@ -25,4 +45,23 @@ export const fetchCardList = async (): Promise<Card[]> => {
 
 export const deleteCard = async (id: number): Promise<void> => {
   await authApi.delete(`/api/cards/${id}`);
+};
+
+export const CreateCardAPI = async (
+  data: ICreateCardInput,
+): Promise<ICreateCardOutput> => {
+  const response = await authApi.post('/api/cards', data);
+  return response.data;
+};
+
+export const CreateCardTempAPI = async (
+  data: ICreateCardInput,
+): Promise<ICreateCardOutput> => {
+  const response = await authApi.post('/api/temp/card', data);
+  return response.data;
+};
+
+export const GetCardTempAPI = async (): Promise<ICreateCardOutput> => {
+  const response = await authApi.get('/api/temp/card');
+  return response.data;
 };

@@ -11,6 +11,7 @@ interface ILinkBottomSheetStore extends IBottomSheetStore {
   links: {url: string; type: string}[];
   selectedUrl: string;
   setLinks: (url: string) => void;
+  resetLinks: () => void;
   setSelectedUrl: (url: string) => void;
   deleteLink: () => void;
   editLink: (newUrl: string) => void;
@@ -53,6 +54,9 @@ export const useLinkBottomSheetStore = create<ILinkBottomSheetStore>(set => ({
     set(state => ({
       links: [...state.links, {url, type: state.detectLinkType(url)}],
     }));
+  },
+  resetLinks: () => {
+    set({links: []});
   },
   setSelectedUrl: (url: string) => set({selectedUrl: url}),
   openBottomSheet: () => set({isOpen: true}),
