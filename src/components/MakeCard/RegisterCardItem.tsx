@@ -19,7 +19,7 @@ import {useCardSubmitBottomSheetStore, useLinkBottomSheetStore} from '../../stor
 import {useMutation} from '@tanstack/react-query';
 import {CreateMyCardAPI} from '../../api/myCard';
 import {CreateCardAPI, CreateCardTempAPI} from '../../api/card';
-import {ICreateCardInput, ICreateCardOutput} from '../../api/card';
+import { getRandomColor } from '../../utils/common';
 
 const XIcon = require('../../assets/icons/links/x_icon.svg').default;
 const KakaoIcon = require('../../assets/icons/links/kakao_icon.svg').default;
@@ -48,9 +48,11 @@ const RegisterCardItem = () => {
     mutationFn: CreateCardTempAPI,
   });
   const navigation = useNavigation();
+
   useEffect(() => {
-    setOnSubmit(() => handleSubmit);
-    setOnCreateMobileCard(() => handleCreateMobileCard);
+    console.log({isMyCard});
+    setOnSubmit(handleSubmit);
+    setOnCreateMobileCard(handleCreateMobileCard);
   }, [formData]);
 
   useEffect(() => {
@@ -65,6 +67,14 @@ const RegisterCardItem = () => {
   const OpenLinkSheet = (link: {url: string; type: string}) => {
     setSelectedUrl(link.url);
     openBottomSheet();
+  };
+
+  const AddLink = () => {
+    if (links.length >= 5) {
+      Alert.alert('오류', '링크는 최대 5개까지 추가할 수 있습니다.');
+      return;
+    }
+    setIsModalOpen(true);
   };
 
   const OpenCardSubmitSheet = () => {
@@ -82,14 +92,15 @@ const RegisterCardItem = () => {
       Alert.alert('입력 오류', '유효한 연락처를 입력해주세요.');
       return;
     }
+    const randomColor = getRandomColor();
+    updateFormData('brColor', randomColor);
     console.log('제출된 데이터:', formData);
     openCardSubmitBottomSheet();
   };
 
   const handleSubmit = () => {
     // Create Card
-    console.log('Create Card');
-    console.log({formData});
+    console.log('Create Card', formData);
     if (isMyCard) {
       createMyCard(formData, {
         onSuccess: () => {
@@ -113,27 +124,15 @@ const RegisterCardItem = () => {
 
   const handleCreateMobileCard = () => {
     // Create Mobile Temp
-    console.log('Create Mobile Temp');
-    if (isMyCard) {
-      createCardTemp(formData, {
-        onSuccess: () => {
-          setStep(step + 1);
-        },
-        onError: () => {
-          Alert.alert('오류', '카드 생성에 실패했습니다.');
-        },
-      }); // formData를 사용하여 카드 생성 요청
-    } else {
-      createCardTemp(formData, {
-        onSuccess: () => {
-          setStep(step + 1);
-        },
-        onError: () => {
-          Alert.alert('오류', '카드 생성에 실패했습니다.');
-        },
-      });
-    }
-    navigation.navigate('RegisterCard');
+    console.log('Create Mobile Temp', formData);
+    createCardTemp(formData, {
+      onSuccess: () => {
+        navigation.navigate('RegisterCard');
+      },
+      onError: () => {
+        Alert.alert('오류', '카드 생성에 실패했습니다.');
+      },
+    }); // formData를 사용하여 카드 생성 요청
   };
 
   return (
@@ -238,7 +237,7 @@ const RegisterCardItem = () => {
                 </TouchableOpacity>
               ),
             )}
-            <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+            <TouchableOpacity onPress={AddLink}>
               <AddIcon />
             </TouchableOpacity>
           </View>

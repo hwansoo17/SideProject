@@ -3,8 +3,10 @@ import {create} from 'zustand';
 
 interface IBottomSheetStore {
   isOpen: boolean;
+  isMyCard: boolean;
   openBottomSheet: () => void;
   closeBottomSheet: () => void;
+  setIsMyCard: (isMyCard: boolean) => void;
 }
 
 interface ILinkBottomSheetStore extends IBottomSheetStore {
@@ -28,8 +30,10 @@ interface ICardSubmitBottomSheetStore extends IBottomSheetStore {
 export const useCreatedCardBottomSheetStore = create<IBottomSheetStore>(
   set => ({
     isOpen: false,
+    isMyCard: true,
     openBottomSheet: () => set({isOpen: true}),
     closeBottomSheet: () => set({isOpen: false}),
+    setIsMyCard: (isMyCard: boolean) => set({isMyCard}),
   }),
 );
 export const useLinkBottomSheetStore = create<ILinkBottomSheetStore>(set => ({

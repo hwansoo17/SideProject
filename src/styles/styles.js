@@ -99,3 +99,19 @@ export const colors = {
   Red: '#FF3F3F',
   SUB: '#BEB4FF',
 };
+
+export const palette = {
+  WHITE: '#F1F1F1',
+  BLUE: '#676DFF',
+  PURPLE: '#6D00DA',
+  LIGHT_BLUE: '#E5E7FF',
+  SKY_BLUE: '#6ED3FF',
+  GREEN: '#81FF6C',
+  PINK: '#FF7173',
+  YELLOW: '#FFDB5D',
+  BLACK: '#242424', 
+  VIOLET: '#8A53FF',
+  RED: '#B43E3E',
+  GRAY: '#B5B5B5',
+  LIGHT_PINK: '#FF7EEA',
+};

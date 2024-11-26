@@ -19,20 +19,21 @@ interface IMakeCardProps {
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
-const MakeCard: React.FC<IMakeCardProps> = ({isMyCard}) => {
+const MakeCard: React.FC<IMakeCardProps> = ({isMyCard = true}) => {
   const {step, resetStep, setIsMyCard} = useMakeCardStore();
   const {resetLinks} = useLinkBottomSheetStore();
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (isMyCard) {
-      setIsMyCard(isMyCard);
-    }
     return () => {
       resetStep();
       resetLinks();
     };
   }, []);
+
+  useEffect(() => {
+    setIsMyCard(isMyCard);
+  }, [isMyCard]);
 
   const handleBack = () => {
     resetStep();

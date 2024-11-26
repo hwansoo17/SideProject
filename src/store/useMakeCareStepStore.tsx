@@ -9,6 +9,15 @@ interface IMakeCardStepState {
   updateFormData: (key: keyof ICardFormData, value: string | string[]) => void;
   setIsMyCard: (isMyCard: boolean) => void;
   resetFormData: () => void;
+  setFormData: (data: ICardFormData) => void;
+}
+
+type IConfigTabStep = 'BG' | 'INFO' | 'CORP' | 'LOGO';
+
+interface IConfigTabState {
+  step: IConfigTabStep;
+  setStep: (step: IConfigTabStep) => void;
+  resetStep: () => void;
 }
 
 interface ICardFormData {
@@ -20,6 +29,12 @@ interface ICardFormData {
   address: string;
   links: string[];
   realCardImg: string;
+
+  logoImg: string;
+  bgImg: string;
+  brColor: string;
+  gradient: string;
+  background: string;
 }
 
 const initialFormData: ICardFormData = {
@@ -31,6 +46,11 @@ const initialFormData: ICardFormData = {
   email: '',
   links: [],
   realCardImg: '',
+  logoImg: '',
+  bgImg: '',
+  brColor: '',
+  gradient: '',
+  background: 'COLOR',
 };
 
 const useMakeCardStore = create<IMakeCardStepState>((set: any) => ({
@@ -51,8 +71,15 @@ const useMakeCardStore = create<IMakeCardStepState>((set: any) => ({
         [key]: value,
       },
     })),
+  setFormData: (data: ICardFormData) => set({formData: data}),
   setIsMyCard: (isMyCard: boolean) => set({isMyCard}),
   resetFormData: () => set({formData: initialFormData}),
+}));
+
+export const useConfigTabStore = create<IConfigTabState>((set: any) => ({
+  step: 'BG',
+  setStep: (step: IConfigTabStep) => set({step}),
+  resetStep: () => set({step: 'BG'}),
 }));
 
 export default useMakeCardStore;
