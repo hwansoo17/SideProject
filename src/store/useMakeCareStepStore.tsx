@@ -20,6 +20,13 @@ interface IConfigTabState {
   resetStep: () => void;
 }
 
+interface ILogoSearchState {
+  search: string;
+  logoImg: string;
+  setSearch: (search: string) => void;
+  setLogoImg: (logoImg: string) => void;
+}
+
 interface ICardFormData {
   name: string;
   corporation: string;
@@ -80,6 +87,13 @@ export const useConfigTabStore = create<IConfigTabState>((set: any) => ({
   step: 'BG',
   setStep: (step: IConfigTabStep) => set({step}),
   resetStep: () => set({step: 'BG'}),
+}));
+
+export const useLogoSearchStore = create<ILogoSearchState>((set: any) => ({
+  search: '',
+  logoImg: '',
+  setSearch: (search: string) => set({search}),
+  setLogoImg: (logoImg: string) => set({logoImg}),
 }));
 
 export default useMakeCardStore;
