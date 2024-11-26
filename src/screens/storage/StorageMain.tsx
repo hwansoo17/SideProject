@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { Button, Linking, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Button, Keyboard, Linking, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 import { NavigationProp } from "@react-navigation/native";
 import { FlatList, TextInput } from "react-native-gesture-handler";
@@ -13,6 +13,7 @@ import CustomChip from "../../components/CustomChip";
 import CardListItem from "../../components/CardListItem";
 import CardGridItem from "../../components/CardGridItem";
 import useDeleteCard from "../../hooks/mutations/useDeleteCard";
+import koFilter from "../../utils/koFilter";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
 const SettingIcon = require('../../assets/buttonIcon/SettingIcon.svg').default;
@@ -33,13 +34,29 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   const [settingVisible, setSettingVisible] = React.useState(false);
   const [isName, setIsName] = React.useState(false);
   const [isGrid, setIsGrid] = React.useState(false);
-  const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
-  
+  const [selectedIds, setSelectedIds] = React.useState<(number | string)[]>([]);
+  const [searchText, setSearchText] = React.useState('');
+  const [filteredData, setFilteredData] = React.useState<any[]>([]);
+  // useEffect(() => {
+  //   console.log(selectedIds);
+  //   console.log(searchText);
+  // }
+  // , [selectedIds, searchText]);
 
   useEffect(() => {
-    console.log(selectedIds);
-  }
-  , [selectedIds]);
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
+      hideTabBar(); // 키보드가 나타나면 탭바 숨기기
+    });
+
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      showTabBar(); // 키보드가 사라지면 탭바 다시 나타내기
+    });
+
+    return () => {
+      keyboardDidShowListener.remove(); // 이벤트 리스너 정리
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const {isLoading, isError, data: data = [], error} = useCardList(isName);
 
@@ -52,7 +69,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       try {
         // 모든 삭제 요청을 병렬로 실행
         await Promise.all(
-          selectedIds.map((id) =>
+          selectedIds.filter((id): id is number => typeof id === 'number').map((id) =>
             deleteCardMutation.mutateAsync(id) // `mutateAsync` 사용
           )
         );
@@ -77,10 +94,14 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
     }
   }
 
+  const handleSearch = (e: string) => {
+    setSearchText(e);
+    setFilteredData(koFilter(data, e));
+  };
   const renderList = () => (
     <FlatList
       key={isGrid ? 'grid' : 'list'}
-      data={data}
+      data={filteredData.length == 0 && searchText.length == 0 ? data : filteredData}
       ListHeaderComponent={<View style={{height:12}}/>}
       ListFooterComponent={<View style={{height:10}}/>}
       renderItem={({item}) => (
@@ -99,17 +120,24 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
 
   const renderGrid = () => {
     const adjustedData = data.length % 2 !== 0 ? [...data, { id: 'placeholder', brColor: '', corporation: '', name: '', tel: '' }] : data; // 홀수일 때 빈 아이템 추가
-    
+    const filteredAdjustedData = filteredData.length % 2 !== 0 ? [...filteredData, { id: 'placeholder', brColor: '', corporation: '', name: '', tel: '' }] : filteredData; // 홀수일 때 빈 아이템 추가
     return (
       <FlatList
         key={isGrid ? 'grid' : 'list'}
-        data={adjustedData}
+        data={filteredAdjustedData.length == 0 && searchText.length == 0 ? adjustedData : filteredAdjustedData}
         numColumns={2} // 그리드 형태
         contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
         ListHeaderComponent={<View style={{height:12}}/>}
         ListFooterComponent={<View/>}
         columnWrapperStyle={{ justifyContent: 'space-between', gap:10 }} // 가로 간격 설정
-        renderItem={({ item }) => (<CardGridItem item={item}/>)}
+        renderItem={({ item }) => (
+          <CardGridItem 
+            item={item}
+            settingVisible={settingVisible}
+            setSelectedIds={setSelectedIds}
+            selectedIds={selectedIds}  
+          />
+        )}
         
         keyExtractor={(item) => item.id.toString()}
       />
@@ -117,11 +145,8 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   }
 
   return (
-    <LinearGradient 
-    style={{flex:1}}
-    colors={['#282828', '#070707']}
-    start= {{x: 0, y: -0.1}}
-    end={{x: 0, y:0.8}}
+    <View 
+    style={{flex:1, backgroundColor:'#0D0D0D'}}
     >
     <View style={{flex:1}}>
       <View style={{flexDirection:'row', alignItems:'center', paddingHorizontal:24, paddingVertical:16}}>
@@ -142,6 +167,8 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
               style={{flex:1, padding:12, color:colors.White}}
               placeholder="검색어를 입력해주세요"
               placeholderTextColor={colors.G08}
+              value={searchText}
+              onChangeText={(e) => handleSearch(e)}
             />
           </View>
         </View>
@@ -154,7 +181,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
             style={{padding:5}}
             onPress={() => setIsGrid(!isGrid)}
           >
-            {isGrid ? <GridIcon/> : <ListIcon/>}
+            {isGrid ? <ListIcon/> : <GridIcon/>}
           </TouchableOpacity>
         </View>
         <View>
@@ -202,7 +229,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       
     </View>
     }
-    </LinearGradient>
+    </View>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View, Linking, Image } from 'react-native';
 import { colors, textStyles } from '../styles/styles';
 
@@ -6,23 +6,50 @@ import { colors, textStyles } from '../styles/styles';
 const LogoIcon = require('../assets/icons/LogoIcon.svg').default;
 const PhoneIcon = require('../assets/buttonIcon/PhoneIcon.svg').default;
 const MailIcon = require('../assets/buttonIcon/MailIcon.svg').default;
+const Check = require('../assets/icons/Check.svg').default;
 
-type GridItemProps = {
-  item: {
-    id: number | string;
-    brColor: string;
-    corporation: string;
-    name: string;
-    tel: string;
-    logoImg?: string;
-  };
+type Item = {
+  id: number | string;
+  brColor: string;
+  corporation: string;
+  name: string;
+  tel: string;
+  logoImg?: string;
 };
 
-const CardGridItem: React.FC<GridItemProps> = ({ item }) => {
+type GridItemProps = {
+  item: Item;
+  settingVisible: boolean;
+  setSelectedIds: React.Dispatch<React.SetStateAction<(number | string)[]>>;
+  selectedIds: (number | string)[];
+};
+
+const CardGridItem: React.FC<GridItemProps> = ({ 
+  item,  
+  settingVisible, 
+  setSelectedIds, 
+  selectedIds  
+}) => {
+
+
   if (item.id === 'placeholder') {
     // Placeholder 아이템은 렌더링하지 않음
     return <View style={{ flex: 1, height: 200 }} />;
   }
+
+  const isSelected = selectedIds.includes(item.id);
+
+  useEffect(() => {
+    if (!settingVisible) {
+      setSelectedIds([]); // 설정 모드 해제 시 선택 초기화
+    }
+  }, [settingVisible, setSelectedIds]);
+
+  const toggleSelection = (id: number | string) => {
+    setSelectedIds((prev: (number | string)[]) =>
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+    );
+  };
 
   return (
     <TouchableOpacity
@@ -33,7 +60,11 @@ const CardGridItem: React.FC<GridItemProps> = ({ item }) => {
         borderRadius: 4,
       }}
       onPress={() => {
-        Linking.openURL(`sideproject://storage/Detail/${item.id}`);
+        if (settingVisible) {
+          toggleSelection(item.id);
+        } else {
+          Linking.openURL(`sideproject://storage/Detail/${item.id}`);
+        }
       }}
     >
       <View
@@ -46,6 +77,25 @@ const CardGridItem: React.FC<GridItemProps> = ({ item }) => {
           gap: 8,
         }}
       >
+        {settingVisible && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              borderRadius: 100,
+              height: 17,
+              width: 17,
+              borderWidth: 1,
+              borderColor: isSelected ? colors.Primary : colors.G10,
+              backgroundColor: isSelected ? colors.Primary : undefined,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {isSelected && <Check />}
+          </View>
+        )}
         {item.logoImg ? (
           <Image 
           src={item.logoImg}

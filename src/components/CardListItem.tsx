@@ -8,7 +8,7 @@ const Check = require('../assets/icons/Check.svg').default;
 
 // Item 타입 정의
 type Item = {
-  id: number;
+  id: (number | string);
   corporation: string;
   name: string;
   tel: string;
@@ -19,8 +19,8 @@ type Item = {
 type CardListItemProps = {
   item: Item;
   settingVisible: boolean;
-  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
-  selectedIds: number[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<(number | string)[]>>;
+  selectedIds: (number | string)[];
 };
 
 const CardListItem: React.FC<CardListItemProps> = ({ 
@@ -37,7 +37,7 @@ const CardListItem: React.FC<CardListItemProps> = ({
     }
   }, [settingVisible, setSelectedIds]);
 
-  const toggleSelection = (id: number) => {
+  const toggleSelection = (id: (number | string)) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
