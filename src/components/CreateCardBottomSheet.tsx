@@ -24,6 +24,7 @@ const RightArrowIcon = require('../assets/icons/chevron_right.svg').default;
 
 const CreateCardBottomSheet = () => {
   const isOpen = useCreatedCardBottomSheetStore(state => state.isOpen);
+  const isMyCard = useCreatedCardBottomSheetStore(state => state.isMyCard);
   const closeBottomSheet = useCreatedCardBottomSheetStore(state => state.closeBottomSheet);
 
   const navigation = useNavigation<INav>();
@@ -94,7 +95,7 @@ const CreateCardBottomSheet = () => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              navigation.navigate('MakeCard');
+              navigation.navigate('RegisterCard', {isMyCard});
               closeBottomSheetWithAnimation();
             }}>
             <View style={styles.linkContainer}>
@@ -108,7 +109,7 @@ const CreateCardBottomSheet = () => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              navigation.navigate('RegisterCard');
+              navigation.navigate('MakeCard', {isMyCard});
               closeBottomSheetWithAnimation();
             }}>
             <View style={styles.linkContainer}>

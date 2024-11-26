@@ -16,6 +16,10 @@ import {useNavigation} from '@react-navigation/native';
 import {colors, textStyles} from '../../styles/styles';
 import AddLinkModal from './AddLinkModal';
 import {useCardSubmitBottomSheetStore, useLinkBottomSheetStore} from '../../store/useBottomSheetStore';
+import {useMutation} from '@tanstack/react-query';
+import {CreateMyCardAPI} from '../../api/myCard';
+import {CreateCardAPI, CreateCardTempAPI} from '../../api/card';
+import { getRandomColor } from '../../utils/common';
 
 const XIcon = require('../../assets/icons/links/x_icon.svg').default;
 const KakaoIcon = require('../../assets/icons/links/kakao_icon.svg').default;
@@ -24,8 +28,8 @@ const InstagramIcon = require('../../assets/icons/links/instagram_icon.svg').def
 const LinkIcon = require('../../assets/icons/links/default_link_icon.svg').default;
 const AddIcon = require('../../assets/icons/links/+_icon.svg').default;
 
-const RegisterCardItem: React.FC = () => {
-  const {formData, updateFormData, resetFormData, step, setStep} =
+const RegisterCardItem = () => {
+  const {formData, updateFormData, resetFormData, step, setStep, isMyCard} =
     useMakeCardStepStore();
   const {openBottomSheet, links, setLinks, setSelectedUrl} = useLinkBottomSheetStore();
   const {
@@ -34,11 +38,22 @@ const RegisterCardItem: React.FC = () => {
     setOnCreateMobileCard,
   } = useCardSubmitBottomSheetStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {mutate: createMyCard} = useMutation({
+    mutationFn: CreateMyCardAPI,
+  });
+  const {mutate: createCard} = useMutation({
+    mutationFn: CreateCardAPI,
+  });
+  const {mutate: createCardTemp} = useMutation({
+    mutationFn: CreateCardTempAPI,
+  });
+  const navigation = useNavigation();
 
   useEffect(() => {
+    console.log({isMyCard});
     setOnSubmit(handleSubmit);
     setOnCreateMobileCard(handleCreateMobileCard);
-  }, []);
+  }, [formData]);
 
   useEffect(() => {
     if (links.length > 0) {
@@ -54,29 +69,70 @@ const RegisterCardItem: React.FC = () => {
     openBottomSheet();
   };
 
+  const AddLink = () => {
+    if (links.length >= 5) {
+      Alert.alert('오류', '링크는 최대 5개까지 추가할 수 있습니다.');
+      return;
+    }
+    setIsModalOpen(true);
+  };
+
   const OpenCardSubmitSheet = () => {
     if (
       !formData.name ||
-      !formData.company ||
-      !formData.phone ||
+      !formData.corporation ||
+      !formData.tel ||
       !formData.email
     ) {
       Alert.alert('입력 오류', '필수 항목을 모두 입력해주세요.');
       return;
     }
+    const phoneNumber = formData.tel.replace(/[^0-9]/g, ''); // 숫자만 남기기
+    if (phoneNumber.length < 9 || phoneNumber.length > 11) {
+      Alert.alert('입력 오류', '유효한 연락처를 입력해주세요.');
+      return;
+    }
+    const randomColor = getRandomColor();
+    updateFormData('brColor', randomColor);
     console.log('제출된 데이터:', formData);
     openCardSubmitBottomSheet();
   };
 
   const handleSubmit = () => {
     // Create Card
-    console.log('Create Card');
-    setStep(step + 1);
+    console.log('Create Card', formData);
+    if (isMyCard) {
+      createMyCard(formData, {
+        onSuccess: () => {
+          setStep(step + 1);
+        },
+        onError: () => {
+          Alert.alert('오류', '카드 생성에 실패했습니다.');
+        },
+      }); // formData를 사용하여 카드 생성 요청
+    } else {
+      createCard(formData, {
+        onSuccess: () => {
+          setStep(step + 1);
+        },
+        onError: () => {
+          Alert.alert('오류', '카드 생성에 실패했습니다.');
+        },
+      });
+    }
   };
+
   const handleCreateMobileCard = () => {
     // Create Mobile Temp
-    console.log('Create Mobile Temp');
-    // navigation.navigate('RegisterCard');
+    console.log('Create Mobile Temp', formData);
+    createCardTemp(formData, {
+      onSuccess: () => {
+        navigation.navigate('RegisterCard');
+      },
+      onError: () => {
+        Alert.alert('오류', '카드 생성에 실패했습니다.');
+      },
+    }); // formData를 사용하여 카드 생성 요청
   };
 
   return (
@@ -105,8 +161,8 @@ const RegisterCardItem: React.FC = () => {
             style={styles.input}
             placeholder="회사명을 입력해주세요"
             placeholderTextColor={colors.G04}
-            value={formData.company}
-            onChangeText={value => updateFormData('company', value)}
+            value={formData.corporation}
+            onChangeText={value => updateFormData('corporation', value)}
           />
         </View>
 
@@ -116,8 +172,8 @@ const RegisterCardItem: React.FC = () => {
             style={styles.input}
             placeholder="직책을 입력해주세요"
             placeholderTextColor={colors.G04}
-            value={formData.position}
-            onChangeText={value => updateFormData('position', value)}
+            value={formData.title}
+            onChangeText={value => updateFormData('title', value)}
           />
         </View>
 
@@ -139,8 +195,8 @@ const RegisterCardItem: React.FC = () => {
             placeholder="연락처를 입력해주세요"
             placeholderTextColor={colors.G04}
             keyboardType="phone-pad"
-            value={formData.phone}
-            onChangeText={value => updateFormData('phone', value)}
+            value={formData.tel}
+            onChangeText={value => updateFormData('tel', value)}
           />
         </View>
 
@@ -181,7 +237,7 @@ const RegisterCardItem: React.FC = () => {
                 </TouchableOpacity>
               ),
             )}
-            <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+            <TouchableOpacity onPress={AddLink}>
               <AddIcon />
             </TouchableOpacity>
           </View>

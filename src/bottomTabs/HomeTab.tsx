@@ -6,6 +6,7 @@ import MakeCard from '../screens/home/MakeCard';
 import RegisterCard from '../screens/home/RegisterCard';
 import CardDetail from '../screens/home/CardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore';
+import Search from '../screens/home/Search';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,11 @@ const HomeTab: React.FC<{route: any}> = ({route}) => {
       <Stack.Screen
         name="RegisterCard"
         component={RegisterCard}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

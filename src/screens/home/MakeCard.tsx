@@ -11,16 +11,29 @@ import TakePhoto from '../../components/MakeCard/TakePhoto';
 import RegisterCardItem from '../../components/MakeCard/RegisterCardItem';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
 import RegisterComplete from '../../components/MakeCard/RegisterComplete';
+import { useLinkBottomSheetStore } from '../../store/useBottomSheetStore';
+
+interface IMakeCardProps {
+  isMyCard: boolean;
+}
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
-const MakeCard: React.FC = () => {
-  const {step, resetStep} = useMakeCardStore();
+const MakeCard: React.FC<IMakeCardProps> = ({isMyCard = true}) => {
+  const {step, resetStep, setIsMyCard} = useMakeCardStore();
+  const {resetLinks} = useLinkBottomSheetStore();
   const navigation = useNavigation();
 
   useEffect(() => {
-    return () => resetStep();
+    return () => {
+      resetStep();
+      resetLinks();
+    };
   }, []);
+
+  useEffect(() => {
+    setIsMyCard(isMyCard);
+  }, [isMyCard]);
 
   const handleBack = () => {
     resetStep();

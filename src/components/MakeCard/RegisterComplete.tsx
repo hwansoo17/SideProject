@@ -1,50 +1,39 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   Image,
-  Button,
-  ActivityIndicator,
-  Platform,
-  PermissionsAndroid,
-  Alert,
   TouchableOpacity,
   Text,
   Dimensions,
 } from 'react-native';
-import {
-  launchCamera,
-  launchImageLibrary,
-  Asset,
-} from 'react-native-image-picker';
-import {postPresignedUrl, putS3upload} from '../../api/upload';
-import {getSrcFromStorage} from '../../utils/common';
 import {useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
+import {colors} from '../../styles/styles';
 
-interface IRegisterComplete {
-  image: string;
-}
 
-const RegisterComplete: React.FC<IRegisterComplete> = ({image}) => {
-  const {step, setStep, resetStep} = useMakeCardStore();
+const RegisterComplete: React.FC = () => {
+  const {step, setStep, resetStep, formData} = useMakeCardStore();
   const navigation = useNavigation<any>();
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>명함이 성공적으로 저장되었습니다!</Text>
       <>
-        {image ? (
-          <Image source={{uri: image}} style={styles.image} />
+        {formData.realCardImage ? (
+          <Image source={{uri: formData.realCardImage}} style={styles.image} />
         ) : (
           <View style={styles.ImageBox} />
         )}
       </>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => navigation.navigate('HomeMain')}>
-          <Text>홈으로 이동</Text>
+          style={styles.homeButton}
+          onPress={() => {
+            resetStep();
+            navigation.navigate('HomeMain');
+          }}>
+          <Text style={styles.buttonText}>홈으로</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -72,6 +61,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
+    color: '#fff',
   },
   buttonContainer: {
     display: 'flex',
@@ -80,21 +70,17 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 16,
   },
-  cancelButton: {
-    backgroundColor: '#fff',
-    width: 100,
+  homeButton: {
+    backgroundColor: colors.G03,
+    width: 150,
     height: 40,
-    borderRadius: 10,
+    borderRadius: 40,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nextButton: {
-    backgroundColor: '#fff',
-    width: 100,
-    height: 40,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+  buttonText: {
+    color: '#fff',
   },
 });
 

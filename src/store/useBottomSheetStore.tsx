@@ -3,14 +3,17 @@ import {create} from 'zustand';
 
 interface IBottomSheetStore {
   isOpen: boolean;
+  isMyCard: boolean;
   openBottomSheet: () => void;
   closeBottomSheet: () => void;
+  setIsMyCard: (isMyCard: boolean) => void;
 }
 
 interface ILinkBottomSheetStore extends IBottomSheetStore {
   links: {url: string; type: string}[];
   selectedUrl: string;
   setLinks: (url: string) => void;
+  resetLinks: () => void;
   setSelectedUrl: (url: string) => void;
   deleteLink: () => void;
   editLink: (newUrl: string) => void;
@@ -27,8 +30,10 @@ interface ICardSubmitBottomSheetStore extends IBottomSheetStore {
 export const useCreatedCardBottomSheetStore = create<IBottomSheetStore>(
   set => ({
     isOpen: false,
+    isMyCard: true,
     openBottomSheet: () => set({isOpen: true}),
     closeBottomSheet: () => set({isOpen: false}),
+    setIsMyCard: (isMyCard: boolean) => set({isMyCard}),
   }),
 );
 export const useLinkBottomSheetStore = create<ILinkBottomSheetStore>(set => ({
@@ -53,6 +58,9 @@ export const useLinkBottomSheetStore = create<ILinkBottomSheetStore>(set => ({
     set(state => ({
       links: [...state.links, {url, type: state.detectLinkType(url)}],
     }));
+  },
+  resetLinks: () => {
+    set({links: []});
   },
   setSelectedUrl: (url: string) => set({selectedUrl: url}),
   openBottomSheet: () => set({isOpen: true}),
