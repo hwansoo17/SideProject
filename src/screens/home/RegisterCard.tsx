@@ -1,5 +1,5 @@
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {
   Text,
   View,
@@ -9,11 +9,11 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { colors } from '../../styles/styles';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { CreateCardAPI, GetCardTempAPI } from '../../api/card';
-import { CreateMyCardAPI } from '../../api/myCard';
-import useMakeCardStore, { useConfigTabStore } from '../../store/useMakeCareStepStore';
+import {colors} from '../../styles/styles';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {CreateCardAPI, GetCardTempAPI} from '../../api/card';
+import {CreateMyCardAPI} from '../../api/myCard';
+import useMakeCardStore, {useConfigTabStore} from '../../store/useMakeCareStepStore';
 import RegisterCustomCardImage from '../../components/RegisterCard/RegisterCustomCardImage';
 import RegisterCustomCardInfo from '../../components/RegisterCard/RegisterCustomCardInfo';
 

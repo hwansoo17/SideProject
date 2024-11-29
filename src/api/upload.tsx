@@ -3,7 +3,6 @@ import {authApi} from './api';
 
 interface IPresignedUrl {
   name: string;
-  fileType: string;
 }
 
 interface IPresignedOutput {
@@ -19,7 +18,7 @@ interface IPresignedOutput {
 export const postPresignedUrl = async (
   payload: IPresignedUrl,
 ): Promise<IPresignedOutput> => {
-  const res = await api.post('/s3-presigned-url', payload);
+  const res = await authApi.post('/api/s3-presigned-url', payload);
   return res.data;
 };
 
@@ -28,6 +27,10 @@ export const postPresignedUrl = async (
  * @param payload
  * @returns
  */
-export const putS3upload = async (payload: {url: string; file: string}) => {
-  return await api.put(payload.url, payload.file);
+ // Start of Selection
+export const putS3upload = async (payload: {url: string; file: Blob}) => {
+  const headers = {
+    'Content-Type': 'image/jpeg',
+  };
+  return await api.put(payload.url, payload.file, {headers});
 };

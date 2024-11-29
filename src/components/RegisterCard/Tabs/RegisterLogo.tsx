@@ -5,6 +5,7 @@ import useMakeCardStore, { useConfigTabStore, useLogoSearchStore } from '../../.
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const SearchIcon = require('../../../assets/icons/search.svg').default;
+const PlusIcon = require('../../../assets/icons/small_plus.svg').default;
 
 interface INav extends NavigationProp<any> {}
 
@@ -15,13 +16,9 @@ const RegisterLogo = () => {
   
   const {setStep} = useConfigTabStore();
 
-  const handleNextStep = () => {
-    if (!formData.corporation) {
-      Alert.alert('입력 오류', '필수 항목을 모두 입력해주세요.');
-      return;
-    }
-    setStep('LOGO');
-  };
+  const handleAddLogo = () => {
+    Alert.alert('추가 완료', '로고가 추가되었습니다.');
+  }
 
   return (
     <View style={styles.container}>
@@ -35,6 +32,7 @@ const RegisterLogo = () => {
               placeholderTextColor={colors.G04}
               value={search}
               readOnly
+              onPress={() => navigation.navigate('Search')}
             />
             <View style={styles.searchIcon}>
               <SearchIcon />
@@ -43,7 +41,12 @@ const RegisterLogo = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>로고를 찾지 못하셨나요? 직접 첨부하기</Text>
+          <Text style={[textStyles.M4, styles.text, styles.center]}>로고를 찾지 못하셨나요? 직접 첨부하기</Text>
+          <View style={styles.logoContainer}>
+            <TouchableOpacity onPress={handleAddLogo} style={styles.addLogoIcon}>
+              <PlusIcon />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -52,7 +55,7 @@ const RegisterLogo = () => {
           >
             <Text style={styles.text}>뒤로</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleNextStep} style={styles.nextButton}>
+          <TouchableOpacity onPress={() => {}} style={styles.nextButton}>
             <Text style={styles.text}>다음</Text>
           </TouchableOpacity>
         </View>
@@ -127,6 +130,21 @@ const styles = StyleSheet.create({
   text: {
     color: colors.White,
   },
+  logoContainer: {
+    marginTop: 24,
+    backgroundColor: colors.G01,
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  center: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  addLogoIcon: {
+    flex: 1,
+  }
 });
 
 export default RegisterLogo;
