@@ -10,6 +10,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
 import useMakeCardStepStore from '../../store/useMakeCareStepStore';
 import {useNavigation} from '@react-navigation/native';
@@ -143,7 +144,11 @@ const RegisterCardItem = () => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.cardImage} />
+        <Image
+          source={{uri: formData.realCardImg}}
+          style={styles.cardImage}
+          resizeMode="contain"
+        />
         <View style={styles.inputContainer}>
           <Text style={[textStyles.M4, styles.label]}>이름 *</Text>
           <TextInput
