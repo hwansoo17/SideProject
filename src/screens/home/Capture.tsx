@@ -249,8 +249,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cancelButton: {
-    backgroundColor: colors.White,
-    opacity: 0.5,
+    backgroundColor: colors.G05,
+    
     width: 180,
     height: 48,
     borderRadius: 48,

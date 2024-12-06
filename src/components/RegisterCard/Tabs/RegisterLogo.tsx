@@ -3,6 +3,10 @@ import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'reac
 import { colors, textStyles } from '../../../styles/styles';
 import useMakeCardStore, { useConfigTabStore, useLogoSearchStore } from '../../../store/useMakeCareStepStore';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import RegisterLogoModal from '../RegisterLogoModal';
+import { useMutation } from '@tanstack/react-query';
+import { CreateMyCardAPI } from '../../../api/myCard';
+import { CreateCardAPI } from '../../../api/card';
 
 const SearchIcon = require('../../../assets/icons/search.svg').default;
 const PlusIcon = require('../../../assets/icons/small_plus.svg').default;
@@ -11,14 +15,64 @@ interface INav extends NavigationProp<any> {}
 
 const RegisterLogo = () => {
   const navigation = useNavigation<INav>();
-  const {search, logoImg, setLogoImg} = useLogoSearchStore();
-  const {formData, updateFormData} = useMakeCardStore();
+  const [openModal, setOpenModal] = useState(false);
+  const {search} = useLogoSearchStore();
+  const {formData, isMyCard} = useMakeCardStore();
+  const {mutate: createCard} = useMutation({
+    mutationFn: CreateCardAPI,
+  });
+  const {mutate: createMyCard} = useMutation({
+    mutationFn: CreateMyCardAPI,
+  });
   
   const {setStep} = useConfigTabStore();
 
   const handleAddLogo = () => {
-    Alert.alert('추가 완료', '로고가 추가되었습니다.');
+    setOpenModal(true);
   }
+
+  const checkFormData = () => {
+    if (
+      !formData.name ||
+      !formData.corporation ||
+      !formData.tel ||
+      !formData.email
+    ) {
+      Alert.alert('입력 오류', '필수 항목을 모두 입력해주세요.');
+      return false;
+    }
+    const phoneNumber = formData.tel.replace(/[^0-9]/g, ''); // 숫자만 남기기
+    if (phoneNumber.length < 9 || phoneNumber.length > 11) {
+      Alert.alert('입력 오류', '유효한 연락처를 입력해주세요.');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSave = () => {
+    if (!checkFormData()) return;
+    if (isMyCard) {
+      createMyCard(formData, {
+        onSuccess: () => {
+          Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+          navigation.navigate('HomeMain');
+        },
+        onError: () => {
+          Alert.alert('오류', '카드 생성에 실패했습니다.');
+        },
+      });
+    } else {
+      createCard(formData, {
+        onSuccess: () => {
+          Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+          navigation.navigate('HomeMain');
+        },
+        onError: () => {
+          Alert.alert('오류', '카드 생성에 실패했습니다.');
+        },
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -50,12 +104,12 @@ const RegisterLogo = () => {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={() => setStep('INFO')}
+            onPress={() => setStep('CORP')}
             style={styles.backButton}
           >
             <Text style={styles.text}>뒤로</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={styles.nextButton}>
+          <TouchableOpacity onPress={handleSave} style={styles.nextButton}>
             <Text style={styles.text}>다음</Text>
           </TouchableOpacity>
         </View>
@@ -63,6 +117,10 @@ const RegisterLogo = () => {
       <View style={styles.searchResultContainer}>
         <Text>검색 결과</Text>
       </View>
+      <RegisterLogoModal 
+        visible={openModal} 
+        onClose={() => setOpenModal(false)} 
+      />
     </View>
   );
 };

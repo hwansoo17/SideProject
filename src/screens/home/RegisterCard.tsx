@@ -77,7 +77,7 @@ const RegisterCard: React.FC<IRegisterCardProps> = ({isMyCard = true}) => {
       createMyCard(formData, {
         onSuccess: () => {
           Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
-          navigation.navigate('Home');
+          navigation.navigate('HomeMain');
         },
         onError: () => {
           Alert.alert('오류', '카드 생성에 실패했습니다.');
@@ -87,7 +87,7 @@ const RegisterCard: React.FC<IRegisterCardProps> = ({isMyCard = true}) => {
       createCard(formData, {
         onSuccess: () => {
           Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
-          navigation.navigate('Home');
+          navigation.navigate('HomeMain');
         },
         onError: () => {
           Alert.alert('오류', '카드 생성에 실패했습니다.');
