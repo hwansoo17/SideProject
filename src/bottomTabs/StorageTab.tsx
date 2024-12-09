@@ -27,7 +27,7 @@ const StorageTab: React.FC<{ route: any }> = ({ route }) => {
   return (
     <Stack.Navigator initialRouteName="StorageMain">
       <Stack.Screen name="StorageMain" component={StorageMain} options={{ headerShown: false }}/>
-      <Stack.Screen name="StorageDetail" component={StorageDetail}/>
+      <Stack.Screen name="StorageDetail" component={StorageDetail} options={{ headerShown: false }}/>
       <Stack.Screen name="AddCard" component={AddCard}/>
     </Stack.Navigator>
   );

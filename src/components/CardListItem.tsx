@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, Linking } from 'react-native';
 import { colors, textStyles } from '../styles/styles';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const PhoneIcon = require('../assets/buttonIcon/PhoneIcon.svg').default;
 const MailIcon = require('../assets/buttonIcon/MailIcon.svg').default;
@@ -29,6 +31,7 @@ const CardListItem: React.FC<CardListItemProps> = ({
   setSelectedIds, 
   selectedIds 
 }) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const isSelected = selectedIds.includes(item.id);
 
   useEffect(() => {
@@ -55,7 +58,8 @@ const CardListItem: React.FC<CardListItemProps> = ({
         if (settingVisible) {
           toggleSelection(item.id);
         } else {
-          Linking.openURL(`sideproject://storage/Detail/${item.id}`);
+          navigation.navigate('StorageDetail', { item: item });
+          // Linking.openURL(`sideproject://storage/Detail/${item}`);
         }
       }}
     >

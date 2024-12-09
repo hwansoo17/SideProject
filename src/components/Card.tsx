@@ -45,7 +45,7 @@ const Card: React.FC<ICard> = ({
 }) => {
   console.log({brColor});
   return (
-    <>
+    <View style={{aspectRatio:0.7, borderRadius:12, overflow:'hidden'}}>
       <View style={[styles.upperBackground, { backgroundColor: brColor }]}>
         <View style={styles.upperLayer}>
           <View>
@@ -98,7 +98,7 @@ const Card: React.FC<ICard> = ({
           </View>
         </View>
       </View>
-    </>
+    </View>
   );
 };
 

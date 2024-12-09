@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View, Linking, Image } from 'react-native';
 import { colors, textStyles } from '../styles/styles';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // SVG 파일 import
 const LogoIcon = require('../assets/icons/LogoIcon.svg').default;
@@ -30,7 +32,7 @@ const CardGridItem: React.FC<GridItemProps> = ({
   setSelectedIds, 
   selectedIds  
 }) => {
-
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   if (item.id === 'placeholder') {
     // Placeholder 아이템은 렌더링하지 않음
@@ -63,7 +65,8 @@ const CardGridItem: React.FC<GridItemProps> = ({
         if (settingVisible) {
           toggleSelection(item.id);
         } else {
-          Linking.openURL(`sideproject://storage/Detail/${item.id}`);
+          navigation.navigate('StorageDetail', { item: item });
+          // Linking.openURL(`sideproject://storage/Detail/${item}`);
         }
       }}
     >
