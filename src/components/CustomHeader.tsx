@@ -5,7 +5,14 @@ import { colors, textStyles } from '../styles/styles';
 
 const BackIcon = require('../assets/icons/BackIcon.svg').default;
 
-const CustomHeader = ({
+interface CustomHeaderProps {
+  title: string;
+  subtitle?: string;
+  onPressRightButton?: () => void;
+  headerRight?: React.ReactNode;
+}
+
+const CustomHeader: React.FC<CustomHeaderProps> = ({
   title, 
   subtitle, 
   onPressRightButton,
