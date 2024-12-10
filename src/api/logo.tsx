@@ -2,7 +2,7 @@ import { authApi } from "./api";
 
 interface ISearchLogoInput {
   query: string;
-  limit: number;
+  limit?: number;
 }
 
 interface ILogo {
@@ -19,8 +19,12 @@ interface ISearchLogoOutput {
   results: ILogo[];
 }
 
-export const SearchLogoAPI = async (payload: ISearchLogoInput): Promise<ISearchLogoOutput> => {
+export const SearchLogoAPI = async (
+  payload: ISearchLogoInput,
+): Promise<ISearchLogoOutput> => {
   payload.limit = 100;
-  const response = await authApi.get('/api/search-corp-logo', {params: payload});
+  const response = await authApi.get('/api/search-corp-logo', {
+    params: payload,
+  });
   return response.data;
 };

@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import { colors, palette } from '../styles/styles';
-import { getRandomColor } from '../utils/common';
+import {StyleSheet, View, Text, Image} from 'react-native';
+import {colors} from '../styles/styles';
+import {getRandomColor} from '../utils/common';
 import LinearGradient from 'react-native-linear-gradient';
 
 const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
@@ -34,28 +34,24 @@ const Card: React.FC<ICard> = ({
   corporation,
   tel,
   email,
-  address,
   logoImg,
   title,
   links = [],
   bgImg,
   brColor = getRandomColor(), // 기본값으로 랜덤 색상 설정
   gradient,
-  realColor,
   background = 'COLOR',
 }) => {
   return (
     <>
-      {
-        background === 'COLOR' ? (
-          <View style={[styles.background, { backgroundColor: brColor }]} />
-        ) : 
-        background === 'IMAGE' ? (
-          <Image source={{ uri: bgImg }} style={styles.background} />
-        ) :
+      {background === 'COLOR' ? (
+        <View style={[styles.background, {backgroundColor: brColor}]} />
+      ) : background === 'IMAGE' ? (
+        <Image source={{uri: bgImg}} style={styles.background} />
+      ) : (
         background === 'GRADIENT' && (
           <>
-            <View style={[styles.background, { backgroundColor: brColor }]} />
+            <View style={[styles.background, {backgroundColor: brColor}]} />
             <LinearGradient
               colors={['black', brColor]}
               start={{x: 0, y: 0}}
@@ -64,16 +60,19 @@ const Card: React.FC<ICard> = ({
             />
           </>
         )
-      }
+      )}
       <View style={[styles.upperBackground]}>
         <View style={styles.upperLayer}>
           <View>
-            {
-              logoImg && <View style={{ width: 63, height: 63, borderRadius: 63, backgroundColor: colors.White, overflow: 'hidden' }}>
-                <Image src={logoImg} style={{ flex: 1, resizeMode: 'contain' }} />
+            {logoImg && (
+              <View style={styles.logoStyle}>
+                <Image
+                  src={logoImg}
+                  style={{flex: 1, resizeMode: 'contain'}}
+                />
               </View>
-            }
-            <View style={{ flex: 1 }} />
+            )}
+            <View style={{flex: 1}} />
             <View>
               <Text style={{ fontFamily: 'Pretendard-Bold', fontSize: 18, color: '#fff' }}>
               {corporation}
@@ -155,6 +154,13 @@ const styles = StyleSheet.create({
   linkContainer: {
     gap: 8,
     justifyContent: 'flex-end',
+  },
+  logoStyle: {
+    width: 63,
+    height: 63,
+    borderRadius: 63,
+    backgroundColor: colors.White,
+    overflow: 'hidden',
   },
 });
 

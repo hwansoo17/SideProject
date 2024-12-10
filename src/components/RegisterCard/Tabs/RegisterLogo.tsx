@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { colors, textStyles } from '../../../styles/styles';
-import useMakeCardStore, { useConfigTabStore, useLogoSearchStore } from '../../../store/useMakeCareStepStore';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import React, {useState} from 'react';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {colors, textStyles} from '../../../styles/styles';
+import useMakeCardStore, {
+  useConfigTabStore,
+  useLogoSearchStore,
+} from '../../../store/useMakeCareStepStore';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import RegisterLogoModal from '../RegisterLogoModal';
-import { useMutation } from '@tanstack/react-query';
-import { CreateMyCardAPI } from '../../../api/myCard';
-import { CreateCardAPI } from '../../../api/card';
+import {useMutation} from '@tanstack/react-query';
+import {CreateMyCardAPI} from '../../../api/myCard';
+import {CreateCardAPI} from '../../../api/card';
 
 const SearchIcon = require('../../../assets/icons/search.svg').default;
 const PlusIcon = require('../../../assets/icons/small_plus.svg').default;
@@ -52,25 +62,31 @@ const RegisterLogo = () => {
   const handleSave = () => {
     if (!checkFormData()) return;
     if (isMyCard) {
-      createMyCard(formData, {
-        onSuccess: () => {
-          Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
-          navigation.navigate('HomeMain');
+      createMyCard(
+        {...formData, isFinalInput: true},
+        {
+          onSuccess: () => {
+            Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+            navigation.navigate('HomeMain');
+          },
+          onError: () => {
+            Alert.alert('오류', '카드 생성에 실패했습니다.');
+          },
         },
-        onError: () => {
-          Alert.alert('오류', '카드 생성에 실패했습니다.');
-        },
-      });
+      );
     } else {
-      createCard(formData, {
-        onSuccess: () => {
-          Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
-          navigation.navigate('HomeMain');
+      createCard(
+        {...formData, isFinalInput: true},
+        {
+          onSuccess: () => {
+            Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+            navigation.navigate('HomeMain');
+          },
+          onError: () => {
+            Alert.alert('오류', '카드 생성에 실패했습니다.');
+          },
         },
-        onError: () => {
-          Alert.alert('오류', '카드 생성에 실패했습니다.');
-        },
-      });
+      );
     }
   };
 

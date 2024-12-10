@@ -1,24 +1,21 @@
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React from 'react';
 import {
   Text,
   View,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  Alert,
   ScrollView,
   Image,
 } from 'react-native';
-import { colors } from '../../styles/styles';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { CreateCardAPI, GetCardTempAPI } from '../../api/card';
-import { CreateMyCardAPI } from '../../api/myCard';
-import useMakeCardStore, { useConfigTabStore, useLogoSearchStore } from '../../store/useMakeCareStepStore';
-import RegisterCustomCardImage from '../../components/RegisterCard/RegisterCustomCardImage';
-import RegisterCustomCardInfo from '../../components/RegisterCard/RegisterCustomCardInfo';
-import { TextInput } from 'react-native-gesture-handler';
-import { SearchLogoAPI } from '../../api/logo';
+import {colors} from '../../styles/styles';
+import {useQuery} from '@tanstack/react-query';
+import useMakeCardStore, {
+  useLogoSearchStore,
+} from '../../store/useMakeCareStepStore';
+import {TextInput} from 'react-native-gesture-handler';
+import {SearchLogoAPI} from '../../api/logo';
 
 interface INav extends NavigationProp<any> {
   popToTop: () => void;
@@ -28,7 +25,18 @@ const SearchIcon = require('../../assets/icons/search.svg').default;
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 const CloseIcon = require('../../assets/icons/close_icon.svg').default;
 
-const exampleLogoList = ['삼성', '현대', '신세계', 'SK', '네이버', '카카오', '아모레퍼시픽', 'CJ', '포스코', '셀트리온'];
+const exampleLogoList = [
+  '삼성',
+  '현대',
+  '신세계',
+  'SK',
+  '네이버',
+  '카카오',
+  '아모레퍼시픽',
+  'CJ',
+  '포스코',
+  '셀트리온',
+];
 
 const Search: React.FC = () => {
   const navigation = useNavigation<INav>();

@@ -30,6 +30,7 @@ export interface ICreateCardInput {
   gradient?: string;
   realCardImg?: string;
   background?: string;
+  isFinalInput?: boolean;
 }
 
 export interface ICreateCardOutput extends ICreateCardInput {
