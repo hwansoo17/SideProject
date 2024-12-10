@@ -41,12 +41,7 @@ const RegisterInfo = () => {
   };
 
   const handleNextStep = () => {
-    if (
-      !formData.name ||
-      !formData.corporation ||
-      !formData.tel ||
-      !formData.email
-    ) {
+    if (!formData.name || !formData.tel || !formData.email) {
       Alert.alert('입력 오류', '필수 항목을 모두 입력해주세요.');
       return;
     }

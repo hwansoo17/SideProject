@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   Alert,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -20,6 +21,7 @@ import {CreateCardAPI} from '../../../api/card';
 
 const SearchIcon = require('../../../assets/icons/search.svg').default;
 const PlusIcon = require('../../../assets/icons/small_plus.svg').default;
+const DelIcon = require('../../../assets/icons/close_icon.svg').default;
 
 interface INav extends NavigationProp<any> {}
 
@@ -27,7 +29,7 @@ const RegisterLogo = () => {
   const navigation = useNavigation<INav>();
   const [openModal, setOpenModal] = useState(false);
   const {search} = useLogoSearchStore();
-  const {formData, isMyCard} = useMakeCardStore();
+  const {formData, updateFormData, isMyCard} = useMakeCardStore();
   const {mutate: createCard} = useMutation({
     mutationFn: CreateCardAPI,
   });
@@ -40,6 +42,11 @@ const RegisterLogo = () => {
   const handleAddLogo = () => {
     setOpenModal(true);
   }
+
+  const handleDelete = () => {
+    updateFormData('bgImg', '');
+    updateFormData('background', 'COLOR');
+  };
 
   const checkFormData = () => {
     if (
@@ -61,6 +68,7 @@ const RegisterLogo = () => {
 
   const handleSave = () => {
     if (!checkFormData()) return;
+    console.log({isMyCard});
     if (isMyCard) {
       createMyCard(
         {...formData, isFinalInput: true},
@@ -112,11 +120,27 @@ const RegisterLogo = () => {
 
         <View style={styles.inputContainer}>
           <Text style={[textStyles.M4, styles.text, styles.center]}>로고를 찾지 못하셨나요? 직접 첨부하기</Text>
-          <View style={styles.logoContainer}>
-            <TouchableOpacity onPress={handleAddLogo} style={styles.addLogoIcon}>
-              <PlusIcon />
-            </TouchableOpacity>
-          </View>
+          
+            {
+              formData.logoImg ? 
+              (<View style={styles.contentContainer}>
+                <View style={styles.imageContainer}>
+                  <Image source={{uri: formData.logoImg}} style={styles.image} />
+                  <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+                    <DelIcon width={20} height={20} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.changeButton} onPress={handleAddLogo}>
+                    <Text style={{color: colors.White}}>변경하기</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>) : (
+                <View style={styles.logoContainer}>
+                  <TouchableOpacity onPress={handleAddLogo} style={styles.addLogoIcon}>
+                    <PlusIcon />
+                  </TouchableOpacity>
+              </View>
+            )
+          }
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -212,13 +236,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  contentContainer: {
+    marginTop: 24,
+    backgroundColor: colors.G01,
+    borderRadius: 8,
+    padding: 16,
+  },
   center: {
     flex: 1,
     textAlign: 'center',
   },
   addLogoIcon: {
     flex: 1,
-  }
+  },
+  imageContainer: {
+    position: 'relative',
+  },
+  image: {
+    width: 110,
+    height: 110,
+    borderRadius: 10,
+  },
+  changeButton: {
+    position: 'absolute',
+    bottom: 42,
+    left: 15,
+    width: 80,
+    height: 25,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.Primary,
+    zIndex: 1,
+  },
+  deleteButton: {
+    position: 'absolute',
+    bottom: 80,
+    left: 80,
+    width: 20,
+    height: 20,
+    zIndex: 1,
+  },
 });
 
 export default RegisterLogo;
