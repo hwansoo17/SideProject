@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { colors, palette } from '../../../../styles/styles';
 import useMakeCardStore from '../../../../store/useMakeCareStepStore';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Gradients = () => {
   const {formData, updateFormData} = useMakeCardStore();
@@ -10,7 +11,6 @@ const Gradients = () => {
   const handleSelectColor = (color: string) => {
     updateFormData('background', 'GRADIENT');
     updateFormData('brColor', color);
-    updateFormData('gradient', 'rgba(0,0,0,0.4)');
   };
 
   return (
@@ -19,11 +19,19 @@ const Gradients = () => {
         <Text style={styles.text}>색상을 선택해주세요</Text>
         <View style={styles.paletteContainer}>
           {Object.values(palette).map((color: string) => (
-            <TouchableOpacity
-              key={color}
-              onPress={() => handleSelectColor(color)}
-              style={[styles.paletteItem, { backgroundColor: color }]}
-            />
+            <>
+              <TouchableOpacity
+                key={color}
+                onPress={() => handleSelectColor(color)}
+              >
+                <LinearGradient
+                  colors={['black', color]}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 1}}
+                  style={[styles.paletteItem]}
+                />
+              </TouchableOpacity>
+            </>
           ))}
         </View>
       </View>

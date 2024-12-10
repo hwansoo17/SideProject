@@ -109,7 +109,7 @@ const CreateCardBottomSheet = () => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              navigation.navigate('MakeCard', {isMyCard});
+              navigation.navigate('Capture', {isMyCard});
               closeBottomSheetWithAnimation();
             }}>
             <View style={styles.linkContainer}>

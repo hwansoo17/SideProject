@@ -13,15 +13,15 @@ import {colors} from '../../styles/styles';
 
 
 const RegisterComplete: React.FC = () => {
-  const {step, setStep, resetStep, formData} = useMakeCardStore();
+  const {resetStep, formData} = useMakeCardStore();
   const navigation = useNavigation<any>();
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>명함이 성공적으로 저장되었습니다!</Text>
       <>
-        {formData.realCardImage ? (
-          <Image source={{uri: formData.realCardImage}} style={styles.image} />
+        {formData.realCardImg ? (
+          <Image source={{uri: formData.realCardImg}} style={styles.image} />
         ) : (
           <View style={styles.ImageBox} />
         )}

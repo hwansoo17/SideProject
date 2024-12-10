@@ -5,12 +5,15 @@ import useMakeCardStore, { useConfigTabStore } from '../../../store/useMakeCareS
 import { useNavigation } from '@react-navigation/native';
 import Colors from './Background/Colors';
 import Gradients from './Background/Gradients';
+import { useBgImgBottomSheetStore } from '../../../store/useBottomSheetStore';
+import Photos from './Background/Photos';
 
 const ChevronUp = require('../../../assets/icons/chevron-up.svg').default;
 const ChevronDown = require('../../../assets/icons/chevron-down.svg').default;
 
 const RegisterBG = () => {
   const navigation = useNavigation();
+  const {openBottomSheet} = useBgImgBottomSheetStore();
   const {formData, updateFormData} = useMakeCardStore();
   const {setStep} = useConfigTabStore();
   const [selectedList, setSelectedList] = useState<[boolean, boolean, boolean]>([false, false, false]);
@@ -30,7 +33,10 @@ const RegisterBG = () => {
         <View style={styles.headLiner}>
           <Text style={styles.text}>사진</Text>
           <TouchableOpacity
-            onPress={() => toggleContainer(0)}
+            onPress={() => {
+              // toggleContainer(0);
+              openBottomSheet();
+            }}
             style={[
               styles.openButton,
               formData.background === 'IMAGE' && styles.selectedButton,
@@ -42,11 +48,7 @@ const RegisterBG = () => {
             {selectedList[0] ? <ChevronUp /> : <ChevronDown />}
           </TouchableOpacity>
         </View>
-        {selectedList[0] && (
-          <View style={styles.content}>
-            <Text>여기에 내용이 들어갑니다.</Text>
-          </View>
-        )}
+        {formData.background === 'IMAGE' && <Photos />}
       </View>
       <View
         style={[

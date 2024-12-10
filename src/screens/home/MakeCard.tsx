@@ -47,14 +47,7 @@ const MakeCard: React.FC<IMakeCardProps> = ({isMyCard = true}) => {
           <BackIcon />
         </TouchableOpacity>
       </View>
-      {
-        step == 1 ? (
-          <TakePhoto />
-        ) : step == 2 ? (
-          <RegisterCardItem />
-        ) : (
-          <RegisterComplete />
-        )}
+      {step === 1 ? <RegisterCardItem /> : <RegisterComplete />}
     </SafeAreaView>
   );
 };

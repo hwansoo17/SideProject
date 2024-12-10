@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import { palette } from '../styles/styles';
-import { getRandomColor } from '../utils/common';
+import {StyleSheet, View, Text, Image} from 'react-native';
+import {colors} from '../styles/styles';
+import {getRandomColor} from '../utils/common';
+import LinearGradient from 'react-native-linear-gradient';
 
 const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
 const PhoneIcon = require('../assets/cardIcon/phone.svg').default;
@@ -33,26 +34,45 @@ const Card: React.FC<ICard> = ({
   corporation,
   tel,
   email,
-  address,
   logoImg,
   title,
   links = [],
   bgImg,
   brColor = getRandomColor(), // 기본값으로 랜덤 색상 설정
   gradient,
-  realColor,
   background = 'COLOR',
 }) => {
-  console.log({brColor});
   return (
     <View style={{aspectRatio:0.7, borderRadius:12, overflow:'hidden'}}>
+      {background === 'COLOR' ? (
+        <View style={[styles.background, {backgroundColor: brColor}]} />
+      ) : background === 'IMAGE' ? (
+        <Image source={{uri: bgImg}} style={styles.background} />
+      ) : (
+        background === 'GRADIENT' && (
+          <>
+            <View style={[styles.background, {backgroundColor: brColor}]} />
+            <LinearGradient
+              colors={['black', brColor]}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
+              style={styles.background}
+            />
+          </>
+        )
+      )}
       <View style={[styles.upperBackground, { backgroundColor: brColor }]}>
         <View style={styles.upperLayer}>
           <View>
-            <View style={{ width: 53, height: 53 }}>
-              <Image src={logoImg} style={{ flex: 1, resizeMode: 'contain' }} />
-            </View>
-            <View style={{ flex: 1 }} />
+            {logoImg && (
+              <View style={styles.logoStyle}>
+                <Image
+                  src={logoImg}
+                  style={{flex: 1, resizeMode: 'contain'}}
+                />
+              </View>
+            )}
+            <View style={{flex: 1}} />
             <View>
               <Text style={{ fontFamily: 'Pretendard-Bold', fontSize: 18, color: '#fff' }}>
               {corporation}
@@ -75,7 +95,7 @@ const Card: React.FC<ICard> = ({
           </View>
         </View> 
       </View>
-      <View style={[styles.lowerBackground, { backgroundColor: brColor }]}>
+      <View style={[styles.lowerBackground]}>
         <View style={styles.lowerLayer}>
           <Text style={{ fontFamily: 'Pretendard-Medium', fontSize: 18, color: '#fff' }}>
             {name}
@@ -103,6 +123,13 @@ const Card: React.FC<ICard> = ({
 };
 
 const styles = StyleSheet.create({
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
   upperBackground: {
     width: '100%',
     height: '70%',
@@ -112,6 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.1)',
     padding: 24,
     flexDirection: 'row',
+    zIndex: 100,
   },
   lowerBackground: {
     width: '100%',
@@ -121,10 +149,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 20,
+    zIndex: 100,
   },
   linkContainer: {
     gap: 8,
     justifyContent: 'flex-end',
+  },
+  logoStyle: {
+    width: 63,
+    height: 63,
+    borderRadius: 63,
+    backgroundColor: colors.White,
+    overflow: 'hidden',
   },
 });
 

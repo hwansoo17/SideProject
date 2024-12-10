@@ -8,6 +8,7 @@ import CreateCardBottomSheet from '../components/CreateCardBottomSheet';
 import LinkBottomSheet from '../components/MakeCard/LinkBottomSheet';
 import CardSubmitBottomSheet from '../components/MakeCard/CardSubmitBottomSheet';
 import { linking } from '../../deepLinkConfig';
+import BgImgBottomSheet from '../components/RegisterCard/Tabs/BgImgBottomSheet';
 
 const RootNavigator = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
@@ -19,6 +20,7 @@ const RootNavigator = () => {
       <CreateCardBottomSheet />
       <LinkBottomSheet />
       <CardSubmitBottomSheet />
+      <BgImgBottomSheet />
     </NavigationContainer>
   );
 };

@@ -10,16 +10,20 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
 import useMakeCardStepStore from '../../store/useMakeCareStepStore';
 import {useNavigation} from '@react-navigation/native';
 import {colors, textStyles} from '../../styles/styles';
 import AddLinkModal from './AddLinkModal';
-import {useCardSubmitBottomSheetStore, useLinkBottomSheetStore} from '../../store/useBottomSheetStore';
+import {
+  useCardSubmitBottomSheetStore,
+  useLinkBottomSheetStore,
+} from '../../store/useBottomSheetStore';
 import {useMutation} from '@tanstack/react-query';
 import {CreateMyCardAPI} from '../../api/myCard';
 import {CreateCardAPI, CreateCardTempAPI} from '../../api/card';
-import { getRandomColor } from '../../utils/common';
+import {getRandomColor} from '../../utils/common';
 
 const XIcon = require('../../assets/icons/links/x_icon.svg').default;
 const KakaoIcon = require('../../assets/icons/links/kakao_icon.svg').default;
@@ -50,7 +54,6 @@ const RegisterCardItem = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log({isMyCard});
     setOnSubmit(handleSubmit);
     setOnCreateMobileCard(handleCreateMobileCard);
   }, [formData]);
@@ -102,23 +105,29 @@ const RegisterCardItem = () => {
     // Create Card
     console.log('Create Card', formData);
     if (isMyCard) {
-      createMyCard(formData, {
-        onSuccess: () => {
-          setStep(step + 1);
+      createMyCard(
+        {...formData, isFinalInput: false},
+        {
+          onSuccess: () => {
+            setStep(step + 1);
+          },
+          onError: () => {
+            Alert.alert('오류', '카드 생성에 실패했습니다.');
+          },
         },
-        onError: () => {
-          Alert.alert('오류', '카드 생성에 실패했습니다.');
-        },
-      }); // formData를 사용하여 카드 생성 요청
+      ); // formData를 사용하여 카드 생성 요청
     } else {
-      createCard(formData, {
-        onSuccess: () => {
-          setStep(step + 1);
+      createCard(
+        {...formData, isFinalInput: false},
+        {
+          onSuccess: () => {
+            setStep(step + 1);
+          },
+          onError: () => {
+            Alert.alert('오류', '카드 생성에 실패했습니다.');
+          },
         },
-        onError: () => {
-          Alert.alert('오류', '카드 생성에 실패했습니다.');
-        },
-      });
+      );
     }
   };
 
@@ -143,7 +152,11 @@ const RegisterCardItem = () => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.cardImage} />
+        <Image
+          source={{uri: formData.realCardImg}}
+          style={styles.cardImage}
+          resizeMode="contain"
+        />
         <View style={styles.inputContainer}>
           <Text style={[textStyles.M4, styles.label]}>이름 *</Text>
           <TextInput
