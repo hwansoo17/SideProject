@@ -146,7 +146,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
 
   return (
     <View 
-    style={{flex:1, backgroundColor:'#0D0D0D'}}
+    style={{flex:1, backgroundColor: colors.BG}}
     >
     <View style={{flex:1}}>
       <View style={{flexDirection:'row', alignItems:'center', paddingHorizontal:24, paddingVertical:16}}>

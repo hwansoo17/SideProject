@@ -43,7 +43,7 @@ const Card: React.FC<ICard> = ({
   background = 'COLOR',
 }) => {
   return (
-    <>
+    <View style={{aspectRatio:0.7, borderRadius:12, overflow:'hidden'}}>
       {background === 'COLOR' ? (
         <View style={[styles.background, {backgroundColor: brColor}]} />
       ) : background === 'IMAGE' ? (
@@ -61,7 +61,7 @@ const Card: React.FC<ICard> = ({
           </>
         )
       )}
-      <View style={[styles.upperBackground]}>
+      <View style={[styles.upperBackground, { backgroundColor: brColor }]}>
         <View style={styles.upperLayer}>
           <View>
             {logoImg && (
@@ -118,7 +118,7 @@ const Card: React.FC<ICard> = ({
           </View>
         </View>
       </View>
-    </>
+    </View>
   );
 };
 

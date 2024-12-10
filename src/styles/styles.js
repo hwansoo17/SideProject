@@ -63,7 +63,7 @@ export const textStyles = StyleSheet.create({
   },
   R3: {
     fontFamily: 'Pretendard-Regular',
-    fontSize: 12,
+    fontSize: 13,
   },
   R4: {
     fontFamily: 'Pretendard-Regular',
@@ -98,6 +98,7 @@ export const colors = {
   Primary: '#5539FF',
   Red: '#FF3F3F',
   SUB: '#BEB4FF',
+  BG: '#0D0D0D'
 };
 
 export const palette = {
