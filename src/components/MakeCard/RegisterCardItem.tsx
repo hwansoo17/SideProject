@@ -12,7 +12,7 @@ import {
   Platform,
   Image,
 } from 'react-native';
-import useMakeCardStepStore from '../../store/useMakeCareStepStore';
+import useMakeCardStore from '../../store/useMakeCareStepStore';
 import {useNavigation} from '@react-navigation/native';
 import {colors, textStyles} from '../../styles/styles';
 import AddLinkModal from './AddLinkModal';
@@ -33,8 +33,7 @@ const LinkIcon = require('../../assets/icons/links/default_link_icon.svg').defau
 const AddIcon = require('../../assets/icons/links/+_icon.svg').default;
 
 const RegisterCardItem = () => {
-  const {formData, updateFormData, resetFormData, step, setStep, isMyCard} =
-    useMakeCardStepStore();
+  const {formData, updateFormData, resetFormData, step, setStep, isMyCard} = useMakeCardStore();
   const {openBottomSheet, links, setLinks, setSelectedUrl} = useLinkBottomSheetStore();
   const {
     openBottomSheet: openCardSubmitBottomSheet,
