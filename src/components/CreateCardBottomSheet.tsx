@@ -23,10 +23,8 @@ const PlusIcon = require('../assets/icons/bottomSheet/bs_plus_icon.svg').default
 const RightArrowIcon = require('../assets/icons/chevron_right.svg').default;
 
 const CreateCardBottomSheet = () => {
-  const isOpen = useCreatedCardBottomSheetStore(state => state.isOpen);
-  const isMyCard = useCreatedCardBottomSheetStore(state => state.isMyCard);
-  const closeBottomSheet = useCreatedCardBottomSheetStore(state => state.closeBottomSheet);
-
+  const {isOpen, isMyCard, closeBottomSheet} = useCreatedCardBottomSheetStore();
+  console.log({isMyCard});
   const navigation = useNavigation<INav>();
 
   const translateY = useRef(new Animated.Value(screenHeight)).current;

@@ -10,7 +10,8 @@ export const api = axios.create({
 });
 
 export const authApi = axios.create({
-  baseURL: config.SERVER_URL,
+  // baseURL: config.SERVER_URL,
+  baseURL: 'https://e9d8-221-148-3-100.ngrok-free.app',
   headers: {
     'Content-Type': 'application/json',
   },

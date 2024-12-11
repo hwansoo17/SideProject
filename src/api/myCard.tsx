@@ -27,8 +27,6 @@ export const fetchMyCardList = async (): Promise<CarouselItem[]> => {
 export const CreateMyCardAPI = async (
   data: ICreateCardInput,
 ): Promise<ICreateCardOutput> => {
-  console.log({data});
   const response = await authApi.post('/api/my_cards', data);
-  console.log(response.data);
   return response.data;
 };

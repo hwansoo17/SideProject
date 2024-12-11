@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {colors} from '../styles/styles';
 import {getRandomColor} from '../utils/common';
@@ -42,8 +42,9 @@ const Card: React.FC<ICard> = ({
   gradient,
   background = 'COLOR',
 }) => {
+
   return (
-    <View style={{aspectRatio:0.7, borderRadius:12, overflow:'hidden'}}>
+    <>
       {background === 'COLOR' ? (
         <View style={[styles.background, {backgroundColor: brColor}]} />
       ) : background === 'IMAGE' ? (
@@ -53,7 +54,7 @@ const Card: React.FC<ICard> = ({
           <>
             <View style={[styles.background, {backgroundColor: brColor}]} />
             <LinearGradient
-              colors={['black', brColor]}
+              colors={['black', brColor, 'rgba(255,255,255,0.2)']}
               start={{x: 0, y: 0}}
               end={{x: 1, y: 1}}
               style={styles.background}
@@ -61,40 +62,38 @@ const Card: React.FC<ICard> = ({
           </>
         )
       )}
-      <View style={[styles.upperBackground, { backgroundColor: brColor }]}>
-        <View style={styles.upperLayer}>
-          <View>
-            {logoImg && (
-              <View style={styles.logoStyle}>
-                <Image
-                  src={logoImg}
-                  style={{flex: 1, resizeMode: 'contain'}}
-                />
-              </View>
-            )}
-            <View style={{flex: 1}} />
-            <View>
-              <Text style={{ fontFamily: 'Pretendard-Bold', fontSize: 18, color: '#fff' }}>
-              {corporation}
-            </Text>
-            <View style={{ height: 8 }} />
-            <Text style={{ fontFamily: 'Pretendard-Regular', fontSize: 16, color: '#f2f2f2' }}>
-              {title}
-            </Text>
+      <View style={styles.upperLayer}>
+        <View>
+          {logoImg && (
+            <View style={styles.logoStyle}>
+              <Image
+                src={logoImg}
+                style={{flex: 1, resizeMode: 'contain'}}
+              />
             </View>
+          )}
+          <View style={{flex: 1}} />
+          <View>
+            <Text style={{ fontFamily: 'Pretendard-Bold', fontSize: 18, color: '#fff' }}>
+            {corporation}
+          </Text>
+          <View style={{ height: 8 }} />
+          <Text style={{ fontFamily: 'Pretendard-Regular', fontSize: 16, color: '#f2f2f2' }}>
+            {title}
+          </Text>
           </View>
-          <View style={{ flex: 1 }} />
-          <View style={styles.linkContainer}>
-            {links.map((link, index) => (
-              link.startsWith('https://x.com') ? <XIcon key={index} /> :
-              link.startsWith('https://kakao.com') ? <KakaoIcon key={index} /> :
-              link.startsWith('https://facebook.com') ? <FacebookIcon key={index} /> :
-              link.startsWith('https://instagram.com') ? <InstagramIcon key={index} /> :
-              <LinkIcon key={index} />
-            ))}
-          </View>
-        </View> 
-      </View>
+        </View>
+        <View style={{ flex: 1 }} />
+        <View style={styles.linkContainer}>
+          {links.map((link, index) => (
+            link.startsWith('https://x.com') ? <XIcon key={index} /> :
+            link.startsWith('https://kakao.com') ? <KakaoIcon key={index} /> :
+            link.startsWith('https://facebook.com') ? <FacebookIcon key={index} /> :
+            link.startsWith('https://instagram.com') ? <InstagramIcon key={index} /> :
+            <LinkIcon key={index} />
+          ))}
+        </View>
+      </View> 
       <View style={[styles.lowerBackground]}>
         <View style={styles.lowerLayer}>
           <Text style={{ fontFamily: 'Pretendard-Medium', fontSize: 18, color: '#fff' }}>
@@ -118,7 +117,7 @@ const Card: React.FC<ICard> = ({
           </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     width: 63,
     height: 63,
     borderRadius: 63,
-    backgroundColor: colors.White,
+    // backgroundColor: colors.White,
     overflow: 'hidden',
   },
 });

@@ -20,8 +20,8 @@ import {
   useCardSubmitBottomSheetStore,
   useLinkBottomSheetStore,
 } from '../../store/useBottomSheetStore';
-import {useMutation} from '@tanstack/react-query';
-import {CreateMyCardAPI} from '../../api/myCard';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {CreateMyCardAPI, fetchMyCardList} from '../../api/myCard';
 import {CreateCardAPI, CreateCardTempAPI} from '../../api/card';
 import {getRandomColor} from '../../utils/common';
 
@@ -42,6 +42,7 @@ const RegisterCardItem = () => {
     setOnCreateMobileCard,
   } = useCardSubmitBottomSheetStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {refetch} = useQuery({queryKey:['myCards'], queryFn: fetchMyCardList});
   const {mutate: createMyCard} = useMutation({
     mutationFn: CreateMyCardAPI,
   });
@@ -97,18 +98,18 @@ const RegisterCardItem = () => {
     }
     const randomColor = getRandomColor();
     updateFormData('brColor', randomColor);
-    console.log('제출된 데이터:', formData);
+    updateFormData('background', 'COLOR');
     openCardSubmitBottomSheet();
   };
 
   const handleSubmit = () => {
     // Create Card
-    console.log('Create Card', formData);
     if (isMyCard) {
       createMyCard(
         {...formData, isFinalInput: false},
         {
           onSuccess: () => {
+            refetch();
             setStep(step + 1);
           },
           onError: () => {
@@ -136,7 +137,7 @@ const RegisterCardItem = () => {
     console.log('Create Mobile Temp', formData);
     createCardTemp(formData, {
       onSuccess: () => {
-        navigation.navigate('RegisterCard');
+        navigation.navigate('RegisterCard', {isMyCard});
       },
       onError: () => {
         Alert.alert('오류', '카드 생성에 실패했습니다.');
@@ -207,7 +208,6 @@ const RegisterCardItem = () => {
             style={styles.input}
             placeholder="연락처를 입력해주세요"
             placeholderTextColor={colors.G04}
-            keyboardType="phone-pad"
             value={formData.tel}
             onChangeText={value => updateFormData('tel', value)}
           />

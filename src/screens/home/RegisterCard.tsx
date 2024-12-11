@@ -12,7 +12,7 @@ import {
 import {colors} from '../../styles/styles';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {CreateCardAPI, GetCardTempAPI} from '../../api/card';
-import {CreateMyCardAPI} from '../../api/myCard';
+import {CreateMyCardAPI, fetchMyCardList} from '../../api/myCard';
 import useMakeCardStore, {
   useConfigTabStore,
 } from '../../store/useMakeCareStepStore';
@@ -30,6 +30,7 @@ const RegisterCard: React.FC<IRegisterCardProps> = ({isMyCard = true}) => {
   const navigation = useNavigation<INav>();
   const {formData, setFormData, resetFormData} = useMakeCardStore();
   const {resetStep} = useConfigTabStore();
+  const {refetch} = useQuery({queryKey:['myCards'], queryFn: fetchMyCardList});
   const {mutate: createCard} = useMutation({
     mutationFn: CreateCardAPI,
   });
@@ -42,6 +43,7 @@ const RegisterCard: React.FC<IRegisterCardProps> = ({isMyCard = true}) => {
   });
 
   useEffect(() => {
+    console.log('RegisterCard', isMyCard, formData);
     return () => {
       resetStep();
     };
@@ -81,6 +83,7 @@ const RegisterCard: React.FC<IRegisterCardProps> = ({isMyCard = true}) => {
         {
           onSuccess: () => {
             Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+            refetch();
             navigation.navigate('HomeMain');
           },
           onError: () => {
@@ -94,6 +97,7 @@ const RegisterCard: React.FC<IRegisterCardProps> = ({isMyCard = true}) => {
         {
           onSuccess: () => {
             Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+            refetch();
             navigation.navigate('HomeMain');
           },
           onError: () => {

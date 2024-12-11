@@ -40,8 +40,7 @@ const AddNewCardItem: React.FC<CarouselItemProps> = ({
 
   const navigation = useNavigation<Props>();
 
-  const setIsMyCard = useCreatedCardBottomSheetStore(state => state.setIsMyCard);
-  const openBottomSheet = useCreatedCardBottomSheetStore(state => state.openBottomSheet);
+  const {setIsMyCard, openBottomSheet} = useCreatedCardBottomSheetStore();
   const handleOpenBottomSheet = () => {
     setIsMyCard(true);
     return openBottomSheet();
