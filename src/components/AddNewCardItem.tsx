@@ -13,6 +13,7 @@ import Animated, {
 import { NavigationProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useCreatedCardBottomSheetStore } from '../store/useBottomSheetStore';
+import useMakeCardStore from '../store/useMakeCareStepStore';
 
 const AddIcon = require('../assets/buttonIcon/AddIcon.svg').default;
 const { width: screenWidth } = Dimensions.get('window');
@@ -40,8 +41,8 @@ const AddNewCardItem: React.FC<CarouselItemProps> = ({
 
   const navigation = useNavigation<Props>();
 
-  const setIsMyCard = useCreatedCardBottomSheetStore(state => state.setIsMyCard);
-  const openBottomSheet = useCreatedCardBottomSheetStore(state => state.openBottomSheet);
+  const {openBottomSheet} = useCreatedCardBottomSheetStore();
+  const {setIsMyCard} = useMakeCardStore();
   const handleOpenBottomSheet = () => {
     setIsMyCard(true);
     return openBottomSheet();

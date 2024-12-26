@@ -1,16 +1,9 @@
 import {create} from 'zustand';
 
-interface IBgImgBottomSheetStore {
-  isOpen: boolean;
-  openBottomSheet: () => void;
-  closeBottomSheet: () => void;
-}
 interface IBottomSheetStore {
   isOpen: boolean;
-  isMyCard: boolean;
   openBottomSheet: () => void;
   closeBottomSheet: () => void;
-  setIsMyCard: (isMyCard: boolean) => void;
 }
 
 interface ILinkBottomSheetStore extends IBottomSheetStore {
@@ -31,7 +24,7 @@ interface ICardSubmitBottomSheetStore extends IBottomSheetStore {
   setOnCreateMobileCard: (fn: () => void) => void;
 }
 
-export const useBgImgBottomSheetStore = create<IBgImgBottomSheetStore>(
+export const useBgImgBottomSheetStore = create<IBottomSheetStore>(
   set => ({
     isOpen: false,
     openBottomSheet: () => set({isOpen: true}),
@@ -42,10 +35,8 @@ export const useBgImgBottomSheetStore = create<IBgImgBottomSheetStore>(
 export const useCreatedCardBottomSheetStore = create<IBottomSheetStore>(
   set => ({
     isOpen: false,
-    isMyCard: true,
     openBottomSheet: () => set({isOpen: true}),
     closeBottomSheet: () => set({isOpen: false}),
-    setIsMyCard: (isMyCard: boolean) => set({isMyCard}),
   }),
 );
 export const useLinkBottomSheetStore = create<ILinkBottomSheetStore>(set => ({

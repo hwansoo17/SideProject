@@ -11,8 +11,9 @@ import {
   Image,
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import { useCreatedCardBottomSheetStore } from '../store/useBottomSheetStore';
-import { colors } from '../styles/styles';
+import {useCreatedCardBottomSheetStore} from '../store/useBottomSheetStore';
+import {colors} from '../styles/styles';
+import useMakeCardStore from '../store/useMakeCareStepStore';
 
 interface INav extends NavigationProp<any> {}
 
@@ -23,10 +24,8 @@ const PlusIcon = require('../assets/icons/bottomSheet/bs_plus_icon.svg').default
 const RightArrowIcon = require('../assets/icons/chevron_right.svg').default;
 
 const CreateCardBottomSheet = () => {
-  const isOpen = useCreatedCardBottomSheetStore(state => state.isOpen);
-  const isMyCard = useCreatedCardBottomSheetStore(state => state.isMyCard);
-  const closeBottomSheet = useCreatedCardBottomSheetStore(state => state.closeBottomSheet);
-
+  const {isOpen, closeBottomSheet} = useCreatedCardBottomSheetStore();
+  const {isMyCard} = useMakeCardStore();
   const navigation = useNavigation<INav>();
 
   const translateY = useRef(new Animated.Value(screenHeight)).current;

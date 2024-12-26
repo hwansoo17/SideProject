@@ -15,8 +15,8 @@ import useMakeCardStore, {
 } from '../../../store/useMakeCareStepStore';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import RegisterLogoModal from '../RegisterLogoModal';
-import {useMutation} from '@tanstack/react-query';
-import {CreateMyCardAPI} from '../../../api/myCard';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {CreateMyCardAPI, fetchMyCardList} from '../../../api/myCard';
 import {CreateCardAPI} from '../../../api/card';
 
 const SearchIcon = require('../../../assets/icons/search.svg').default;
@@ -29,7 +29,8 @@ const RegisterLogo = () => {
   const navigation = useNavigation<INav>();
   const [openModal, setOpenModal] = useState(false);
   const {search} = useLogoSearchStore();
-  const {formData, updateFormData, isMyCard} = useMakeCardStore();
+  const {formData, resetFormData, updateFormData, isMyCard} = useMakeCardStore();
+  const {refetch} = useQuery({queryKey:['myCards'], queryFn: fetchMyCardList});
   const {mutate: createCard} = useMutation({
     mutationFn: CreateCardAPI,
   });
@@ -75,6 +76,8 @@ const RegisterLogo = () => {
         {
           onSuccess: () => {
             Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+            resetFormData();
+            refetch();
             navigation.navigate('HomeMain');
           },
           onError: () => {
@@ -88,9 +91,12 @@ const RegisterLogo = () => {
         {
           onSuccess: () => {
             Alert.alert('생성완료', '카드 생성이 완료되었습니다.');
+            resetFormData();
+            refetch();
             navigation.navigate('HomeMain');
           },
-          onError: () => {
+          onError: (e) => {
+            console.log(e);
             Alert.alert('오류', '카드 생성에 실패했습니다.');
           },
         },

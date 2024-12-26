@@ -51,9 +51,7 @@ export const deleteCard = async (id: number): Promise<void> => {
 export const CreateCardAPI = async (
   data: ICreateCardInput,
 ): Promise<ICreateCardOutput> => {
-  console.log({data});
   const response = await authApi.post('/api/cards', data);
-  console.log(response.data);
   return response.data;
 };
 
