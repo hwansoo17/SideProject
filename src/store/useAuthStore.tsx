@@ -8,16 +8,19 @@ interface User {
 interface AuthState {
   isLoggedIn: boolean;
   data: {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
     user: User;
   } | null;
-  login: (data: { token: string; user: User }) => void;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
+  login: (data: { accessToken: string; refreshToken: string; user: User }) => void;
   logout: () => void;
 }
 
 const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: false,
   data: null,
+  setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
   login: (data) => set({ isLoggedIn: true, data }),
   logout: () => set({ isLoggedIn: false, data: null }),
 }));

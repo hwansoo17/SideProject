@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore';
+import { colors } from '../styles/styles';
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
   
@@ -13,7 +14,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
   }
   
   return (
-    <SafeAreaView style={{ backgroundColor: '#282828' }}>
+    <SafeAreaView style={{ backgroundColor: colors.BG }}>
       <View style={styles.container}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-    backgroundColor: '#535353',
+    backgroundColor: colors.G01,
     height: 73,
     flexDirection: 'row',
     shadowColor: '#000',

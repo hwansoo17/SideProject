@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Dimensions, Text, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Dimensions, Text, Image, ImageBackground } from 'react-native';
 import { Pressable, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -13,6 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '@react-navigation/native';
+import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
@@ -53,7 +54,6 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
   isFlipped,
   scrollWidth,
 }) => {
-
   const navigation = useNavigation<Props>();
 
   const rotateY = useSharedValue(0);
@@ -148,6 +148,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         animatedStyle,
       ]}
     >
+      {item.background == "COLOR" &&
       <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.brColor }]}>
         <TouchableWithoutFeedback 
           style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
@@ -204,6 +205,70 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
           </View>
         </TouchableWithoutFeedback>
       </Animated.View>
+      }
+      {item.background == "IMAGE" &&
+      <Animated.View style={[styles.front, frontCardAnimatedStyle, {backgroundColor: item.brColor}]}>
+        <ImageBackground
+          src={item.bgImg}
+          style={{flex:1}}
+        >
+          <TouchableWithoutFeedback 
+            style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
+            onPress={() => navigation.navigate('CardDetail', { item })}
+          >
+            <View style={{width:'100%', height:'70%', padding:24, flexDirection:'row'}}>
+              <View>
+                <View style={{width:53, height:53}}> 
+                  <Image src={item.logoImg} style={{flex:1, resizeMode:'contain'}}/>
+                </View>
+                <View style={{flex:1}}/>
+                <View>
+                  <Text style={{fontFamily: 'Pretendard-Bold', fontSize:18, color: '#fff'}}>
+                    {item.corporation}
+                  </Text>
+                  <View style={{height:8}}/>
+                  <Text style={{fontFamily: 'Pretendard-Regular', fontSize:16, color: '#f2f2f2'}}>
+                    {item.title}
+                  </Text>
+                </View>
+              </View>
+              <View style={{flex:1}}/>
+              <View style={{justifyContent:'flex-end'}}>
+                {data.map((item, index) => (
+                  <TouchableOpacity 
+                    key={index} 
+                    style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.05)', borderRadius:18, marginTop:12}}
+                    onPress={() => console.log('링크 터치')}
+                  >    
+                  </TouchableOpacity>
+                ))}
+              </View>  
+            </View>
+            <View style={{width:'100%', height:'30%', padding:20, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
+              <Text style={{fontFamily: 'Pretendard-Medium', fontSize:18, color: '#fff'}}>
+                {item.name}
+              </Text>
+              <View style={{flex:1}}/>
+              <View style={{flexDirection:'row', alignItems:'center'}}>
+                <PhoneIcon/>
+                <View style={{width:4}}/>
+                <Text style={{fontFamily: 'Pretendard-Light', fontSize:14, color: '#fff'}}>
+                  {item.tel}
+                </Text>
+              </View>
+              <View style={{height:4}}/>
+              <View style={{flexDirection:'row', alignItems:'center'}}>
+                <MailIcon/>
+                <View style={{width:4}}/>
+                <Text style={{fontFamily: 'Pretendard-Light', fontSize:14, color: '#fff'}}>
+                  {item.email}
+                </Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </ImageBackground>
+      </Animated.View>
+      }
       <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: '#fff' }]}>
         <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
           <View style={{alignItems:'center', justifyContent:'center', flex:1}}>

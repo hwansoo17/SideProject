@@ -10,8 +10,9 @@ export const useLogin = () => {
     mutationFn: loginUser,
     onSuccess: async(data: any) => {
       console.log('Login successful:', data);
-      await AsyncStorage.setItem('token', data.token);
-      login({ token: data.token, user: data.user });
+      await AsyncStorage.setItem('accessToken', data.accessToken);
+      await AsyncStorage.setItem('refreshToken', data.refreshToken);
+      login({ refreshToken: data.refreshToken, accessToken: data.accessToken, user: data.user });
     },
     onError: (error: any) => {
       console.error('Login failed:', error.message);

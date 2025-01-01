@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from './api';
 
 export interface LoginResponse {
@@ -34,6 +35,14 @@ export const loginUser = async (loginData: LoginData): Promise<void> => {
   const response = await api.post(`/api/auth/login`, loginData);
   return response.data;
 };
+
+export const refresh = async (): Promise<void> => {
+  const refreshToken = await AsyncStorage.getItem('refreshToken');
+  console.log(refreshToken, 'refreshToken');
+  const response = await api.post(`/api/auth/refresh`, {refreshToken});
+  await AsyncStorage.setItem('accessToken', response.data.accessToken);
+  return response.data;
+}
 
 export const sendCode = async (email: string): Promise<void> => {
   const response = await api.post(`/api/auth/send-email`, { email });

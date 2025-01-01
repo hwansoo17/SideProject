@@ -9,9 +9,15 @@ import LinkBottomSheet from '../components/MakeCard/LinkBottomSheet';
 import CardSubmitBottomSheet from '../components/MakeCard/CardSubmitBottomSheet';
 import { linking } from '../../deepLinkConfig';
 import BgImgBottomSheet from '../components/RegisterCard/Tabs/BgImgBottomSheet';
+import useRefresh from '../hooks/mutations/useRefresh';
 
 const RootNavigator = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+  const useMutateRefresh = useRefresh();
+
+  useEffect(() => {
+    useMutateRefresh.mutate();
+  }, []);
 
   return (
     <NavigationContainer linking={linking}>

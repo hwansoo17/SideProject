@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+  Touchable,
 } from 'react-native';
 
 import useAuthStore from '../../store/useAuthStore';
@@ -12,9 +13,12 @@ import ShareButton from '../../components/ShareButton';
 import { authApi } from '../../api/api';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMyCardList } from '../../api/myCard';
+import { colors, textStyles } from '../../styles/styles';
+import LinearGradient from 'react-native-linear-gradient';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-
+const WalletIcon = require('../../assets/icons/wallet.svg').default;
 
 
 interface CarouselItem {
@@ -78,6 +82,49 @@ const HomeMain: React.FC = () => {
         <ShareButton handleFlip={handleFlip} />
       </View>}
       {/* <Button title="로그아웃" onPress={() => { logout(); console.log(isLoggedIn); }} /> */}
+      <View style={{position:'absolute', paddingHorizontal:20, paddingVertical:10, gap:12, width:'100%', bottom:50}}>
+        <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'space-between'}}>
+          <View style={{flexDirection: 'row', alignItems:'center'}}>
+            <WalletIcon />
+            <View style={{width: 8}} />
+            <Text style={[textStyles.SB1, {color: colors.White}]}>{myCardList.length}</Text>
+            <Text style={[textStyles.SB1, {color: colors.White}]}>/100</Text>
+          </View>
+          <View style={{borderRadius:100, paddingHorizontal:12, paddingVertical:2, backgroundColor:colors.Primary, borderWidth:1, borderColor: '#BBB0FF'}}>
+            <Text style={[textStyles.M5, {color: colors.White}]}>FREE</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            height: 10,
+            borderRadius: 100,
+            backgroundColor: colors.G02,
+            flexDirection: 'row',
+          }}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 50/myCardList.length == null ? 100 : myCardList.length, y: 0}}
+            colors={['#5539FF', '#D8D8FF']}
+            style={{flex: myCardList.length == null ? 100 : myCardList.length, borderRadius: 100}}
+          />
+          <View style={{flex: 100-(myCardList.length == null ? 100 : myCardList.length)}} />
+        </View>
+        <View style={{flexDirection: 'row', alignItems:'center', gap:16, justifyContent:'center'}}>
+          <TouchableOpacity style={{padding:4}}>
+            <Text style={[textStyles.M5, {color: colors.G10}]}>
+              명함 등록
+            </Text>
+          </TouchableOpacity>
+          <Text style={[textStyles.M5, {color: colors.G10}]}>
+            {'|'}
+          </Text> 
+          <TouchableOpacity style={{padding:4}}>
+            <Text style={[textStyles.M5, {color: colors.G10}]}>
+              플랜 구독
+            </Text> 
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -85,7 +132,7 @@ const HomeMain: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#282828',
+    backgroundColor: colors.BG,
   },
 });
 

@@ -19,10 +19,10 @@ export const authApi = axios.create({
 authApi.interceptors.request.use(
   async config => {
     console.log('헤더에 토큰 삽입');
-    const token = await AsyncStorage.getItem('token'); // AsyncStorage에서 토큰 가져오기
-    if (token) {
-      console.log(token, 'token');
-      config.headers['Authorization'] = `Token ${token}`; // 헤더에 토큰 추가
+    const accessToken = await AsyncStorage.getItem('accessToken'); // AsyncStorage에서 토큰 가져오기
+    if (accessToken) {
+      console.log(accessToken, 'accessToken');
+      config.headers['Authorization'] = `Token ${accessToken}`; // 헤더에 토큰 추가
     }
     return config;
   },
