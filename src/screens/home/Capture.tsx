@@ -12,11 +12,12 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import {postPresignedUrl, putS3upload} from '../../api/upload';
+import {Camera, useCameraDevice} from 'react-native-vision-camera';
+import {postPresignedUrl} from '../../api/upload';
 import {getSrcFromStorage} from '../../utils/common';
 import {useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
-import {RNCamera} from 'react-native-camera';
+// import {RNCamera} from 'react-native-camera';
 import {colors} from '../../styles/styles';
 import ImageEditor from '@react-native-community/image-editor';
 
@@ -30,8 +31,8 @@ const Capture: React.FC<ICapture> = ({isMyCard}) => {
   const [loading, setLoading] = useState(false);
   const {updateFormData} = useMakeCardStore();
   const navigation = useNavigation();
-  
-  const cameraRef = useRef<RNCamera | null>(null);
+  const device = useCameraDevice('back');
+  const camera = useRef<Camera | null>(null);
 
   const handleBack = () => {
     navigation.goBack();
@@ -102,35 +103,89 @@ const Capture: React.FC<ICapture> = ({isMyCard}) => {
     }
   }
 
-  const handleCapture = async () => {
-    if (cameraRef.current) {
+//   const handleCapture = async () => {
+//     if (camera.current) {
+//       try {
+//         setLoading(true);
+//         // 사진 촬영
+//         const options = {
+//           quality: 1,
+//           base64: true,
+//         };
+//         const data = await cameraRef.current.takePictureAsync(options);
+//         // 이미지 크롭
+//         const croppedImageUri = await cropImage(data.uri);
+//         if (croppedImageUri) {
+//           try {
+//             // 1. 파일 이름 생성 (timestamp를 사용하여 유니크한 파일명 생성)
+//             const timestamp = new Date().getTime();
+//             const fileName = `card_image_${timestamp}.jpg`;
+  
+//             // 2. presigned URL 요청
+//             const payload = {
+//               name: fileName,
+//             };
+//             const {uploadUrl, uploadPath} = await postPresignedUrl(payload);
+
+//             // 3. 로컬 파일을 Blob으로 변환
+//             const response = await fetch(croppedImageUri);
+//             const blob = await response.blob();
+
+//             // S3 업로드
+//             const uploadResponse = await fetch(uploadUrl, {
+//               method: 'PUT',
+//               body: blob,
+//               headers: {
+//                 'Content-Type': 'image/jpeg',
+//               },
+//             });
+            
+//             if (uploadResponse.ok) {
+//               // 업로드 성공 - S3 URL 저장
+//               const s3ImageUrl = getSrcFromStorage(uploadPath);
+//               console.log('S3 업로드 성공:', s3ImageUrl);
+//               updateFormData('realCardImg', s3ImageUrl);
+//               navigation.navigate('MakeCard', {isMyCard});
+//             } else {
+//               throw new Error('S3 업로드 실패');
+//             }
+//           } catch (uploadError) {
+//             console.error('S3 업로드 오류:', uploadError);
+//             Alert.alert('업로드 실패', '이미지 업로드 중 오류가 발생했습니다.');
+//           }
+//         }
+//       } catch (error) {
+//         console.error('촬영 또는 크롭 실패:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     }
+
+//   }
+const handleCapture = async () => {
+    if (camera.current) {
       try {
         setLoading(true);
-        // 사진 촬영
-        const options = {
-          quality: 1,
-          base64: true,
-        };
-        const data = await cameraRef.current.takePictureAsync(options);
-        // 이미지 크롭
-        const croppedImageUri = await cropImage(data.uri);
+        const photo = await camera.current.takePhoto({
+          enableShutterSound: false,
+          flash: 'off',
+        });
+        
+        const imageUri = `file://${photo.path}`;
+        const croppedImageUri = await cropImage(imageUri);
+        
         if (croppedImageUri) {
           try {
-            // 1. 파일 이름 생성 (timestamp를 사용하여 유니크한 파일명 생성)
             const timestamp = new Date().getTime();
             const fileName = `card_image_${timestamp}.jpg`;
-  
-            // 2. presigned URL 요청
             const payload = {
               name: fileName,
             };
             const {uploadUrl, uploadPath} = await postPresignedUrl(payload);
 
-            // 3. 로컬 파일을 Blob으로 변환
             const response = await fetch(croppedImageUri);
             const blob = await response.blob();
 
-            // S3 업로드
             const uploadResponse = await fetch(uploadUrl, {
               method: 'PUT',
               body: blob,
@@ -140,9 +195,7 @@ const Capture: React.FC<ICapture> = ({isMyCard}) => {
             });
             
             if (uploadResponse.ok) {
-              // 업로드 성공 - S3 URL 저장
               const s3ImageUrl = getSrcFromStorage(uploadPath);
-              console.log('S3 업로드 성공:', s3ImageUrl);
               updateFormData('realCardImg', s3ImageUrl);
               navigation.navigate('MakeCard', {isMyCard});
             } else {
@@ -159,6 +212,14 @@ const Capture: React.FC<ICapture> = ({isMyCard}) => {
         setLoading(false);
       }
     }
+  };
+
+  if (!device) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>카메라를 사용할 수 없습니다.</Text>
+      </View>
+    );
   }
 
   return (
@@ -172,14 +233,21 @@ const Capture: React.FC<ICapture> = ({isMyCard}) => {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
-          <RNCamera
+          {/* <RNCamera
             ref={cameraRef}
             style={styles.camera}
             type={RNCamera.Constants.Type.back}
             flashMode={RNCamera.Constants.FlashMode.off}
             captureAudio={false}>
             <View />
-          </RNCamera>
+          </RNCamera> */}
+          <Camera
+            ref={camera}
+            style={styles.camera}
+            device={device}
+            isActive={true}
+            photo={true}
+          />
           {/* 상단 반투명 영역 */}
           <View style={styles.overlayTop} />
           {/* 좌측 반투명 영역 */}
