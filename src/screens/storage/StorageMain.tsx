@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { Button, Keyboard, Linking, Pressable, Text, TouchableOpacity, View } from "react-native";
 
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, useFocusEffect } from "@react-navigation/native";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,6 +14,7 @@ import CardListItem from "../../components/CardListItem";
 import CardGridItem from "../../components/CardGridItem";
 import useDeleteCard from "../../hooks/mutations/useDeleteCard";
 import koFilter from "../../utils/koFilter";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
 const SettingIcon = require('../../assets/buttonIcon/SettingIcon.svg').default;
@@ -43,21 +44,22 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   // }
   // , [selectedIds, searchText]);
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
-      hideTabBar(); // 키보드가 나타나면 탭바 숨기기
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      showTabBar(); // 키보드가 사라지면 탭바 다시 나타내기
-    });
-
-    return () => {
-      keyboardDidShowListener.remove(); // 이벤트 리스너 정리
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
+  useFocusEffect(
+    React.useCallback(() => {
+      const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
+        hideTabBar();
+      });
+  
+      const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+        showTabBar();
+      });
+  
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }, [])
+  );
   const {isLoading, isError, data: data = [], error} = useCardList(isName);
 
   const deleteCardMutation  = useDeleteCard();
@@ -145,7 +147,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   }
 
   return (
-    <View 
+    <SafeAreaView 
     style={{flex:1, backgroundColor: colors.BG}}
     >
     <View style={{flex:1}}>
@@ -229,7 +231,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       
     </View>
     }
-    </View>
+    </SafeAreaView>
   );
 }
 

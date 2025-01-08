@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Image, ImageBackground } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Image, ImageBackground, Linking } from 'react-native';
 import { Pressable, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -18,6 +18,12 @@ import axios from 'axios';
 const { width: screenWidth } = Dimensions.get('window');
 const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
 const PhoneIcon = require('../assets/cardIcon/phone.svg').default;
+
+const XIcon = require('../assets/icons/links/x_icon.svg').default;
+const KakaoIcon = require('../assets/icons/links/kakao_icon.svg').default;
+const FacebookIcon = require('../assets/icons/links/facebook_icon.svg').default;
+const InstagramIcon = require('../assets/icons/links/instagram_icon.svg').default;
+const LinkIcon = require('../assets/icons/links/default_link_icon.svg').default;
 interface CarouselItemProps {
   item: {
     id: number;
@@ -154,11 +160,12 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
           style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
           onPress={() => navigation.navigate('CardDetail', { item })}
         >
-          <View style={{width:'100%', height:'70%', padding:24, flexDirection:'row'}}>
+          <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
             <View>
-              <View style={{width:53, height:53}}> 
-                <Image src={item.logoImg} style={{flex:1, resizeMode:'contain'}}/>
-              </View>
+              {item.logoImg &&
+                <View style={{width:53, height:53, backgroundColor:'white', borderRadius:100, overflow:'hidden'}}> 
+                  <Image src={item.logoImg} style={{flex:1, resizeMode:'contain'}}/>
+                </View>}
               <View style={{flex:1}}/>
               <View>
                 <Text style={{fontFamily: 'Pretendard-Bold', fontSize:18, color: '#fff'}}>
@@ -172,12 +179,15 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
             </View>
             <View style={{flex:1}}/>
             <View style={{justifyContent:'flex-end'}}>
-              {data.map((item, index) => (
-                <TouchableOpacity 
-                  key={index} 
-                  style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.05)', borderRadius:18, marginTop:12}}
-                  onPress={() => console.log('링크 터치')}
-                >    
+              {item.links.map((link, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => Linking.openURL(link)}>
+                  {link.startsWith('https://x.com') ? <XIcon width={36} height={36}/> :
+                  link.startsWith('https://kakao.com') ? <KakaoIcon width={36} height={36}/> :
+                  link.startsWith('https://facebook.com') ? <FacebookIcon width={36} height={36}/> :
+                  link.startsWith('https://instagram.com') ? <InstagramIcon width={36} height={36}/> :
+                  <LinkIcon width={36} height={36}/>}
                 </TouchableOpacity>
               ))}
             </View>  
@@ -216,11 +226,12 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
             style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
             onPress={() => navigation.navigate('CardDetail', { item })}
           >
-            <View style={{width:'100%', height:'70%', padding:24, flexDirection:'row'}}>
+            <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
               <View>
-                <View style={{width:53, height:53}}> 
+                {item.logoImg &&
+                <View style={{width:53, height:53, backgroundColor:'white', borderRadius:100, overflow:'hidden'}}> 
                   <Image src={item.logoImg} style={{flex:1, resizeMode:'contain'}}/>
-                </View>
+                </View>}
                 <View style={{flex:1}}/>
                 <View>
                   <Text style={{fontFamily: 'Pretendard-Bold', fontSize:18, color: '#fff'}}>
@@ -234,12 +245,15 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
               </View>
               <View style={{flex:1}}/>
               <View style={{justifyContent:'flex-end'}}>
-                {data.map((item, index) => (
+                {item.links.map((link, index) => (
                   <TouchableOpacity 
-                    key={index} 
-                    style={{width:36, height:36, backgroundColor:'rgba(255,255,255, 0.05)', borderRadius:18, marginTop:12}}
-                    onPress={() => console.log('링크 터치')}
-                  >    
+                    key={index}
+                    onPress={() => Linking.openURL(link)}>
+                    {link.startsWith('https://x.com') ? <XIcon width={36} height={36}/> :
+                    link.startsWith('https://kakao.com') ? <KakaoIcon width={36} height={36}/> :
+                    link.startsWith('https://facebook.com') ? <FacebookIcon width={36} height={36}/> :
+                    link.startsWith('https://instagram.com') ? <InstagramIcon width={36} height={36}/> :
+                    <LinkIcon width={36} height={36}/>}
                   </TouchableOpacity>
                 ))}
               </View>  
@@ -269,15 +283,17 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         </ImageBackground>
       </Animated.View>
       }
-      <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: '#fff' }]}>
-        <View style={{width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-          <View style={{alignItems:'center', justifyContent:'center', flex:1}}>
+      <Animated.View style={[styles.back, backCardAnimatedStyle, { backgroundColor: item.brColor }]}>
+        <ImageBackground 
+          src={item.bgImg}
+          style={{width: screenWidth * 0.7, height: screenWidth}}
+        >
+          <View style={{alignItems:'center', justifyContent:'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
             <View style={{width: '53%', aspectRatio:1, justifyContent:'center', alignItems:'center', borderRadius:4, backgroundColor:'white'}}>
             <Image src={item.qrCodeSrc} style={{width: '86%', aspectRatio:1}}/>
             </View>
           </View>
-
-        </View>
+        </ImageBackground>
       </Animated.View>
     </Animated.View>
   );
