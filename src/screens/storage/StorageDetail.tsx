@@ -92,8 +92,7 @@ const StorgeDetail: React.FC<{ route: any }> = ({route}) => {
         !isEdit ? 
         setIsEdit(!isEdit) 
         : 
-        mutateUpdateCard.mutate({id:item.id, data: editData});
-        setIsEdit(!isEdit);
+        mutateUpdateCard.mutate({id:item.id, data: editData}, {onSuccess: () => {setIsEdit(!isEdit); Alert.alert('수정되었습니다')}});
       }
       }/>
       <ScrollView>
