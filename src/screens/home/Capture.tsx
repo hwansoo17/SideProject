@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -18,8 +18,9 @@ import {getSrcFromStorage} from '../../utils/common';
 import {useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
 // import {RNCamera} from 'react-native-camera';
-import {colors} from '../../styles/styles';
+import {colors, textStyles} from '../../styles/styles';
 import ImageEditor from '@react-native-community/image-editor';
+import useTabBarVisibilityStore from '../../store/useTabBarVisibilityStore';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
@@ -27,12 +28,14 @@ interface ICapture {
   isMyCard: boolean;
 }
 
-const Capture: React.FC<ICapture> = ({isMyCard}) => {
+const Capture: React.FC<ICapture> = () => {
+  const {hideTabBar, showTabBar} = useTabBarVisibilityStore();
   const [loading, setLoading] = useState(false);
   const {updateFormData} = useMakeCardStore();
   const navigation = useNavigation();
   const device = useCameraDevice('back');
   const camera = useRef<Camera | null>(null);
+
 
   const handleBack = () => {
     navigation.goBack();
@@ -197,7 +200,7 @@ const handleCapture = async () => {
             if (uploadResponse.ok) {
               const s3ImageUrl = getSrcFromStorage(uploadPath);
               updateFormData('realCardImg', s3ImageUrl);
-              navigation.navigate('MakeCard', {isMyCard});
+              navigation.navigate('MakeCard');
             } else {
               throw new Error('S3 업로드 실패');
             }
@@ -260,14 +263,14 @@ const handleCapture = async () => {
             <View style={styles.borderFrame} />
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.text}>프레임 안에 명함을 맞춰주세요</Text>
+            <Text style={[styles.text, textStyles.M3]}>프레임 안에 명함을 맞춰주세요</Text>
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={handleBack}>
-              <Text style={styles.text}>뒤로</Text>
+              <Text style={[styles.text, textStyles.M3]}>뒤로</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.nextButton} onPress={handleCapture}>
-              <Text style={styles.text}>촬영</Text>
+              <Text style={[styles.text, textStyles.M3]}>촬영</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -300,16 +303,16 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     position: 'absolute',
-    top: 360,
+    top: 340,
   },
   text: {
-    color: colors.White,
+    color: colors.G12,
     fontSize: 16,
     fontWeight: 'bold',
   },
   buttonContainer: {
     position: 'absolute',
-    top: 400,
+    top: 360,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -317,18 +320,17 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cancelButton: {
-    backgroundColor: colors.G05,
-    
-    width: 180,
-    height: 48,
+    backgroundColor: `rgba(255, 255, 255, 0.4)`,
+    width: 165,
+    height: 42,
     borderRadius: 48,
     justifyContent: 'center',
     alignItems: 'center',
   },
   nextButton: {
     backgroundColor: colors.Primary,
-    width: 180,
-    height: 48,
+    width: 165,
+    height: 42,
     borderRadius: 48,
     justifyContent: 'center',
     alignItems: 'center',

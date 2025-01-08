@@ -9,16 +9,16 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
-import {colors} from '../../styles/styles';
+import {colors, textStyles} from '../../styles/styles';
 
 
 const RegisterComplete: React.FC = () => {
-  const {resetStep, formData} = useMakeCardStore();
+  const {resetStep, formData, isMyCard} = useMakeCardStore();
   const navigation = useNavigation<any>();
   
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>명함이 성공적으로 저장되었습니다!</Text>
+      <Text style={[textStyles.B2, {color: colors.White, marginTop: 24}]}>명함이 성공적으로 저장되었습니다!</Text>
       <>
         {formData.realCardImg ? (
           <Image source={{uri: formData.realCardImg}} style={styles.image} />
@@ -31,9 +31,13 @@ const RegisterComplete: React.FC = () => {
           style={styles.homeButton}
           onPress={() => {
             resetStep();
-            navigation.navigate('HomeMain');
+            if (isMyCard) {
+              navigation.navigate('HomeMain');
+            } else {
+              navigation.navigate('StorageMain');
+            }
           }}>
-          <Text style={styles.buttonText}>홈으로</Text>
+          <Text style={[textStyles.M3, {color: colors.White}]}>{isMyCard ? '홈으로' : '보관함으로'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -48,39 +52,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   image: {
-    width: '100%',
-    height: Dimensions.get('window').width * (184 / 343),
-    marginVertical: 20,
+    // width: '100%',
+    // height: Dimensions.get('window').width * (184 / 343),
+    width: 273,
+    height: 150,
+    borderRadius: 4,
+    marginVertical: 53,
   },
   ImageBox: {
-    width: '100%',
-    height: Dimensions.get('window').width * (184 / 343),
-    marginVertical: 20,
+    // width: '100%',
+    // height: Dimensions.get('window').width * (184 / 343),
+    width: 273,
+    height: 150,
+    marginVertical: 53,
     backgroundColor: '#bebebe',
-    borderRadius: 10,
-  },
-  headerText: {
-    fontSize: 20,
-    color: '#fff',
+    borderRadius: 4,
   },
   buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 16,
-    gap: 16,
   },
   homeButton: {
-    backgroundColor: colors.G03,
-    width: 150,
-    height: 40,
-    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    width: 165,
+    height: 42,
+    borderRadius: 42,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
   },
 });
 
