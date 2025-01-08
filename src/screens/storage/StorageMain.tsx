@@ -25,6 +25,7 @@ const ListIcon = require('../../assets/buttonIcon/ListIcon.svg').default;
 const LogoIcon = require('../../assets/icons/LogoIcon.svg').default;
 const TotalSelectIcon = require('../../assets/buttonIcon/TotalSelectIcon.svg').default;
 const TrashCanIcon = require('../../assets/buttonIcon/TrashCanIcon.svg').default;
+const PlusIcon = require('../../assets/icons/plus.svg').default;
 interface Props {
   navigation: NavigationProp<any>;
 }
@@ -154,19 +155,16 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       <View style={{flexDirection:'row', alignItems:'center', paddingHorizontal:24, paddingVertical:16}}>
         <Text style={{fontFamily:'Pretendard-SemiBold', fontSize:28, color:'#fff'}}>보관함</Text>
         <View style={{flex:1}}/>
-        <TouchableOpacity onPress={() => {navigation.navigate("AddCard")}}>
-          <EditIcon/>
-        </TouchableOpacity>
         <View style={{width:16}}/>
         <TouchableOpacity onPress={() => {pressSetting()}}>
           <SettingIcon/>
         </TouchableOpacity>
       </View>
-      <View style={{paddingHorizontal: 20, gap:16}}>
+      <View style={{paddingHorizontal: 20, gap:16, marginTop: 16}}>
         <View>
-          <View style={{height:41, backgroundColor:'rgba(255, 255, 255, 0.05)', borderRadius:4}}>
+          <View style={{backgroundColor:'rgba(255, 255, 255, 0.05)', borderRadius:4}}>
             <TextInput
-              style={{flex:1, padding:12, color:colors.White}}
+              style={{ paddingHorizontal:12, paddingVertical:8, color:colors.White,}}
               placeholder="검색어를 입력해주세요"
               placeholderTextColor={colors.G08}
               value={searchText}
@@ -180,10 +178,27 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
           <CustomChip text="회사명" isSelected={!isName} onPress={() => setIsName(false)}/>
           <View style={{flex:1}}/>
           <TouchableOpacity 
+            style={{
+              gap:2,
+              flexDirection:'row',
+              borderRadius: 100, 
+              paddingHorizontal:10, 
+              paddingVertical:6, 
+              borderColor: 'rgba(142, 142, 151, 0.4)', 
+              borderWidth: 1,
+              alignItems:'center'
+            }}
+            onPress={() => {navigation.navigate("AddCard")}}
+          >
+            <PlusIcon/>
+            <Text style={{fontFamily:'Pretendard-Medium', fontSize:11, color: colors.G09}}>명함추가</Text>
+          </TouchableOpacity>
+          <View style={{width:8}}/>
+          <TouchableOpacity 
             style={{padding:5}}
             onPress={() => setIsGrid(!isGrid)}
           >
-            {isGrid ? <ListIcon/> : <GridIcon/>}
+            {!isGrid ? <ListIcon/> : <GridIcon/>}
           </TouchableOpacity>
         </View>
         <View>
