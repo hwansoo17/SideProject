@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Button,
+  Keyboard,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import TakePhoto from '../../components/MakeCard/TakePhoto';
@@ -12,6 +13,7 @@ import RegisterCardItem from '../../components/MakeCard/RegisterCardItem';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
 import RegisterComplete from '../../components/MakeCard/RegisterComplete';
 import { useLinkBottomSheetStore } from '../../store/useBottomSheetStore';
+import useTabBarVisibilityStore from '../../store/useTabBarVisibilityStore';
 
 interface IMakeCardProps {
   isMyCard: boolean;
@@ -20,6 +22,7 @@ interface IMakeCardProps {
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
 const MakeCard: React.FC<IMakeCardProps> = ({isMyCard = true}) => {
+  const { hideTabBar, showTabBar } = useTabBarVisibilityStore();
   const {step, resetStep, setIsMyCard} = useMakeCardStore();
   const {resetLinks} = useLinkBottomSheetStore();
   const navigation = useNavigation();
@@ -28,6 +31,30 @@ const MakeCard: React.FC<IMakeCardProps> = ({isMyCard = true}) => {
     return () => {
       resetStep();
       resetLinks();
+    };
+  }, []);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        hideTabBar();
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        hideTabBar(); // 키보드가 사라져도 탭바는 계속 숨김 상태 유지
+      }
+    );
+
+    // 컴포넌트 마운트 시 탭바 숨기기
+    hideTabBar();
+
+    // 클린업 함수
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
     };
   }, []);
 

@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     width: 63,
     height: 63,
     borderRadius: 63,
-    // backgroundColor: colors.White,
+    backgroundColor: colors.White,
     overflow: 'hidden',
   },
 });

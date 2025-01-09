@@ -14,6 +14,7 @@ import CardListItem from "../../components/CardListItem";
 import CardGridItem from "../../components/CardGridItem";
 import useDeleteCard from "../../hooks/mutations/useDeleteCard";
 import koFilter from "../../utils/koFilter";
+import useMakeCardStore from "../../store/useMakeCareStepStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
@@ -33,6 +34,7 @@ interface Props {
 const StorageMain: React.FC<Props> = ({navigation}) => {
   // const {isLoading, isError, data: data, error} = useQuery({queryKey:['cards'], queryFn: fetchCardList});
   const {showTabBar, hideTabBar, isTabBarVisible} = useTabBarVisibilityStore();
+  const {setIsMyCard} = useMakeCardStore();
   const [settingVisible, setSettingVisible] = React.useState(false);
   const [isName, setIsName] = React.useState(false);
   const [isGrid, setIsGrid] = React.useState(false);
@@ -177,6 +179,12 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
           <View style={{width:8}}/>
           <CustomChip text="회사명" isSelected={!isName} onPress={() => setIsName(false)}/>
           <View style={{flex:1}}/>
+          <TouchableOpacity onPress={() => {
+            setIsMyCard(false); 
+            navigation.navigate('AddCard');
+          }}>
+            <Text style={[textStyles.R4, {color: colors.G09}]}>명함추가</Text>
+          </TouchableOpacity>
           <TouchableOpacity 
             style={{
               gap:2,

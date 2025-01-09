@@ -34,6 +34,7 @@ const AddIcon = require('../../assets/icons/links/+_icon.svg').default;
 
 const RegisterCardItem = () => {
   const {formData, updateFormData, resetFormData, step, setStep, isMyCard} = useMakeCardStore();
+  
   const {openBottomSheet, links, setLinks, setSelectedUrl} = useLinkBottomSheetStore();
   const {
     openBottomSheet: openCardSubmitBottomSheet,
@@ -98,7 +99,12 @@ const RegisterCardItem = () => {
     const randomColor = getRandomColor();
     updateFormData('brColor', randomColor);
     updateFormData('background', 'COLOR');
-    openCardSubmitBottomSheet();
+    console.log({isMyCard});
+    if (isMyCard) {
+      openCardSubmitBottomSheet();
+    } else {
+      handleSubmit();
+    }
   };
 
   const handleSubmit = () => {
@@ -158,73 +164,73 @@ const RegisterCardItem = () => {
           resizeMode="contain"
         />
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>이름 *</Text>
+          <Text style={[textStyles.M6, styles.label]}>이름 *</Text>
           <TextInput
-            style={styles.input}
-            placeholder="이름을 입력해주세요"
-            placeholderTextColor={colors.G04}
+            style={[styles.input, textStyles.M3]}
+            placeholder="홍길동"
+            placeholderTextColor={colors.G08}
             value={formData.name}
             onChangeText={value => updateFormData('name', value)}
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>회사명 *</Text>
+          <Text style={[textStyles.M6, styles.label]}>회사명 *</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, textStyles.M3]}
             placeholder="회사명을 입력해주세요"
-            placeholderTextColor={colors.G04}
+            placeholderTextColor={colors.G08}
             value={formData.corporation}
             onChangeText={value => updateFormData('corporation', value)}
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>직책</Text>
+          <Text style={[textStyles.M6, styles.label]}>직책</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, textStyles.M3]}
             placeholder="직책을 입력해주세요"
-            placeholderTextColor={colors.G04}
+            placeholderTextColor={colors.G08}
             value={formData.title}
             onChangeText={value => updateFormData('title', value)}
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>주소</Text>
+          <Text style={[textStyles.M6, styles.label]}>주소</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, textStyles.M3]}
             placeholder="주소를 입력해주세요"
-            placeholderTextColor={colors.G04}
+            placeholderTextColor={colors.G08}
             value={formData.address}
             onChangeText={value => updateFormData('address', value)}
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>연락처 *</Text>
+          <Text style={[textStyles.M6, styles.label]}>연락처 *</Text>
           <TextInput
-            style={styles.input}
-            placeholder="연락처를 입력해주세요"
-            placeholderTextColor={colors.G04}
+            style={[styles.input, textStyles.M3]}
+            placeholder="ex) 010-1234-5678"
+            placeholderTextColor={colors.G08}
             value={formData.tel}
             onChangeText={value => updateFormData('tel', value)}
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>이메일 *</Text>
+          <Text style={[textStyles.M6, styles.label]}>이메일 *</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, textStyles.M3]}
             placeholder="이메일을 입력해주세요"
-            placeholderTextColor={colors.G04}
+            placeholderTextColor={colors.G08}
             keyboardType="email-address"
             value={formData.email}
             onChangeText={value => updateFormData('email', value)}
           />
         </View>
         <View style={styles.inputContainer}>
-          <Text style={[textStyles.M4, styles.label]}>링크 추가</Text>
+          <Text style={[textStyles.M6, styles.label]}>링크 추가</Text>
           <View style={styles.linkContainer}>
             {links.map((link: {url: string; type: string}, index: number) =>
               link.type === 'x' ? (
@@ -255,16 +261,20 @@ const RegisterCardItem = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={() => setStep(step - 1)}>
-            <Text>취소</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={OpenCardSubmitSheet}>
-            <Text>다음</Text>
-          </TouchableOpacity>
+          <View style={{flex: 1}}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => navigation.goBack()}>
+              <Text style={[textStyles.M3, {color: colors.White}]}>재촬영</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{flex: 1}}>
+            <TouchableOpacity
+              style={styles.nextButton}
+              onPress={OpenCardSubmitSheet}>
+              <Text style={[textStyles.M3, {color: colors.White}]}>다음</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
       <AddLinkModal
@@ -295,25 +305,25 @@ const styles = StyleSheet.create({
   cardImage: {
     width: '100%',
     height: Dimensions.get('window').width * (184 / 343),
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 30,
     backgroundColor: '#bebebe',
     borderRadius: 10,
   },
   inputContainer: {
-    marginBottom: 24,
+    marginBottom: 12,
     width: '100%',
   },
   label: {
-    color: colors.White,
+    color: colors.G09,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: colors.G01,
-    borderRadius: 8,
+    backgroundColor: 'rgba(53, 53, 53, 0.4)',
+    borderRadius: 4,
     padding: 16,
-    color: colors.White,
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 14,
+    height: 52,
+    color: colors.White
   },
   linkContainer: {
     display: 'flex',
@@ -339,23 +349,22 @@ const styles = StyleSheet.create({
   buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     padding: 16,
-    gap: 16,
+    paddingHorizontal: 4,
+    gap: 5,
   },
   cancelButton: {
-    backgroundColor: colors.G02,
-    width: 100,
-    height: 40,
-    borderRadius: 10,
+    backgroundColor: '#252525',
+    height: 42,
+    borderRadius: 42,
     justifyContent: 'center',
     alignItems: 'center',
   },
   nextButton: {
     backgroundColor: colors.Primary,
-    width: 100,
-    height: 40,
-    borderRadius: 10,
+    height: 42,
+    borderRadius: 42,
     justifyContent: 'center',
     alignItems: 'center',
   },

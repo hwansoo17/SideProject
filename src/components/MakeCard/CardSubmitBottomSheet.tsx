@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import {useCardSubmitBottomSheetStore} from '../../store/useBottomSheetStore';
-import {colors} from '../../styles/styles';
+import {colors, textStyles} from '../../styles/styles';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -92,8 +92,8 @@ const CardSubmitBottomSheet = () => {
             }}>
             <View style={styles.linkContainer}>
               <View style={styles.linkHeader}>
-                <SaveIcon />
-                <Text style={styles.menuText}>이대로 명함 제작</Text>
+                <SaveIcon style={{width: 24, height: 24}} />
+                <Text style={[textStyles.R2, {color: colors.White}]}>이대로 명함 제작</Text>
               </View>
               <RightArrowIcon />
             </View>
@@ -105,9 +105,9 @@ const CardSubmitBottomSheet = () => {
               closeBottomSheetWithAnimation();
             }}>
             <View style={styles.linkContainer}>
-              <View style={styles.linkHeader}>
-                <EditIcon />
-                <Text style={styles.menuText}>모바일 명함 제작</Text>
+              <View style={[styles.linkHeader, {gap: 10}]}>
+                <EditIcon style={{width: 24, height: 24}} />
+                <Text style={[textStyles.R2, {color: colors.White}]}>모바일 명함 제작</Text>
               </View>
               <RightArrowIcon />
             </View>
@@ -176,7 +176,9 @@ const styles = StyleSheet.create({
     paddingTop: 32,
   },
   menuItem: {
-    paddingVertical: 12,
+    // paddingVertical: 12,
+    paddingHorizontal: 4,
+    height: 54,
   },
   menuText: {
     fontSize: 18,
@@ -189,7 +191,8 @@ const styles = StyleSheet.create({
   },
   linkHeader: {
     flexDirection: 'row',
-    gap: 10,
+    alignItems: 'center',
+    gap: 8,
   },
 });
 
