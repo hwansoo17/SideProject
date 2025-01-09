@@ -55,6 +55,13 @@ export const CreateCardAPI = async (
   return response.data;
 };
 
+export const updateCard = async (
+  id: number,
+  data: ICreateCardInput,
+): Promise<ICreateCardOutput> => {
+  const response = await authApi.patch(`/api/cards/${id}`, data);
+  return response.data;
+}
 export const CreateCardTempAPI = async (
   data: ICreateCardInput,
 ): Promise<ICreateCardOutput> => {
