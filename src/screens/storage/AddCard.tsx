@@ -16,7 +16,6 @@ import {useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
 import {colors, textStyles} from '../../styles/styles';
 import ImageEditor from '@react-native-community/image-editor';
-import useTabBarVisibilityStore from '../../store/useTabBarVisibilityStore';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
@@ -25,10 +24,6 @@ interface IAddCard {
 }
 
 const AddCard: React.FC<IAddCard> = () => {
-  const { hideTabBar, showTabBar } = useTabBarVisibilityStore();
-  const { isMyCard } = useMakeCardStore();
-  console.log('AddCard');
-  console.log({isMyCard});
   const [loading, setLoading] = useState(false);
   const {updateFormData} = useMakeCardStore();
   const navigation = useNavigation();
