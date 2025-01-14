@@ -62,6 +62,7 @@ export const updateCard = async (
   const response = await authApi.patch(`/api/cards/${id}`, data);
   return response.data;
 }
+
 export const CreateCardTempAPI = async (
   data: ICreateCardInput,
 ): Promise<ICreateCardOutput> => {

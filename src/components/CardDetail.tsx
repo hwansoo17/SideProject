@@ -104,7 +104,7 @@ const Card: React.FC<ICard> = ({
           </View>
         </View>
       </View>}
-      {background == 'IMAGE' || background == 'GRADIENT' &&
+      {(background == 'IMAGE' || background == 'GRADIENT') &&
       <ImageBackground
         src={bgImg}
         style={{flex:1}}

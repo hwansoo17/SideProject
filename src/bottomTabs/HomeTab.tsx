@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeMain from '../screens/home/HomeMain';
 import MakeCard from '../screens/home/MakeCard';
 import RegisterCard from '../screens/home/RegisterCard';
-import CardDetail from '../screens/home/CardDetail';
+import CardDetail from '../screens/myCard/MyCardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore';
 import Search from '../screens/home/Search';
 import Capture from '../screens/home/Capture';
@@ -29,7 +29,7 @@ const HomeTab: React.FC<{route: any}> = ({route}) => {
         component={HomeMain}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="CardDetail" component={CardDetail} />
+      <Stack.Screen name="CardDetail" component={CardDetail} options={{headerShown: false}}/>
       <Stack.Screen
         name="MakeCard"
         component={MakeCard}

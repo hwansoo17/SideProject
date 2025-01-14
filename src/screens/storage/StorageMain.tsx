@@ -41,11 +41,6 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   const [selectedIds, setSelectedIds] = React.useState<(number | string)[]>([]);
   const [searchText, setSearchText] = React.useState('');
   const [filteredData, setFilteredData] = React.useState<any[]>([]);
-  // useEffect(() => {
-  //   console.log(selectedIds);
-  //   console.log(searchText);
-  // }
-  // , [selectedIds, searchText]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -179,12 +174,12 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
           <View style={{width:8}}/>
           <CustomChip text="회사명" isSelected={!isName} onPress={() => setIsName(false)}/>
           <View style={{flex:1}}/>
-          <TouchableOpacity onPress={() => {
+          {/* <TouchableOpacity onPress={() => {
             setIsMyCard(false); 
             navigation.navigate('AddCard');
           }}>
             <Text style={[textStyles.R4, {color: colors.G09}]}>명함추가</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity 
             style={{
               gap:2,
@@ -196,7 +191,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
               borderWidth: 1,
               alignItems:'center'
             }}
-            onPress={() => {navigation.navigate("AddCard")}}
+            onPress={() => {setIsMyCard(false); navigation.navigate("AddCard");}}
           >
             <PlusIcon/>
             <Text style={{fontFamily:'Pretendard-Medium', fontSize:11, color: colors.G09}}>명함추가</Text>

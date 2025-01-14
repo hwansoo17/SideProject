@@ -21,9 +21,10 @@ type CarouselProps = {
   setCurrentIndex: (index: number) => void;
   data: any[];
   isFlipped: boolean;
+  settingVisible?: boolean;
 };
 
-const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data, isFlipped}) => {
+const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data, isFlipped, settingVisible}) => {
 
   const scrollX = useSharedValue(0);
   const scrollWidth = screenWidth * 0.7 - screenWidth * 0.1;
@@ -35,8 +36,6 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
     );
     runOnJS(setCurrentIndex)(index);
   });
-
-  
 
   return (
     <Animated.ScrollView
@@ -63,6 +62,7 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
           currentIndex={currentIndex}
           index={index}
           isFlipped={isFlipped && currentIndex === index}
+          settingVisible={settingVisible}
         />
       ))}
       <AddNewCardItem

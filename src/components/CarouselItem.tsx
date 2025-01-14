@@ -14,6 +14,7 @@ import Animated, {
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '@react-navigation/native';
 import axios from 'axios';
+import { colors } from '../styles/styles';
 
 const { width: screenWidth } = Dimensions.get('window');
 const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
@@ -24,6 +25,7 @@ const KakaoIcon = require('../assets/icons/links/kakao_icon.svg').default;
 const FacebookIcon = require('../assets/icons/links/facebook_icon.svg').default;
 const InstagramIcon = require('../assets/icons/links/instagram_icon.svg').default;
 const LinkIcon = require('../assets/icons/links/default_link_icon.svg').default;
+const TrashCanIcon = require('../assets/buttonIcon/TrashCanIcon.svg').default;
 interface CarouselItemProps {
   item: {
     id: number;
@@ -46,6 +48,7 @@ interface CarouselItemProps {
     index: number;
     isFlipped: boolean;
     scrollWidth: number;
+    settingVisible?: boolean;
 }
 
 interface Props {
@@ -59,6 +62,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
   index,
   isFlipped,
   scrollWidth,
+  settingVisible
 }) => {
   const navigation = useNavigation<Props>();
 
@@ -145,8 +149,6 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
     };
   });
 
-  const data = [1, 2, 3, 4];
-
   return (
     <Animated.View
       style={[
@@ -159,6 +161,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         <TouchableWithoutFeedback 
           style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
           onPress={() => navigation.navigate('CardDetail', { item })}
+          disabled={settingVisible}
         >
           <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
             <View>
@@ -179,6 +182,14 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
             </View>
             <View style={{flex:1}}/>
             <View style={{justifyContent:'flex-end'}}>
+              {settingVisible && (index) === currentIndex && (
+                <TouchableOpacity
+                  style={{width:32, height:32, borderRadius:16, backgroundColor:'rgba(0, 0, 0, 0.3)', alignItems:'center', justifyContent:'center', borderWidth:1.2, borderColor: colors.White}}
+                  onPress={() => navigation.navigate('CardDetail', { item })}>
+                  <TrashCanIcon width={19} height={19}/>
+                </TouchableOpacity>
+              )}
+              <View style={{flex:1}}/>
               {item.links.map((link, index) => (
                 <TouchableOpacity
                   key={index}
@@ -225,6 +236,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
           <TouchableWithoutFeedback 
             style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
             onPress={() => navigation.navigate('CardDetail', { item })}
+            disabled={settingVisible}
           >
             <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
               <View>
@@ -245,6 +257,14 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
               </View>
               <View style={{flex:1}}/>
               <View style={{justifyContent:'flex-end'}}>
+                {settingVisible && (index) === currentIndex && (
+                  <TouchableOpacity
+                    style={{width:32, height:32, borderRadius:16, backgroundColor:'rgba(0, 0, 0, 0.3)', alignItems:'center', justifyContent:'center', borderWidth:1.2, borderColor: colors.White}}
+                    onPress={() => navigation.navigate('CardDetail', { item })}>
+                    <TrashCanIcon width={19} height={19}/>
+                  </TouchableOpacity>
+                )}
+                <View style={{flex:1}}/>
                 {item.links.map((link, index) => (
                   <TouchableOpacity 
                     key={index}

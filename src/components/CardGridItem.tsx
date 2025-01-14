@@ -147,7 +147,7 @@ const CardGridItem: React.FC<GridItemProps> = ({
         </View>
       </View>       
       }
-      {item.background === 'IMAGE' || item.background === 'GRADIENT' &&
+      {(item.background === 'IMAGE' || item.background === 'GRADIENT') &&
         <ImageBackground
           src={item.bgImg}
           style={{

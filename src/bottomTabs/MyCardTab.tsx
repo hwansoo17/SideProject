@@ -25,7 +25,7 @@ const MyCardTab: React.FC<{ route: any }> = ({ route }) => {
   return (
     <Stack.Navigator initialRouteName="MyCardMain">
       <Stack.Screen name="MyCardMain" component={MyCardMain} options={{ headerShown: false }}/>
-      <Stack.Screen name="MyCardDetail" component={MyCardDetail}/>
+      <Stack.Screen name="CardDetail" component={MyCardDetail} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };

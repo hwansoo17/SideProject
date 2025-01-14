@@ -137,7 +137,7 @@ const CardListItem: React.FC<CardListItemProps> = ({
           </TouchableOpacity>
         </View>
       </View>}
-      {item.background === 'IMAGE' || item.background === 'GRADIENT' &&
+      {(item.background === 'IMAGE' || item.background === 'GRADIENT') &&
       <ImageBackground
         src={item.bgImg}
         style={{
