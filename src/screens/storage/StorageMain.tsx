@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from "react";
 import { Button, Keyboard, Linking, Pressable, Text, TouchableOpacity, View } from "react-native";
-
 import { NavigationProp, useFocusEffect } from "@react-navigation/native";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
