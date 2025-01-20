@@ -55,6 +55,7 @@ const CardListItem: React.FC<CardListItemProps> = ({
         backgroundColor: item.brColor,
         borderRadius: 4,
         marginHorizontal: 20,
+        overflow: 'hidden',
       }}
       onPress={() => {
         if (settingVisible) {
