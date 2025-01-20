@@ -71,14 +71,14 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
       });
   
       const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
-        showTabBar();
+        settingVisible ? null : showTabBar();
       });
   
       return () => {
         keyboardDidShowListener.remove();
         keyboardDidHideListener.remove();
       };
-    }, [])
+    }, [settingVisible])
   );
   const {isLoading, isError, data: data = [], error} = useCardList(isName);
 
