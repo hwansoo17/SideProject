@@ -14,10 +14,22 @@ import useRefresh from '../hooks/mutations/useRefresh';
 const RootNavigator = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
   const useMutateRefresh = useRefresh();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    useMutateRefresh.mutate();
+    useMutateRefresh.mutate(undefined, {
+      onSuccess: () => {
+        setIsLoading(false); // 성공 시 로딩 상태 해제
+      },
+      onError: () => {
+        setIsLoading(false); // 에러 발생 시에도 로딩 상태 해제
+      },
+    });
   }, []);
+
+  if (isLoading || useMutateRefresh.isPending) {
+    return null;
+  }
 
   return (
     <NavigationContainer linking={linking}>
