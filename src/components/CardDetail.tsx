@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Linking, ImageBackground } from 'react-native';
-import { palette } from '../styles/styles';
+import { colors, palette } from '../styles/styles';
 import { getRandomColor } from '../utils/common';
 
 const MailIcon = require('../assets/cardIcon/phone-1.svg').default;
@@ -50,7 +50,7 @@ const Card: React.FC<ICard> = ({
         <View style={[styles.upperBackground, { backgroundColor: brColor }]}>
           <View style={styles.upperLayer}>
             <View>
-              <View style={{ width: 53, height: 53 }}>
+              <View style={{ width: 53, height: 53, borderRadius: 100, overflow: 'hidden', backgroundColor: colors.White }}>
                 <Image src={logoImg} style={{ flex: 1, resizeMode: 'contain' }} />
               </View>
               <View style={{ flex: 1 }} />
@@ -113,7 +113,7 @@ const Card: React.FC<ICard> = ({
           <View style={[styles.upperBackground]}>
             <View style={styles.upperLayer}>
               <View>
-                <View style={{ width: 53, height: 53 }}>
+                <View style={{ width: 53, height: 53, borderRadius: 100, overflow: 'hidden', backgroundColor: colors.White }}>
                   <Image src={logoImg} style={{ flex: 1, resizeMode: 'contain' }} />
                 </View>
                 <View style={{ flex: 1 }} />
