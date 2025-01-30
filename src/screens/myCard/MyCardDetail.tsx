@@ -58,7 +58,7 @@ const EditingInfoItem: React.FC<editInfoItemProps> = ({ title, content, setEditD
   )
 }
 
-const StorgeDetail: React.FC<{ route: any }> = ({route}) => {
+const CardDetail: React.FC<{ route: any }> = ({route}) => {
   const item = route.params.item;
   const [isEdit, setIsEdit] = useState(false);
   const {selectedOption} = useToggleStore();
@@ -163,4 +163,4 @@ const StorgeDetail: React.FC<{ route: any }> = ({route}) => {
   );
 }
 
-export default StorgeDetail;
+export default CardDetail;

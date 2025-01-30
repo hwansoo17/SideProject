@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateCard, ICreateCardInput } from '../../api/card';
+import { queryKey } from '../queries/queryKey';
 
 const useUpdateCard = () => {
   const queryClient = useQueryClient();
@@ -8,7 +9,7 @@ const useUpdateCard = () => {
     mutationFn: ({ id, data }: { id: number; data: ICreateCardInput }) => updateCard(id, data),
     onSuccess: async (response) => {
       console.log(response)
-      queryClient.invalidateQueries({ queryKey: ['cardList'] });
+      queryClient.invalidateQueries({ queryKey: queryKey.cardList });
     },
     onError: (error) => {
       console.log(error);

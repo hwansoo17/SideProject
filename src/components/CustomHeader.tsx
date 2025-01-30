@@ -31,7 +31,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
         <BackIcon color={colors.G11}/>
       </TouchableOpacity>
       <View style={{alignItems: 'center', paddingVertical:8, gap:4, flex:6}}>
-        <Text style={[textStyles.B1, {color: colors.Black, textAlign:'center'}]}>
+        <Text style={[textStyles.M1, {color: colors.White, textAlign:'center', fontSize:18}]}>
           {title}
         </Text>
         {subtitle &&

@@ -50,9 +50,10 @@ const Card: React.FC<ICard> = ({
         <View style={[styles.upperBackground, { backgroundColor: brColor }]}>
           <View style={styles.upperLayer}>
             <View>
+              {logoImg &&
               <View style={{ width: 53, height: 53, borderRadius: 100, overflow: 'hidden', backgroundColor: colors.White }}>
                 <Image src={logoImg} style={{ flex: 1, resizeMode: 'contain' }} />
-              </View>
+              </View>}
               <View style={{ flex: 1 }} />
               <View>
                 <Text style={{ fontFamily: 'Pretendard-Bold', fontSize: 18, color: '#fff' }}>
@@ -113,9 +114,10 @@ const Card: React.FC<ICard> = ({
           <View style={[styles.upperBackground]}>
             <View style={styles.upperLayer}>
               <View>
+              {logoImg &&
                 <View style={{ width: 53, height: 53, borderRadius: 100, overflow: 'hidden', backgroundColor: colors.White }}>
                   <Image src={logoImg} style={{ flex: 1, resizeMode: 'contain' }} />
-                </View>
+                </View>}
                 <View style={{ flex: 1 }} />
                 <View>
                   <Text style={{ fontFamily: 'Pretendard-Bold', fontSize: 18, color: '#fff' }}>

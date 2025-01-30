@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchCardList } from '../../api/card';
+import { queryKey } from './queryKey';
 
 const useCardList = (isName: boolean) => {
   return useQuery({
-    queryKey: ['cardList'],
+    queryKey: queryKey.cardList,
     queryFn: fetchCardList,
     select: (data) => {
           // 정렬 로직 적용

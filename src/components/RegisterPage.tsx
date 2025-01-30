@@ -5,7 +5,7 @@ import CustomButton from './CustomButton';
 import CustomInput from './CustomInput';
 
 interface RegisterPageProps {
-  title: string,
+  title?: string,
   inputData: inputData[],
   buttonTitle: string,
   onPress: () => void,
@@ -32,9 +32,10 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
 
   return (
     <View>
+      {title &&
       <Text style={[textStyles.B2, {color:colors.White}]}>
         {title}
-      </Text>
+      </Text>}
       <View style={{height: 16}} />
       {inputData.map((item, index) => (
         <CustomInput

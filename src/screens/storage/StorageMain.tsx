@@ -14,8 +14,9 @@ import CardGridItem from "../../components/CardGridItem";
 import useDeleteCard from "../../hooks/mutations/useDeleteCard";
 import koFilter from "../../utils/koFilter";
 import useMakeCardStore from "../../store/useMakeCareStepStore";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { getInitial } from "../../utils/extractInitial";
+import { queryKey } from "../../hooks/queries/queryKey";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
 const SettingIcon = require('../../assets/buttonIcon/SettingIcon.svg').default;
@@ -53,7 +54,7 @@ const IndexBar: FC<IndexBarProps> = ({ sections, onPress }) => (
 );
 
 const StorageMain: React.FC<Props> = ({navigation}) => {
-  // const {isLoading, isError, data: data, error} = useQuery({queryKey:['cards'], queryFn: fetchCardList});
+  const insets = useSafeAreaInsets();
   const {showTabBar, hideTabBar, isTabBarVisible} = useTabBarVisibilityStore();
   const {setIsMyCard} = useMakeCardStore();
   const [settingVisible, setSettingVisible] = React.useState(false);
@@ -129,7 +130,7 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   
         console.log('All selected cards deleted successfully.');
         setSelectedIds([]); // 선택 초기화
-        queryClient.invalidateQueries({ queryKey: ['cardList'] }); // 한 번만 호출
+        queryClient.invalidateQueries({ queryKey: queryKey.cardList }); // 한 번만 호출
         pressSetting();
       } catch (error) {
         console.error('Error deleting selected cards:', error);
@@ -201,8 +202,13 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView 
-    style={{flex:1, backgroundColor: colors.BG}}
+    <View 
+    style={{
+      flex:1, 
+      backgroundColor: colors.BG,
+      paddingBottom: insets.bottom,
+      paddingTop: insets.top,
+    }}
     >
       <View style={{flex:1}}>
         <View style={{flexDirection:'row', alignItems:'center', paddingHorizontal:24, paddingVertical:16}}>
@@ -270,46 +276,46 @@ const StorageMain: React.FC<Props> = ({navigation}) => {
         {isGrid ? renderGrid() : renderList()}
         
       </View>
-    {settingVisible &&
-    <View style={{
-      borderTopLeftRadius: 12,
-      borderTopRightRadius: 12,
-      backgroundColor: 'rgba(44,44,44,0.8)',
-      height: 73,
-      flexDirection: 'row',
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5}}
-    >
-      <TouchableOpacity 
-        style={{padding:20}}
-        onPress={() => {
-          if (selectedIds.length === data.length) {
-            // 이미 모두 선택된 경우 선택 해제
-            setSelectedIds([]);
-          } else {
-            // 모든 아이템 선택
-            setSelectedIds(data.map((item) => item.id));
-          }
-        }}
+      {settingVisible &&
+      <View style={{
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        backgroundColor: 'rgba(44,44,44,0.8)',
+        height: 73,
+        flexDirection: 'row',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5}}
       >
-        <TotalSelectIcon/>
-      </TouchableOpacity>
-      <View style={{flex:1}}>
-        <Text style={[textStyles.R1, {color:colors.White, textAlign:'center'}]}>
-          {selectedIds.length}개 항목 선택됨
-        </Text>
+        <TouchableOpacity 
+          style={{padding:20}}
+          onPress={() => {
+            if (selectedIds.length === data.length) {
+              // 이미 모두 선택된 경우 선택 해제
+              setSelectedIds([]);
+            } else {
+              // 모든 아이템 선택
+              setSelectedIds(data.map((item) => item.id));
+            }
+          }}
+        >
+          <TotalSelectIcon/>
+        </TouchableOpacity>
+        <View style={{flex:1}}>
+          <Text style={[textStyles.R1, {color:colors.White, textAlign:'center'}]}>
+            {selectedIds.length}개 항목 선택됨
+          </Text>
+        </View>
+        <TouchableOpacity style={{padding:20}} onPress={deleteSelectedCards}>
+          <TrashCanIcon/>
+        </TouchableOpacity>
+        
       </View>
-      <TouchableOpacity style={{padding:20}} onPress={deleteSelectedCards}>
-        <TrashCanIcon/>
-      </TouchableOpacity>
-      
+      }
     </View>
-    }
-    </SafeAreaView>
   );
 }
 

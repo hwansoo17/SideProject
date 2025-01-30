@@ -93,7 +93,7 @@ const CardListItem: React.FC<CardListItemProps> = ({
             {isSelected && <Check />}
           </View>
         )}
-        <View>
+        <View style={{gap:4}}>
           <Text style={[textStyles.R3, { color: colors.G11 }]}>{item.corporation}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={[textStyles.M3, { color: colors.White }]}>{item.name}</Text>
@@ -165,7 +165,7 @@ const CardListItem: React.FC<CardListItemProps> = ({
               {isSelected && <Check />}
             </View>
           )}
-          <View>
+          <View style={{gap:4}}>
             <Text style={[textStyles.R3, { color: colors.G11 }]}>{item.corporation}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={[textStyles.M3, { color: colors.White }]}>{item.name}</Text>
