@@ -12,7 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import {colors} from '../../../styles/styles';
-import {useBgImgBottomSheetStore} from '../../../store/useBottomSheetStore';
+import {useBgImgForUpdateBottomSheetStore} from '../../../store/useBottomSheetStore';
 import {GetRandomImageAPI} from '../../../api/image';
 import useUpdateCardStore from '../../../store/useUpdateCardStore';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -26,8 +26,8 @@ const GalleryIcon = require('../../../assets/icons/bottomSheet/pick_image_icon.s
 const RandomIcon = require('../../../assets/icons/bottomSheet/random_icon.svg').default;
 const RightArrowIcon = require('../../../assets/icons/chevron_right.svg').default;
 
-const BgImgBottomSheet = () => {
-  const {isOpen, closeBottomSheet} = useBgImgBottomSheetStore();
+const BgImgBottomSheetForUpdate = () => {
+  const {isOpen, closeBottomSheet} = useBgImgForUpdateBottomSheetStore();
   const {formData, updateFormData} = useUpdateCardStore();
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
@@ -160,9 +160,11 @@ const BgImgBottomSheet = () => {
   };
 
   const handleRandomImage = async () => {
+    console.log("#########################")
     const {imageUrl} = await GetRandomImageAPI();
     updateFormData('background', 'IMAGE');
     updateFormData('bgImg', imageUrl);
+    console.log({imageUrl});
     closeBottomSheetWithAnimation();
   }
 
@@ -294,4 +296,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BgImgBottomSheet;
+export default BgImgBottomSheetForUpdate;

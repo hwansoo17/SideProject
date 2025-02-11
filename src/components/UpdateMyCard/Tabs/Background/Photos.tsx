@@ -2,13 +2,13 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {colors} from '../../../../styles/styles';
 import useUpdateCardStore from '../../../../store/useUpdateCardStore';
-import {useBgImgBottomSheetStore} from '../../../../store/useBottomSheetStore';
+import {useBgImgForUpdateBottomSheetStore} from '../../../../store/useBottomSheetStore';
 
 const DelIcon = require('../../../../assets/icons/close_icon.svg').default;
 
 const Photos = () => {
   const {formData, updateFormData} = useUpdateCardStore();
-  const {openBottomSheet} = useBgImgBottomSheetStore();
+  const {openBottomSheet} = useBgImgForUpdateBottomSheetStore();
 
   const handleDelete = () => {
     updateFormData('bgImg', '');

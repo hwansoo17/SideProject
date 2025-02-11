@@ -32,6 +32,14 @@ export const useBgImgBottomSheetStore = create<IBottomSheetStore>(
   }),
 );
 
+export const useBgImgForUpdateBottomSheetStore = create<IBottomSheetStore>(
+  set => ({
+    isOpen: false,
+    openBottomSheet: () => set({isOpen: true}),
+    closeBottomSheet: () => set({isOpen: false}),
+  }),
+);
+
 export const useCreatedCardBottomSheetStore = create<IBottomSheetStore>(
   set => ({
     isOpen: false,

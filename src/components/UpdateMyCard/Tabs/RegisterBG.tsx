@@ -5,7 +5,7 @@ import useUpdateCardStore, { useConfigTabStore } from '../../../store/useUpdateC
 import { useNavigation } from '@react-navigation/native';
 import Colors from './Background/Colors';
 import Gradients from './Background/Gradients';
-import { useBgImgBottomSheetStore } from '../../../store/useBottomSheetStore';
+import { useBgImgForUpdateBottomSheetStore } from '../../../store/useBottomSheetStore';
 import Photos from './Background/Photos';
 
 const ChevronUp = require('../../../assets/icons/chevron-up.svg').default;
@@ -13,7 +13,7 @@ const ChevronDown = require('../../../assets/icons/chevron-down.svg').default;
 
 const RegisterBG = () => {
   const navigation = useNavigation();
-  const {openBottomSheet} = useBgImgBottomSheetStore();
+  const {openBottomSheet} = useBgImgForUpdateBottomSheetStore();
   const {formData, updateFormData} = useUpdateCardStore();
   const {setStep} = useConfigTabStore();
   const [selectedList, setSelectedList] = useState<[boolean, boolean, boolean]>([false, false, false]);

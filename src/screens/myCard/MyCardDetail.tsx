@@ -10,7 +10,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useUpdateCard from "../../hooks/mutations/useUpdateCard";
 import useUpdateCardStore from "../../store/useUpdateCardStore";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import useOriginStore from "../../store/useOriginStore";
 
 const EditIcon = require('../../assets/buttonIcon/EditIcon.svg').default;
@@ -96,7 +95,8 @@ const CardDetail: React.FC<{ route: any }> = ({route}) => {
     // console.log(item);
     setFormData(item);
 
-    navigation.navigate('MyCard', { screen: 'UpdateMyCard'});
+    // navigation.navigate('MyCard', { screen: 'UpdateMyCard'});
+    navigation.navigate('UpdateMyCard');
   }
 
   // console.log(item);
@@ -104,7 +104,7 @@ const CardDetail: React.FC<{ route: any }> = ({route}) => {
     <SafeAreaView style={{backgroundColor: colors.BG, flex:1}}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(origin)}
+          onPress={() => navigation.navigate("MyCardMain")}
           style={styles.leftIcon}>
           <BackIcon />
         </TouchableOpacity>
