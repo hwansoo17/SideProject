@@ -92,14 +92,11 @@ const CardDetail: React.FC<{ route: any }> = ({route}) => {
   };
 
   const handleEdit = () => {
-    // console.log(item);
     setFormData(item);
 
-    // navigation.navigate('MyCard', { screen: 'UpdateMyCard'});
-    navigation.navigate('UpdateMyCard');
+    navigation.navigate('MyCard', { screen:'UpdateMyCard'});
   }
 
-  // console.log(item);
   return (
     <SafeAreaView style={{backgroundColor: colors.BG, flex:1}}>
       <View style={styles.header}>
