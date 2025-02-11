@@ -40,7 +40,6 @@ export interface ICreateCardOutput extends ICreateCardInput {
 // 카드 리스트 가져오기 함수
 export const fetchCardList = async (): Promise<Card[]> => {
   const response = await authApi.get<{ results: Card[] }>('/api/cards');
-  console.log(response.data);
   return response.data.results; // `results` 배열만 반환
 };
 

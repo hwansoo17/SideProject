@@ -10,6 +10,7 @@ interface CustomHeaderProps {
   subtitle?: string;
   onPressRightButton?: () => void;
   headerRight?: React.ReactNode;
+  goBack?: () => void;
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({
@@ -17,6 +18,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
   subtitle, 
   onPressRightButton,
   headerRight,
+  goBack
 }) => {
 
   const navigation = useNavigation();
@@ -25,7 +27,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
     <View style={{flexDirection:'row', alignItems:'center'}}>
       <TouchableOpacity
         onPress={() => {
-          navigation.goBack();
+          goBack ? goBack() : navigation.goBack();
         }}
         style={{padding:16, flex:1}}>
         <BackIcon color={colors.G11}/>

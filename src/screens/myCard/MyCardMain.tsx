@@ -19,6 +19,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useCardList from '../../hooks/queries/useCardList';
+import useOriginStore from '../../store/useOriginStore';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const WalletIcon = require('../../assets/icons/wallet.svg').default;
@@ -46,9 +47,14 @@ const HomeMain: React.FC = () => {
   const [settingVisible, setSettingVisible] = React.useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {setOrigin} = useOriginStore();
 
   const {isLoading, isError, data: myCardList = [], error} = useQuery({queryKey:['myCards'], queryFn: fetchMyCardList});
   
+  useEffect(() => {
+    setOrigin('MyCardMain');
+  }, []);
+
   useEffect(() => {
     setIsFlipped(false);
   }, [currentIndex]);

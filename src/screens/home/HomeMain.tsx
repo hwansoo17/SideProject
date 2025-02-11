@@ -21,6 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import useCardList from '../../hooks/queries/useCardList';
 import StorageStatusBar from '../../components/StorageStatusBar';
 import useMyCardList from '../../hooks/queries/useMyCardList';
+import useOriginStore from '../../store/useOriginStore';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
@@ -44,6 +45,7 @@ const HomeMain: React.FC = () => {
   
   const [isFlipped, setIsFlipped] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {setOrigin} = useOriginStore();
 
   const {isLoading, isError, data: myCardList = [], error} = useMyCardList();
   const { data: cardList = [] } = useCardList(true);
@@ -54,6 +56,9 @@ const HomeMain: React.FC = () => {
   const userdata = useAuthStore((state) => state.data);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
+  useEffect(() => {
+    setOrigin('HomeMain');
+  }, []);
 
   useEffect(() => {
     setIsFlipped(false);
