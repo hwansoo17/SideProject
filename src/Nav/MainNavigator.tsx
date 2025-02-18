@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MyCardTab from '../bottomTabs/MyCardTab';
-import { CommonActions } from '@react-navigation/native';
 import StorageTab from '../bottomTabs/StorageTab';
 import HomeTab from '../bottomTabs/HomeTab';
 import CustomTabBar from '../components/CustomTabBar';
@@ -30,16 +29,6 @@ const MainNavigator = () => {
             <HomeIcon color={focused ? '#FFFFFF' : '#A1A1A1'} />
           ),
         }}
-        listeners={({ navigation }) => ({
-          tabPress: e => {
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'HomeMain' }], // HomeTab의 초기 화면
-              })
-            );
-          },
-        })}
       />
       <Tab.Screen
         name="MyCard"
@@ -51,16 +40,6 @@ const MainNavigator = () => {
             <MyCardIcon color={focused ? '#FFFFFF' : '#A1A1A1'} />
           ),
         }}
-        listeners={({ navigation }) => ({
-          tabPress: e => {
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'MyCardMain' }], // HomeTab의 초기 화면
-              })
-            );
-          },
-        })}
       />
       <Tab.Screen
         name="Storage"

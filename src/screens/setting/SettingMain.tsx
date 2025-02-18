@@ -83,7 +83,7 @@ const SettingMain: React.FC<Props> = ({navigation}) => {
               renderItem={({item}) => (
                 <TouchableOpacity
                   style={{width:width-40, backgroundColor:item.brColor, borderRadius:4, padding:20}}
-                  onPress={() => navigation.navigate('CardDetail3', { item })}>
+                  onPress={() => {navigation.navigate('CardDetail', { item });}}>
                   <View style={{gap:4}}>
                     <Text style={[textStyles.R3, { color: colors.G11, fontSize:12 }]}>{item.corporation}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>

@@ -29,7 +29,7 @@ const SettingTab: React.FC<{ route: any }> = ({ route }) => {
   return (
     <Stack.Navigator initialRouteName="storageMain">
       <Stack.Screen name="SettingMain" component={SettingMain} options={{ headerShown: false }}/>
-      <Stack.Screen name="CardDetail3" component={MyCardDetail} options={{ headerShown: false }}/>
+      <Stack.Screen name="CardDetail" component={MyCardDetail} options={{ headerShown: false }}/>
       <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }}/>
       <Stack.Screen name="AccountManage" component={AccountManage} options={{ headerShown: false }}/>
       <Stack.Screen name="PasswordChange" component={PasswordChange} options={{ headerShown: false }}/>

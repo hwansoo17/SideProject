@@ -101,7 +101,7 @@ const CardDetail: React.FC<{ route: any }> = ({route}) => {
     <SafeAreaView style={{backgroundColor: colors.BG, flex:1}}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("MyCardMain")}
+          onPress={() => navigation.goBack()}
           style={styles.leftIcon}>
           <BackIcon />
         </TouchableOpacity>

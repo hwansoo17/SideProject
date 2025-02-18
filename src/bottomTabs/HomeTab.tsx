@@ -23,7 +23,7 @@ const HomeTab: React.FC<{route: any}> = ({route}) => {
     }
   }, [route, showTabBar, hideTabBar]);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="HomeMain">
       <Stack.Screen
         name="HomeMain"
         component={HomeMain}

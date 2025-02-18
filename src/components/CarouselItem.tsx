@@ -160,7 +160,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       <Animated.View style={[styles.front, frontCardAnimatedStyle, { backgroundColor: item.brColor }]}>
         <TouchableWithoutFeedback 
           style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
-          onPress={() => navigation.navigate('CardDetail', { item })}
+          onPress={() => {navigation.navigate(`CardDetail${navigation.getState().index}`, { item }); console.log(navigation.getState())}}
           disabled={settingVisible}
         >
           <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
@@ -235,7 +235,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         >
           <TouchableWithoutFeedback 
             style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
-            onPress={() => navigation.navigate('CardDetail', { item })}
+            onPress={() => {navigation.navigate(`CardDetail`, { item })}}
             disabled={settingVisible}
           >
             <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
