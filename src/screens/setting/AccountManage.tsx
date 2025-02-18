@@ -36,7 +36,7 @@ const AccountManage: React.FC<Props> = ({navigation}) => {
   }
   
   const profileEditList: SettingItemProps[] = [
-    { title: "이메일 주소", onPress: () => {} },
+    { title: "이메일 주소", onPress: () => {navigation.navigate("EmailChange")} },
     { title: "비밀번호", onPress: () => {navigation.navigate("PasswordChange")} },
   ];
 

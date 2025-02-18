@@ -10,7 +10,7 @@ import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore'; // Imp
 import { NavigationProp } from '@react-navigation/native';
 import AccountManage from '../screens/setting/AccountManage';
 import PasswordChange from '../screens/setting/PasswordChange';
-
+import EmailChange from '../screens/setting/EmailChange';
 const Stack = createStackNavigator();
 
 const SettingTab: React.FC<{ route: any }> = ({ route }) => {
@@ -33,6 +33,7 @@ const SettingTab: React.FC<{ route: any }> = ({ route }) => {
       <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }}/>
       <Stack.Screen name="AccountManage" component={AccountManage} options={{ headerShown: false }}/>
       <Stack.Screen name="PasswordChange" component={PasswordChange} options={{ headerShown: false }}/>
+      <Stack.Screen name="EmailChange" component={EmailChange} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };

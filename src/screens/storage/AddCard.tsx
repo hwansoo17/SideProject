@@ -12,21 +12,20 @@ import {
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import {postPresignedUrl} from '../../api/upload';
 import {getSrcFromStorage} from '../../utils/common';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
 import {colors, textStyles} from '../../styles/styles';
 import ImageEditor from '@react-native-community/image-editor';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
-interface IAddCard {
-  isMyCard: boolean;
+interface Props {
+  navigation: NavigationProp<any>;
 }
 
-const AddCard: React.FC<IAddCard> = () => {
+const AddCard: React.FC<Props> = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const {updateFormData} = useMakeCardStore();
-  const navigation = useNavigation();
   const device = useCameraDevice('back');
   const camera = useRef<Camera | null>(null);
 

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { loginUser, register, sendCode, verifyCode, resetPassword } from '../api/auth';
+import { loginUser, register, sendCode, verifyCode, resetPassword, changePassword, changeEmail, sendCodeForChangeEmail } from '../api/auth';
 import useAuthStore from '../store/useAuthStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -65,6 +65,42 @@ export const useResetPassword = () => {
   return useMutation({
     mutationFn: resetPassword,
     onSuccess: async(data: any) => {
+      console.log('send successful:', data);
+    },
+    onError: (error: any) => {
+      console.error('send failed:', error);
+    },
+  });
+}
+
+export const useChangePassword = () => {
+  return useMutation({
+    mutationFn: changePassword,
+    onSuccess: async(data: any) => {
+      console.log('send successful:', data);
+    },
+    onError: (error: any) => {
+      console.error('send failed:', error);
+    },
+  });
+}
+
+export const useChangeEmail = () => {
+  return useMutation({
+    mutationFn: changeEmail,
+    onSuccess: async(data: any) => {
+      console.log('send successful:', data);
+    },
+    onError: (error: any) => {
+      console.error('send failed:', error);
+    },
+  });
+}
+
+export const useSendCodeForChangeEmail = () => {
+  return useMutation({
+    mutationFn: sendCodeForChangeEmail,
+    onSuccess: async(data) => {
       console.log('send successful:', data);
     },
     onError: (error: any) => {

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { api } from './api';
+import { api, authApi } from './api';
 
 export interface LoginResponse {
   token: string;
@@ -29,6 +29,16 @@ export interface ResetPasswordData {
   email: string;
   newPassword: string;
   otp: string;
+}
+
+export interface ChangePasswordData {
+  newPassword: string;
+  oldPassword: string;
+}
+
+export interface ChangeEmailData {
+  newEmail: string;
+  otpInput: string;
 }
 
 export const loginUser = async (loginData: LoginData): Promise<void> => {
@@ -61,5 +71,20 @@ export const verifyCode = async (VerifyCodeData: VerifyCodeData): Promise<void> 
 
 export const resetPassword = async (resetPasswordData: ResetPasswordData): Promise<void> => {
   const response = await api.post(`/api/auth/change-password`, resetPasswordData);
+  return response.data;
+}
+
+export const changePassword = async (changePasswordData: ChangePasswordData): Promise<void> => {
+  const response = await authApi.post(`/api/auth/config/change-password`, changePasswordData);
+  return response.data;
+}
+
+export const changeEmail = async (changeEmailData: ChangeEmailData): Promise<void> => {
+  const response = await authApi.post(`/api/auth/config/change-email`, changeEmailData);
+  return response.data;
+}
+
+export const sendCodeForChangeEmail = async (email: string): Promise<void> => {
+  const response = await authApi.post(`/api/auth/config/send-email`, { email });
   return response.data;
 }

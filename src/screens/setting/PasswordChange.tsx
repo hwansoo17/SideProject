@@ -4,7 +4,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { colors, textStyles } from '../../styles/styles';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import RegisterPage from '../../components/RegisterPage';
-import { useResetPassword } from '../../hooks/useAuthMutation';
+import { useChangePassword, useResetPassword } from '../../hooks/useAuthMutation';
 import CustomHeader from '../../components/CustomHeader';
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
@@ -15,7 +15,7 @@ const PasswordChange: React.FC<{ navigation: NavigationProp<ParamListBase> }> = 
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [isPasswordSame, setIsPasswordSame] = useState(true);
 
-  const { mutate: resetPasswordMutate, isPending: isResetPasswordPending } = useResetPassword();
+  const { mutate: changePasswordMutate, isPending: isChangePasswordPending } = useChangePassword();
 
   const isPasswordValid = (password: string) => {
     if (password.length > 0) {
@@ -40,22 +40,21 @@ const PasswordChange: React.FC<{ navigation: NavigationProp<ParamListBase> }> = 
     setIsPasswordSame(isSamePassword(newPassword, passwordCheck));
   }, [newPassword, passwordCheck]);
 
-  // const handleResetPassword = () => {
-  //   resetPasswordMutate({ newPassword: password }, {
-  //     onSuccess: (data) => {
-  //       if (data.result == 'success') {
-  //         Alert.alert('비밀번호가 변경되었습니다'); 
-  //         navigation.navigate('Login');
-  //       } else {
-  //         Alert.alert('비밀번호 변경에 실패했습니다');
-  //       }
-  //     },
-  //     onError: (error) => {
-  //       console.error(error.response?.data.message)
-  //     },
-  //   });
-  // }
-  // 현재 비밀번호로 변경하는 기능으로 교체 필요
+  const handleResetPassword = () => {
+    changePasswordMutate({ newPassword: newPassword, oldPassword:password }, {
+      onSuccess: (data) => {
+        if (data.result == 'success') {
+          Alert.alert('비밀번호가 변경되었습니다'); 
+          navigation.navigate('SettingMain');
+        } else {
+          Alert.alert('비밀번호 변경에 실패했습니다');
+        }
+      },
+      onError: (error) => {
+        console.error(error.response?.data.message)
+      },
+    });
+  }
 
   return (
     <View 
@@ -98,8 +97,8 @@ const PasswordChange: React.FC<{ navigation: NavigationProp<ParamListBase> }> = 
             ]
           }
           buttonTitle="확인"
-          onPress={() => {}}
-          disabled={!(isValidPassword && isPasswordSame && password.length > 1 && newPassword.length > 1 && passwordCheck.length > 1) || isResetPasswordPending}
+          onPress={() => {handleResetPassword()}}
+          disabled={!(isValidPassword && isPasswordSame && password.length > 1 && newPassword.length > 1 && passwordCheck.length > 1) || isChangePasswordPending}
         />
       </View>
     </View>
