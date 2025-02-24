@@ -8,6 +8,7 @@ import CardDetail from '../screens/myCard/MyCardDetail';
 import useTabBarVisibilityStore from '../store/useTabBarVisibilityStore';
 import Search from '../screens/home/Search';
 import Capture from '../screens/home/Capture';
+import UpdateMyCard from '../screens/myCard/UpdateMyCard';
 // import Capture from '../screens/home/Capture';
 const Stack = createStackNavigator();
 
@@ -48,6 +49,11 @@ const HomeTab: React.FC<{route: any}> = ({route}) => {
       <Stack.Screen
         name="Capture"
         component={Capture}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="UpdateMyCard"
+        component={UpdateMyCard}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

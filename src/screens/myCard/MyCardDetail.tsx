@@ -94,7 +94,7 @@ const CardDetail: React.FC<{ route: any }> = ({route}) => {
   const handleEdit = () => {
     setFormData(item);
 
-    navigation.navigate('MyCard', { screen:'UpdateMyCard'});
+    navigation.navigate('UpdateMyCard');
   }
 
   return (
