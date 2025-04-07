@@ -1506,6 +1506,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@mj-studio/js-util@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.npmjs.org/@mj-studio/js-util/-/js-util-1.1.3.tgz"
+  integrity sha512-XZe1V3J1CJ9DbPY0GlPTOES7UdnWcoUe3kIjmUWMvwmunOb/kYuDWiswu5eogHhcPSlM3LpYQYU2HhMzf3N6tw==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.npmjs.org/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz"
@@ -1705,6 +1710,22 @@
   version "4.2.1"
   resolved "https://registry.npmjs.org/@react-native-community/image-editor/-/image-editor-4.2.1.tgz"
   integrity sha512-wb+9jd3RgaHFodJpTI5quPW3iYXyFwfB7BNviR5ssxEtgk4g7hPXP6ZTuG1Bw6VTNqjOkV0hGNYYSFIGpcNPKQ==
+
+"@react-native-kakao/core@^2.3.0", "@react-native-kakao/core@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/@react-native-kakao/core/-/core-2.3.0.tgz"
+  integrity sha512-zfqmWMDXEMQ8jzgYTz4pvfl9mzmyCGZ0sCTRoL1FwX7/VUcaHtjvxhoQ1YmOr1US34h10oLOZgRD7e7/bzBmNQ==
+  dependencies:
+    crypto-js "^4.2.0"
+    query-string "7.1.3"
+    return-fetch "^0.4.5"
+
+"@react-native-kakao/user@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/@react-native-kakao/user/-/user-2.3.0.tgz"
+  integrity sha512-S+sDF7t1TuYEjZ+pbUVfW8X5JgXYVdDrFdalGCJYGA1zGwepsCRJpCAGvl6yaEdrN9KI+mmd6eKnwkvR+KjesA==
+  dependencies:
+    "@mj-studio/js-util" "1.1.3"
 
 "@react-native/assets-registry@0.74.85":
   version "0.74.85"
@@ -3125,6 +3146,11 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 css-select@^5.1.0:
   version "5.1.0"
@@ -6101,7 +6127,7 @@ pure-rand@^6.0.0:
   resolved "https://registry.npmjs.org/pure-rand/-/pure-rand-6.1.0.tgz"
   integrity sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==
 
-query-string@^7.1.3:
+query-string@^7.1.3, query-string@7.1.3:
   version "7.1.3"
   resolved "https://registry.npmjs.org/query-string/-/query-string-7.1.3.tgz"
   integrity sha512-hh2WYhq4fi8+b+/2Kg9CEge4fDPvHS534aOOvOZeQ3+Vf2mCFsaFBYj0i+iXcAq6I9Vzp5fjMFBlONvayDC1qg==
@@ -6237,10 +6263,10 @@ react-native-svg@^15.4.0, react-native-svg@>=12.0.0:
     css-tree "^1.1.3"
     warn-once "0.1.1"
 
-react-native-vision-camera@^4.6.3:
-  version "4.6.3"
-  resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-4.6.3.tgz"
-  integrity sha512-fVHww4cNFrxvMYOlUZcjl3iYmR3vcUtvLZKW9NHlKZ3o4zsspwYjbw2vheZvHrHtJ30OrE3N2NFqT6CxgPvRCw==
+react-native-vision-camera@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-4.6.4.tgz"
+  integrity sha512-d998uTHsGJ9bTlsClgT37RK1sK7ZQekv5y6ylynds3vmdK6YbFQJUoi2cvMrFN4dp9qvSlCjEfwekjMIz3guQA==
 
 react-native@*, "react-native@^0.0.0-0 || >=0.65 <1.0", react-native@>=0.57.0, react-native@>=0.59.0, react-native@0.74.3:
   version "0.74.3"
@@ -6484,6 +6510,11 @@ restore-cursor@^3.1.0:
   dependencies:
     onetime "^5.1.0"
     signal-exit "^3.0.2"
+
+return-fetch@^0.4.5:
+  version "0.4.8"
+  resolved "https://registry.npmjs.org/return-fetch/-/return-fetch-0.4.8.tgz"
+  integrity sha512-v4QDtYcpZURU2x9fr+OqurHzuUBhudR+nrFxo8EwOY3nF35kMbE+t8FYtlmfJGfnrBun7dMJ5++VFjXjfwsWGQ==
 
 reusify@^1.0.4:
   version "1.0.4"

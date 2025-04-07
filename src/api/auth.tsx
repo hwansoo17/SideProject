@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { api, authApi } from './api';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { api, authApi } from "./api";
 
 export interface LoginResponse {
   token: string;
@@ -46,45 +46,67 @@ export const loginUser = async (loginData: LoginData): Promise<void> => {
   return response.data;
 };
 
-export const refresh = async (): Promise<void> => {
-  const refreshToken = await AsyncStorage.getItem('refreshToken');
-  console.log(refreshToken, 'refreshToken');
-  const response = await api.post(`/api/auth/refresh`, {refreshToken});
-  await AsyncStorage.setItem('accessToken', response.data.accessToken);
+export const kakaoLoginUser = async (accessToken: string): Promise<void> => {
+  const response = await api.post(`/api/auth/kakao-login`, { accessToken });
   return response.data;
-}
+};
+
+export const refresh = async (): Promise<void> => {
+  const refreshToken = await AsyncStorage.getItem("refreshToken");
+  console.log(refreshToken, "refreshToken");
+  const response = await api.post(`/api/auth/refresh`, { refreshToken });
+  await AsyncStorage.setItem("accessToken", response.data.accessToken);
+  return response.data;
+};
 
 export const sendCode = async (email: string): Promise<void> => {
   const response = await api.post(`/api/auth/send-email`, { email });
   return response.data;
-}
+};
 
 export const register = async (registerData: RegisterData): Promise<void> => {
   const response = await api.post(`/api/user`, registerData);
   return response.data;
-}
+};
 
-export const verifyCode = async (VerifyCodeData: VerifyCodeData): Promise<void> => {
+export const verifyCode = async (
+  VerifyCodeData: VerifyCodeData
+): Promise<void> => {
   const response = await api.post(`/api/auth/verify-code`, VerifyCodeData);
   return response.data;
-}
+};
 
-export const resetPassword = async (resetPasswordData: ResetPasswordData): Promise<void> => {
-  const response = await api.post(`/api/auth/change-password`, resetPasswordData);
+export const resetPassword = async (
+  resetPasswordData: ResetPasswordData
+): Promise<void> => {
+  const response = await api.post(
+    `/api/auth/change-password`,
+    resetPasswordData
+  );
   return response.data;
-}
+};
 
-export const changePassword = async (changePasswordData: ChangePasswordData): Promise<void> => {
-  const response = await authApi.post(`/api/auth/config/change-password`, changePasswordData);
+export const changePassword = async (
+  changePasswordData: ChangePasswordData
+): Promise<void> => {
+  const response = await authApi.post(
+    `/api/auth/config/change-password`,
+    changePasswordData
+  );
   return response.data;
-}
+};
 
-export const changeEmail = async (changeEmailData: ChangeEmailData): Promise<void> => {
-  const response = await authApi.post(`/api/auth/config/change-email`, changeEmailData);
+export const changeEmail = async (
+  changeEmailData: ChangeEmailData
+): Promise<void> => {
+  const response = await authApi.post(
+    `/api/auth/config/change-email`,
+    changeEmailData
+  );
   return response.data;
-}
+};
 
 export const sendCodeForChangeEmail = async (email: string): Promise<void> => {
   const response = await authApi.post(`/api/auth/config/send-email`, { email });
   return response.data;
-}
+};

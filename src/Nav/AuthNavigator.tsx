@@ -13,14 +13,8 @@ const AuthNavigator = () => {
         component={Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Register"
-        component={Register}
-      />
-      <Stack.Screen
-        name="PasswordReset"
-        component={PasswordReset}
-      />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="PasswordReset" component={PasswordReset} />
     </Stack.Navigator>
   );
 };

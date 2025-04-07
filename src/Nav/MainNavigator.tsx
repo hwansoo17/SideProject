@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyCardTab from '../bottomTabs/MyCardTab';
 import StorageTab from '../bottomTabs/StorageTab';
 import HomeTab from '../bottomTabs/HomeTab';
@@ -13,12 +13,10 @@ const SettingIcon = require('../assets/tabBarIcon/SettingIcon.svg').default;
 const Tab = createBottomTabNavigator();
 
 const MainNavigator = () => {
-
   return (
-    <Tab.Navigator 
-      initialRouteName='Home'
-      tabBar={(props) => <CustomTabBar {...props} />}
-    >
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBar={props => <CustomTabBar {...props} />}>
       <Tab.Screen
         name="Home"
         component={HomeTab}
