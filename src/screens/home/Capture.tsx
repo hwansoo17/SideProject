@@ -17,10 +17,8 @@ import {postPresignedUrl} from '../../api/upload';
 import {getSrcFromStorage} from '../../utils/common';
 import {useNavigation} from '@react-navigation/native';
 import useMakeCardStore from '../../store/useMakeCareStepStore';
-// import {RNCamera} from 'react-native-camera';
 import {colors, textStyles} from '../../styles/styles';
 import ImageEditor from '@react-native-community/image-editor';
-import useTabBarVisibilityStore from '../../store/useTabBarVisibilityStore';
 
 const BackIcon = require('../../assets/icons/BackIcon.svg').default;
 
@@ -29,13 +27,11 @@ interface ICapture {
 }
 
 const Capture: React.FC<ICapture> = () => {
-  const {hideTabBar, showTabBar} = useTabBarVisibilityStore();
   const [loading, setLoading] = useState(false);
   const {updateFormData} = useMakeCardStore();
   const navigation = useNavigation();
   const device = useCameraDevice('back');
   const camera = useRef<Camera | null>(null);
-
 
   const handleBack = () => {
     navigation.goBack();
@@ -61,30 +57,39 @@ const Capture: React.FC<ICapture> = () => {
       // 화면 크기
       const screenWidth = Dimensions.get('window').width;
       const screenHeight = Dimensions.get('window').height;
-  
+      console.log({screenWidth, screenHeight})
       // 원본 이미지 크기 가져오기
       const imageSize = await getImageSize(imageUri);
-  
+      console.log({imageSize})
       // captureArea의 화면상 위치와 크기
       const viewWidth = 343;
       const viewHeight = 200;
       const viewX = (screenWidth - viewWidth) / 2;
       const viewY = 120;
-  
+      console.log({viewX, viewY})
       // 이미지와 화면의 비율 계산
       const widthRatio = imageSize.width / screenWidth;
       const heightRatio = imageSize.height / screenHeight;
-  
+      
+      console.log("크롭 영역")
+      console.log({x: Math.floor(viewX * widthRatio), y: Math.floor(viewY * heightRatio)})
+      console.log({width: Math.floor(viewWidth * widthRatio), height: Math.floor(viewHeight * heightRatio)})
       // 실제 크롭할 영역 계산
       const cropData = {
         offset: {
           x: Math.floor(viewX * widthRatio),
           y: Math.floor(viewY * heightRatio),
         },
-        size: {
-          width: Math.floor(viewWidth * widthRatio),
-          height: Math.floor(viewHeight * heightRatio),
-        },
+        size: Platform.OS === 'android' 
+        ? {
+            // Android에서는 약간 다른 계산식 사용
+            width: Math.ceil(viewWidth * widthRatio),  // 올림 사용
+            height: Math.ceil(viewHeight * heightRatio),
+          }
+        : {
+            width: Math.floor(viewWidth * widthRatio), // 내림 사용
+            height: Math.floor(viewHeight * heightRatio),
+          },
         displaySize: {
           width: viewWidth,
           height: viewHeight,
@@ -92,7 +97,7 @@ const Capture: React.FC<ICapture> = () => {
       };
   
       const croppedImageResult = await ImageEditor.cropImage(imageUri, cropData);
-  
+      console.log({croppedImageResult})
       if (typeof croppedImageResult === 'string') {
         return croppedImageResult;
       } else if (croppedImageResult && 'uri' in croppedImageResult) {
@@ -106,77 +111,17 @@ const Capture: React.FC<ICapture> = () => {
     }
   }
 
-//   const handleCapture = async () => {
-//     if (camera.current) {
-//       try {
-//         setLoading(true);
-//         // 사진 촬영
-//         const options = {
-//           quality: 1,
-//           base64: true,
-//         };
-//         const data = await cameraRef.current.takePictureAsync(options);
-//         // 이미지 크롭
-//         const croppedImageUri = await cropImage(data.uri);
-//         if (croppedImageUri) {
-//           try {
-//             // 1. 파일 이름 생성 (timestamp를 사용하여 유니크한 파일명 생성)
-//             const timestamp = new Date().getTime();
-//             const fileName = `card_image_${timestamp}.jpg`;
-  
-//             // 2. presigned URL 요청
-//             const payload = {
-//               name: fileName,
-//             };
-//             const {uploadUrl, uploadPath} = await postPresignedUrl(payload);
-
-//             // 3. 로컬 파일을 Blob으로 변환
-//             const response = await fetch(croppedImageUri);
-//             const blob = await response.blob();
-
-//             // S3 업로드
-//             const uploadResponse = await fetch(uploadUrl, {
-//               method: 'PUT',
-//               body: blob,
-//               headers: {
-//                 'Content-Type': 'image/jpeg',
-//               },
-//             });
-            
-//             if (uploadResponse.ok) {
-//               // 업로드 성공 - S3 URL 저장
-//               const s3ImageUrl = getSrcFromStorage(uploadPath);
-//               console.log('S3 업로드 성공:', s3ImageUrl);
-//               updateFormData('realCardImg', s3ImageUrl);
-//               navigation.navigate('MakeCard', {isMyCard});
-//             } else {
-//               throw new Error('S3 업로드 실패');
-//             }
-//           } catch (uploadError) {
-//             console.error('S3 업로드 오류:', uploadError);
-//             Alert.alert('업로드 실패', '이미지 업로드 중 오류가 발생했습니다.');
-//           }
-//         }
-//       } catch (error) {
-//         console.error('촬영 또는 크롭 실패:', error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     }
-
-//   }
-const handleCapture = async () => {
+  const handleCapture = async () => {
     if (camera.current) {
       try {
-        setLoading(true);
         const photo = await camera.current.takePhoto({
           enableShutterSound: false,
           flash: 'off',
         });
-        
+        setLoading(true);
         const imageUri = `file://${photo.path}`;
         const croppedImageUri = await cropImage(imageUri);
-        
+
         if (croppedImageUri) {
           try {
             const timestamp = new Date().getTime();
