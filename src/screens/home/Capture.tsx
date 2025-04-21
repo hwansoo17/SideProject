@@ -31,7 +31,24 @@ const Capture: React.FC<ICapture> = () => {
   const {updateFormData} = useMakeCardStore();
   const navigation = useNavigation();
   const device = useCameraDevice('back');
+  // const format = device?.formats.find(f => f.photoWidth && f.photoHeight);
   const camera = useRef<Camera | null>(null);
+
+  // test for device
+  useEffect(() => {
+    const checkPermissions = async () => {
+      const cameraPermission = await Camera.getCameraPermissionStatus();
+      console.log({cameraPermission});
+      if (cameraPermission !== 'granted') {
+        const newPermission = await Camera.requestCameraPermission();
+        console.log({newPermission});
+        if (newPermission !== 'granted') {
+          Alert.alert('권한 필요', '카메라 사용을 위해 권한이 필요합니다.');
+        }
+      }
+    };
+    checkPermissions();
+  }, []);
 
   const handleBack = () => {
     navigation.goBack();
@@ -195,6 +212,7 @@ const Capture: React.FC<ICapture> = () => {
             device={device}
             isActive={true}
             photo={true}
+            // format={format}
           />
           {/* 상단 반투명 영역 */}
           <View style={styles.overlayTop} />
