@@ -161,6 +161,7 @@ const Capture: React.FC<ICapture> = () => {
             
             if (uploadResponse.ok) {
               const s3ImageUrl = getSrcFromStorage(uploadPath);
+              console.log({s3ImageUrl});
               updateFormData('realCardImg', s3ImageUrl);
               navigation.navigate('MakeCard');
             } else {
