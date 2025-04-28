@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, Key} from 'react';
+import React, { useRef, useEffect, Key } from "react";
 import {
   View,
   Text,
@@ -9,23 +9,25 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Image,
-} from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {useCreatedCardBottomSheetStore} from '../store/useBottomSheetStore';
-import {colors} from '../styles/styles';
-import useMakeCardStore from '../store/useMakeCareStepStore';
+} from "react-native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useCreatedCardBottomSheetStore } from "../store/useBottomSheetStore";
+import { colors } from "../styles/styles";
+import useMakeCardStore from "../store/useMakeCareStepStore";
 
 interface INav extends NavigationProp<any> {}
 
-const {height: screenHeight} = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get("window");
 
-const CameraIcon = require('../assets/icons/bottomSheet/bs_camera_icon.svg').default;
-const PlusIcon = require('../assets/icons/bottomSheet/bs_plus_icon.svg').default;
-const RightArrowIcon = require('../assets/icons/chevron_right.svg').default;
+const CameraIcon =
+  require("../assets/icons/bottomSheet/bs_camera_icon.svg").default;
+const PlusIcon =
+  require("../assets/icons/bottomSheet/bs_plus_icon.svg").default;
+const RightArrowIcon = require("../assets/icons/chevron_right.svg").default;
 
 const CreateCardBottomSheet = () => {
-  const {isOpen, closeBottomSheet} = useCreatedCardBottomSheetStore();
-  const {isMyCard} = useMakeCardStore();
+  const { isOpen, closeBottomSheet } = useCreatedCardBottomSheetStore();
+  const { isMyCard } = useMakeCardStore();
   const navigation = useNavigation<INav>();
 
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -88,15 +90,16 @@ const CreateCardBottomSheet = () => {
         {...panResponder.panHandlers} // 드래그 제스처 핸들러
       >
         <View style={styles.drawerContainer}>
-          <Image style={styles.drawerImage} />
+          <View style={styles.drawerImage} />
         </View>
         <View style={styles.contentContainer}>
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              navigation.navigate('RegisterCard', {isMyCard});
+              navigation.navigate("RegisterCard", { isMyCard });
               closeBottomSheetWithAnimation();
-            }}>
+            }}
+          >
             <View style={styles.linkContainer}>
               <View style={styles.linkHeader}>
                 <PlusIcon />
@@ -108,9 +111,10 @@ const CreateCardBottomSheet = () => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
-              navigation.navigate('Capture', {isMyCard});
+              navigation.navigate("Capture", { isMyCard });
               closeBottomSheetWithAnimation();
-            }}>
+            }}
+          >
             <View style={styles.linkContainer}>
               <View style={styles.linkHeader}>
                 <CameraIcon />
@@ -127,76 +131,71 @@ const CreateCardBottomSheet = () => {
 
 const styles = StyleSheet.create({
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   background: {
     flex: 1,
-    backgroundColor: 'rgba(1, 1, 1, 0.5)', // 투명한 배경
+    backgroundColor: "rgba(1, 1, 1, 0.5)", // 투명한 배경
   },
   drawerContainer: {
-    position: 'relative',
-    top: 10,
-    width: '100%',
-    alignItems: 'center',
+    paddingVertical: 16,
+    width: "100%",
+    alignItems: "center",
   },
   drawerImage: {
-    width: 60,
     height: 5,
+    width: 50,
+    alignSelf: "center",
+    backgroundColor: colors.G04,
     borderRadius: 10,
-    backgroundColor: colors.White,
-    elevation: 10,
   },
   bottomSheetContainer: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     bottom: 0,
     height: screenHeight / 4,
-    backgroundColor: '#35353C',
+    backgroundColor: "#35353C",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: -3},
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
   },
   header: {
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: '#eaeaea',
+    borderBottomColor: "#eaeaea",
   },
   headerText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
-  contentContainer: {
-    flex: 1,
-    padding: 16,
-    paddingTop: 32,
-  },
+  contentContainer: {},
   menuItem: {
     paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   menuText: {
     fontSize: 18,
-    fontWeight: '500',
-    color: '#fff',
+    fontWeight: "500",
+    color: "#fff",
   },
   linkContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   linkHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
     gap: 10,
   },
 });
