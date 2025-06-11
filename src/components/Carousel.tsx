@@ -27,7 +27,8 @@ type CarouselProps = {
 const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data, isFlipped, settingVisible}) => {
 
   const scrollX = useSharedValue(0);
-  const scrollWidth = screenWidth * 0.7 - screenWidth * 0.1;
+  // const scrollWidth = screenWidth * 0.6;
+  const scrollWidth = screenWidth * 0.6;
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollX.value = event.contentOffset.x;
@@ -42,7 +43,7 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
       horizontal
       showsHorizontalScrollIndicator={false}
       snapToInterval={scrollWidth}
-      snapToAlignment="center"
+      snapToAlignment="start"
       decelerationRate="fast"
       scrollEventThrottle={16}
       bounces={false}
@@ -50,7 +51,6 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
     >
       <View
         style={{
-          // width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
           width: screenWidth * 0.2,
         }}
       />
@@ -75,7 +75,7 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
       />
       <View
         style={{
-          width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
+          width: screenWidth * 0.2,
         }}
       />
     </Animated.ScrollView>

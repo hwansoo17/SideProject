@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Platform } from 'react-native';
 import { View, StyleSheet, Dimensions, Text, Image, ImageBackground, Linking } from 'react-native';
-import { Pressable, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   interpolate,
   Extrapolation,
   SharedValue,
@@ -13,7 +13,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '@react-navigation/native';
-import axios from 'axios';
 import { colors } from '../styles/styles';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -89,27 +88,27 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       Extrapolation.CLAMP
     );
 
-    const marginRight = interpolate(
-      scrollX.value,
-      [
-        (index) * scrollWidth,
-        ((index) + 0.5) * scrollWidth,
-        ((index) + 1) * scrollWidth,
-      ],
-      [-screenWidth * 0.05, 50, -screenWidth * 0.05],
-      Extrapolation.CLAMP
-    );
+    // const marginRight = interpolate(
+    //   scrollX.value,
+    //   [
+    //     (index) * scrollWidth,
+    //     ((index) + 0.5) * scrollWidth,
+    //     ((index) + 1) * scrollWidth,
+    //   ],
+    //   [-screenWidth * 0.05, 50, -screenWidth * 0.05],
+    //   Extrapolation.CLAMP
+    // );
 
-    const marginLeft = interpolate(
-      scrollX.value,
-      [
-        ((index) - 1) * scrollWidth,
-        ((index) - 0.5) * scrollWidth,
-        (index) * scrollWidth,
-      ],
-      [-screenWidth * 0.05, 50, -screenWidth * 0.05],
-      Extrapolation.CLAMP
-    );
+    // const marginLeft = interpolate(
+    //   scrollX.value,
+    //   [
+    //     ((index) - 1) * scrollWidth,
+    //     ((index) - 0.5) * scrollWidth,
+    //     (index) * scrollWidth,
+    //   ],
+    //   [-screenWidth * 0.05, 50, -screenWidth * 0.05],
+    //   Extrapolation.CLAMP
+    // );
 
     const zIndex = currentIndex === (index) ? 2 : 0;
 
@@ -118,8 +117,8 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         { scale },
         // { perspective: 1000 },
       ],
-      marginRight: (index) === currentIndex ? marginRight : undefined,
-      marginLeft: (index) === currentIndex ? marginLeft : undefined,
+      // marginRight: (index) === currentIndex ? marginRight : undefined,
+      // marginLeft: (index) === currentIndex ? marginLeft : undefined,
       zIndex,
     };
   });
@@ -321,8 +320,14 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: screenWidth * 0.7,
-    marginHorizontal: -screenWidth * 0.05,
+    width: Platform.select({
+      ios: screenWidth * 0.6,
+      android: screenWidth * 0.7,
+    }),
+    marginHorizontal: Platform.select({
+      ios: undefined,
+      android: -screenWidth * 0.05,
+    }),
     justifyContent: 'center',
     alignItems: 'center',
   },
