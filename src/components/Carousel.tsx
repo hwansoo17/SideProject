@@ -42,7 +42,7 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
       horizontal
       showsHorizontalScrollIndicator={false}
       snapToInterval={scrollWidth}
-      snapToAlignment="start"
+      snapToAlignment="center"
       decelerationRate="fast"
       scrollEventThrottle={16}
       bounces={false}
@@ -50,7 +50,8 @@ const Carousel: React.FC<CarouselProps> = ({currentIndex, setCurrentIndex, data,
     >
       <View
         style={{
-          width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
+          // width: (screenWidth - screenWidth * 0.7) / 2 + screenWidth * 0.05,
+          width: screenWidth * 0.2,
         }}
       />
       {data.map((item, index) => (
