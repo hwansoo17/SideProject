@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { View, StyleSheet, Dimensions, Text, Image, ImageBackground, Linking } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -226,6 +227,84 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         </TouchableWithoutFeedback>
       </Animated.View>
       }
+      {item.background == "GRADIENT" &&
+      <Animated.View style={[styles.front, frontCardAnimatedStyle]}>
+        <LinearGradient
+          colors={item.gradient ? item.gradient.split(',') : [item.brColor, item.brColor]}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          style={{flex:1, borderRadius: 10}}
+        >
+        <TouchableWithoutFeedback 
+          style={{flex:1, width: screenWidth * 0.7, height: screenWidth, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}
+          onPress={() => {navigation.navigate(`CardDetail`, { item });}}
+          disabled={settingVisible}
+        >
+          <View style={{width:'100%', height:'70%', padding:16, flexDirection:'row'}}>
+            <View>
+              {item.logoImg &&
+                <View style={{width:53, height:53, backgroundColor:'white', borderRadius:100, overflow:'hidden'}}> 
+                  <Image src={item.logoImg} style={{flex:1, resizeMode:'contain'}}/>
+                </View>}
+              <View style={{flex:1}}/>
+              <View>
+                <Text style={{fontFamily: 'Pretendard-Bold', fontSize:18, color: '#fff'}}>
+                  {item.corporation}
+                </Text>
+                <View style={{height:8}}/>
+                <Text style={{fontFamily: 'Pretendard-Regular', fontSize:16, color: '#f2f2f2'}}>
+                  {item.title}
+                </Text>
+              </View>
+            </View>
+            <View style={{flex:1}}/>
+            <View style={{justifyContent:'flex-end'}}>
+              {settingVisible && (index) === currentIndex && (
+                <TouchableOpacity
+                  style={{width:32, height:32, borderRadius:16, backgroundColor:'rgba(0, 0, 0, 0.3)', alignItems:'center', justifyContent:'center', borderWidth:1.2, borderColor: colors.White}}
+                  onPress={() => navigation.navigate('CardDetail', { item })}>
+                  <TrashCanIcon width={19} height={19}/>
+                </TouchableOpacity>
+              )}
+              <View style={{flex:1}}/>
+              {item.links.map((link, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => Linking.openURL(link)}>
+                  {link.startsWith('https://x.com') ? <XIcon width={36} height={36}/> :
+                  link.startsWith('https://kakao.com') ? <KakaoIcon width={36} height={36}/> :
+                  link.startsWith('https://facebook.com') ? <FacebookIcon width={36} height={36}/> :
+                  link.startsWith('https://instagram.com') ? <InstagramIcon width={36} height={36}/> :
+                  <LinkIcon width={36} height={36}/>}
+                </TouchableOpacity>
+              ))}
+            </View>  
+          </View>
+          <View style={{width:'100%', height:'30%', padding:20, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
+            <Text style={{fontFamily: 'Pretendard-Medium', fontSize:18, color: '#fff'}}>
+              {item.name}
+            </Text>
+            <View style={{flex:1}}/>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+              <PhoneIcon/>
+              <View style={{width:4}}/>
+              <Text style={{fontFamily: 'Pretendard-Light', fontSize:14, color: '#fff'}}>
+                {item.tel}
+              </Text>
+            </View>
+            <View style={{height:4}}/>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+              <MailIcon/>
+              <View style={{width:4}}/>
+              <Text style={{fontFamily: 'Pretendard-Light', fontSize:14, color: '#fff'}}>
+                {item.email}
+              </Text>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+        </LinearGradient>
+      </Animated.View>
+      }
       {item.background == "IMAGE" &&
       <Animated.View style={[styles.front, frontCardAnimatedStyle, {backgroundColor: item.brColor}]}>
         <ImageBackground
@@ -309,8 +388,15 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         >
           <View style={{alignItems:'center', justifyContent:'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
             <View style={{width: '53%', aspectRatio:1, justifyContent:'center', alignItems:'center', borderRadius:4, backgroundColor:'white'}}>
-            <Image src={item.qrCodeSrc} style={{width: '86%', aspectRatio:1}}/>
+              <Image src={item.qrCodeSrc} style={{width: '86%', aspectRatio:1}}/>
             </View>
+            <View style={{height: 16}}/>
+            <TouchableOpacity style={{width: 165, height: 42, backgroundColor: 'rgba(0, 0, 0, 0.1)', alignItems:'center', justifyContent:'center', borderRadius:100}}>
+              <Text style={{fontFamily: 'Pretendard-Medium', fontSize:14, color: '#fff'}}>명함 공유하기</Text>
+            </TouchableOpacity>
+            <View style={{height: 30}}/>
+            <Text style={{fontFamily: 'Pretendard-Medium', fontSize:13, color: '#fff'}}>큐알을 인식하시면</Text>
+            <Text style={{fontFamily: 'Pretendard-Medium', fontSize:13, color: '#fff'}}>명함이 추가됩니다</Text>
           </View>
         </ImageBackground>
       </Animated.View>

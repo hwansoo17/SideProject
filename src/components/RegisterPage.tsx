@@ -39,15 +39,16 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
       <View style={{height: 16}} />
       {inputData.map((item, index) => (
         <CustomInput
-        key={index}
-        category={item.category}
-        value={item.value} 
-        placeHolder={item.placeHolder} 
-        onChangeText={item.onChangeText} 
-        isValid={item.isValid} 
-        errorMessage={item.errorMessage}
-        secureTextEntry={item.secureTextEntry}
-      />))}
+          key={index}
+          category={item.category}
+          value={item.value} 
+          placeHolder={item.placeHolder} 
+          onChangeText={item.onChangeText} 
+          isValid={item.isValid} 
+          errorMessage={item.errorMessage}
+          secureTextEntry={item.secureTextEntry}
+        />
+      ))}
       <View style={{height: 30}} />
       <CustomButton title={buttonTitle} onPress={onPress} disabled={disabled}/>
     </View>

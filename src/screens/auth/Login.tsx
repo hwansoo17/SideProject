@@ -116,13 +116,13 @@ const LoginScreen: React.FC = () => {
           password.length == 0
         }
       />
-      <View style={{ height: 16 }} />
+      <View style={{ height: 12 }} />
       <KakaoLoginButton
         title={"카카오 로그인"}
         onPress={handleKakaoLogin}
         disabled={kakaoIsPending}
       />
-      <View style={{ height: 16 }} />
+      <View style={{ height: 32 }} />
       <View
         style={{
           flexDirection: "row",
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingVertical: 80,
     backgroundColor: colors.Black,
   },
   input: {

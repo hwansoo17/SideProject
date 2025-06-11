@@ -68,11 +68,18 @@ const HomeMain: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Carousel currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} data={myCardList} isFlipped={isFlipped} />
       {currentIndex !== myCardList.length &&
-      <View style={{position:'absolute', bottom: (screenHeight-screenWidth-73)/2-24, alignSelf:'center'}}>
+      <View 
+        style={{
+          position:'absolute', 
+          // bottom: (screenHeight-screenWidth-73)/2-24, 
+          bottom: (screenHeight-screenWidth-73)/2-80, 
+          alignSelf:'center'
+        }}
+      >
         <ShareButton handleFlip={handleFlip} />
       </View>}
       {/* <Button title="로그아웃" onPress={() => { logout(); console.log(isLoggedIn); }} /> */}
-      <View style={{position:'absolute', paddingHorizontal:20, paddingVertical:10, gap:12, width:'100%', bottom:50}}>
+      <View style={{position:'absolute', paddingHorizontal:20, paddingVertical:10, gap:12, width:'100%', bottom:20}}>
         <StorageStatusBar />
       </View>
     </SafeAreaView>

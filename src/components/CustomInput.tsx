@@ -25,6 +25,8 @@ const CustomInput: React.FC<CustomInputProps> = ({category, value, placeHolder, 
           style={[
             textStyles.M4,
             {
+            height: 49,
+            paddingLeft: 4,
             borderBottomWidth: 1,
             borderColor: colors.G07,
             color: colors.White
