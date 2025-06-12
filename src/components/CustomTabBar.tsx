@@ -14,7 +14,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
   }
   
   return (
-    <SafeAreaView style={{ backgroundColor: colors.BG }}>
+    // <SafeAreaView style={{ backgroundColor: colors.BG }}>
       <View style={styles.container}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -65,7 +65,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
           );
         })}
       </View>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 };
 
@@ -75,13 +75,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     backgroundColor: colors.G01,
-    height: 73,
+    height: 93,
     flexDirection: 'row',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    paddingBottom: 10,
+    marginTop: -10,
   },
   tabButton: {
     flex: 1,

@@ -72,14 +72,14 @@ const HomeMain: React.FC = () => {
         style={{
           position:'absolute', 
           // bottom: (screenHeight-screenWidth-73)/2-24, 
-          bottom: (screenHeight-screenWidth-73)/2-80, 
+          bottom: (screenHeight-screenWidth-73)/2-40, 
           alignSelf:'center'
         }}
       >
         <ShareButton handleFlip={handleFlip} />
       </View>}
       {/* <Button title="로그아웃" onPress={() => { logout(); console.log(isLoggedIn); }} /> */}
-      <View style={{position:'absolute', paddingHorizontal:20, paddingVertical:10, gap:12, width:'100%', bottom:20}}>
+      <View style={{position:'absolute', paddingHorizontal:20, paddingTop:10, paddingBottom:43, gap:12, width:'100%', bottom:20}}>
         <StorageStatusBar />
       </View>
     </SafeAreaView>

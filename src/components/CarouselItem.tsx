@@ -42,13 +42,14 @@ interface CarouselItemProps {
     realCardImg: string;
     background: string;
     qrCodeSrc: string;
+    shareLink: string;
   };
-    scrollX: SharedValue<number>;
-    currentIndex: number;
-    index: number;
-    isFlipped: boolean;
-    scrollWidth: number;
-    settingVisible?: boolean;
+  scrollX: SharedValue<number>;
+  currentIndex: number;
+  index: number;
+  isFlipped: boolean;
+  scrollWidth: number;
+  settingVisible?: boolean;
 }
 
 interface Props {
@@ -148,6 +149,12 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       elevation
     };
   });
+
+  const shareLinkFn = () => {
+    if (item.shareLink) {
+      Linking.openURL(item.shareLink);
+    } 
+  }
 
   return (
     <Animated.View
@@ -391,11 +398,21 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
               <Image src={item.qrCodeSrc} style={{width: '86%', aspectRatio:1}}/>
             </View>
             <View style={{height: 16}}/>
-            <TouchableOpacity style={{width: 165, height: 42, backgroundColor: 'rgba(0, 0, 0, 0.1)', alignItems:'center', justifyContent:'center', borderRadius:100}}>
+            <TouchableOpacity 
+              style={{
+                width: 165, 
+                height: 42, 
+                backgroundColor: 'rgba(0, 0, 0, 0.1)', 
+                alignItems:'center', 
+                justifyContent:'center', 
+                borderRadius:100
+            }}
+              onPress={shareLinkFn}
+            >
               <Text style={{fontFamily: 'Pretendard-Medium', fontSize:14, color: '#fff'}}>명함 공유하기</Text>
             </TouchableOpacity>
             <View style={{height: 30}}/>
-            <Text style={{fontFamily: 'Pretendard-Medium', fontSize:13, color: '#fff'}}>큐알을 인식하시면</Text>
+            <Text style={{fontFamily: 'Pretendard-Medium', fontSize:13, color: '#fff'}}>QR을 인식하시면</Text>
             <Text style={{fontFamily: 'Pretendard-Medium', fontSize:13, color: '#fff'}}>명함이 추가됩니다</Text>
           </View>
         </ImageBackground>
