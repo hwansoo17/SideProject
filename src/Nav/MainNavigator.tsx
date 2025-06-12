@@ -16,7 +16,8 @@ const MainNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      tabBar={props => <CustomTabBar {...props} />}>
+      tabBar={props => <CustomTabBar {...props} />}
+    >
       <Tab.Screen
         name="Home"
         component={HomeTab}
